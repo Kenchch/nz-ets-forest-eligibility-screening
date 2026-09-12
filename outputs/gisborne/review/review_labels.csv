@@ -1,0 +1,31 @@
+parcel_id,review_label,reviewer,review_date,evidence_note
+lcdb1000012117,already-forested,Codex visual review,2026-09-12,Dense closed woody cover is visible across the polygon; low-resolution single-image interpretation.
+lcdb1000034948,clearly-not-plantable,Codex visual review,2026-09-12,Long narrow polygon follows an active river margin within intensively managed flats.
+lcdb1000035223,plausible-plantable,Codex visual review,2026-09-12,Open or recently cleared patch is visible within a wooded setting; no obvious built or water constraint.
+lcdb1000035749,clearly-not-plantable,Codex visual review,2026-09-12,Polygon includes coastal margin and settlement-access features rather than a coherent plantable block.
+lcdb1000035874,clearly-not-plantable,Codex visual review,2026-09-12,Small irregular polygon is constrained by a forestry-road junction.
+lcdb1000036039,plausible-plantable,Codex visual review,2026-09-12,Open vegetated patch beside forestry roads appears physically plantable at this image scale.
+lcdb1000036061,clearly-not-plantable,Codex visual review,2026-09-12,Polygon occupies a coastal edge with exposed beach or cliff influence.
+lcdb1000036320,clearly-not-plantable,Codex visual review,2026-09-12,Polygon crosses an active braided river margin and nearby developed edge.
+lcdb1000036932,plausible-plantable,Codex visual review,2026-09-12,Continuous open pasture or grass cover is visible with no obvious hard constraint.
+lcdb1000037104,plausible-plantable,Codex visual review,2026-09-12,Large open grassed block is visible although its irregular arms require assessor review.
+lcdb1000056959,already-forested,Codex visual review,2026-09-12,Polygon lies in a plantation harvest-road pattern and may be temporarily cleared forest land.
+lcdb1000057578,plausible-plantable,Codex visual review,2026-09-12,Open narrow gully and pasture mosaic appears potentially plantable but requires width review.
+lcdb1000058208,already-forested,Codex visual review,2026-09-12,Dark woody canopy is visible across most of the polygon.
+lcdb1000090167,plausible-plantable,Codex visual review,2026-09-12,Open shrub and grass mosaic is consistent with the mapped gorse/broom proxy class.
+lcdb1000117275,already-forested,Codex visual review,2026-09-12,Large area shows plantation harvest or regeneration pattern within continuous forest land.
+lcdb1000402087,plausible-plantable,Codex visual review,2026-09-12,Open pasture block beside forest and river terrace has no obvious built constraint.
+lcdb1000403209,plausible-plantable,Codex visual review,2026-09-12,Open grassed terrace is visible beside the river.
+lcdb1000411402,plausible-plantable,Codex visual review,2026-09-12,Small open vegetated area beside a track appears physically plantable.
+lcdb1000412931,clearly-not-plantable,Codex visual review,2026-09-12,Polygon occupies or closely follows an active riverbed margin.
+lcdb1000451202,plausible-plantable,Codex visual review,2026-09-12,Predominantly open grass and shrub cover is visible with no clear infrastructure constraint.
+lcdb1000611311,clearly-not-plantable,Codex visual review,2026-09-12,Narrow angular polygon follows road and drainage features rather than a coherent block.
+lcdb1000611312,clearly-not-plantable,Codex visual review,2026-09-12,Narrow polygon is constrained by an active channel and access track.
+lcdb1000611723,clearly-not-plantable,Codex visual review,2026-09-12,Polygon wraps a road and active channel crossing.
+lcdb1000611934,clearly-not-plantable,Codex visual review,2026-09-12,Long narrow eroding gully form is unsuitable as a coherent forest block.
+lcdb1000700853,clearly-not-plantable,Codex visual review,2026-09-12,Polygon is an island or bar within a braided active riverbed.
+lcdb2000503095,plausible-plantable,Codex visual review,2026-09-12,Compact open pasture block is visible.
+lcdb2000504361,plausible-plantable,Codex visual review,2026-09-12,Open pasture and shrub block near a river terrace appears physically plantable.
+lcdb2000507976,plausible-plantable,Codex visual review,2026-09-12,Woody shrub cover is consistent with gorse/broom and no hard constraint is visible.
+lcdb2000510673,clearly-not-plantable,Codex visual review,2026-09-12,Narrow polygon follows an active river or erosion margin beside forestry land.
+lcdb2000512609,already-forested,Codex visual review,2026-09-12,Dense woody cover is visible despite the gorse/broom LCDB label.

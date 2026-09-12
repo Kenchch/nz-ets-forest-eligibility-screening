@@ -1,0 +1,9 @@
+metric,value
+total_features,5748
+candidate_review,2520
+quarantine,2926
+excluded,302
+automated_reject_rate,0.5616
+width_method_disagreements,694
+manual_rules_out_of_scope,3
+crs_epsg,2193

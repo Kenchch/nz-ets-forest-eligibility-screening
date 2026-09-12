@@ -1,9 +1,9 @@
 {
   "scope": "screening/triage only; not an eligibility determination",
   "crs": "EPSG:2193",
-  "feature_count": 12,
-  "reject_rate": 0.5,
-  "reject_rate_threshold": 0.9,
+  "feature_count": 5748,
+  "reject_rate": 0.5615866388308977,
+  "reject_rate_threshold": 0.8,
   "unresolved_rules": [
     "R-03",
     "R-06",

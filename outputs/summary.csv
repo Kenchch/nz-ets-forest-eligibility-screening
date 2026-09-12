@@ -1,9 +1,0 @@
-metric,value
-total_features,12
-candidate_review,6
-quarantine,5
-excluded,1
-automated_reject_rate,0.5000
-width_method_disagreements,1
-manual_rules_out_of_scope,3
-crs_epsg,2193

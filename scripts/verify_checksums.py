@@ -1,4 +1,4 @@
-"""Verify pinned demonstration inputs without platform-specific shell tools."""
+"""Verify every pinned test and processed input without shell-specific tools."""
 
 from hashlib import sha256
 from pathlib import Path
@@ -23,4 +23,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

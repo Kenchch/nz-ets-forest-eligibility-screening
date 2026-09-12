@@ -1,0 +1,10 @@
+metric,value
+sample_size,30
+plausible_plantable,13
+already_forested,5
+clearly_not_plantable,12
+visual_agreement_rate,0.4333
+visual_false_positive_rate,0.5667
+reviewer,Codex visual review
+imagery,Gisborne District Council Imagery Satellite Gisborne 2024 (copyright LINZ)
+limitation,Single AI-assisted visual review from one imagery date; no independent ground truth
