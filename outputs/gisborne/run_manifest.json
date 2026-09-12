@@ -1,8 +1,14 @@
 {
   "scope": "screening/triage only; not an eligibility determination",
   "crs": "EPSG:2193",
-  "feature_count": 5748,
-  "reject_rate": 0.5615866388308977,
+  "input_feature_type": "LCDB land-cover mapping units; not cadastral parcels or ETS application areas",
+  "feature_count": 5712,
+  "overlap_materiality": {
+    "minimum_area_m2_exclusive": 1.0,
+    "minimum_source_unit_pct_inclusive": 1.0,
+    "status_below_both_thresholds": "advisory"
+  },
+  "reject_rate": 0.5295868347338936,
   "reject_rate_threshold": 0.8,
   "unresolved_rules": [
     "R-03",

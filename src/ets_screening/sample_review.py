@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+from hashlib import sha256
 import json
 import os
 from pathlib import Path
@@ -22,10 +23,28 @@ def select_review_sample(
     candidates: gpd.GeoDataFrame,
     sample_size: int = 30,
     seed: int = 20260912,
+    sample_ids: list[str] | None = None,
 ) -> gpd.GeoDataFrame:
     assert_nztm2000(candidates, "review candidates")
+    if sample_ids is not None:
+        available = candidates.set_index("unit_id", drop=False)
+        missing = [unit_id for unit_id in sample_ids if unit_id not in available.index]
+        if missing:
+            raise ValueError(f"review sample IDs are no longer candidates: {missing}")
+        return available.loc[sample_ids].reset_index(drop=True).copy()
     count = min(sample_size, len(candidates))
-    return candidates.sample(n=count, random_state=seed).sort_values("parcel_id").copy()
+    # Hash ranking is deterministic by ID, not by row position. Preprocessing
+    # changes therefore do not silently replace every review case.
+    ranked = candidates.copy()
+    ranked["_sample_rank"] = ranked["unit_id"].astype(str).map(
+        lambda value: sha256(f"{seed}:{value}".encode("utf-8")).hexdigest()
+    )
+    return (
+        ranked.sort_values("_sample_rank")
+        .head(count)
+        .drop(columns="_sample_rank")
+        .sort_values("unit_id")
+    )
 
 
 def write_review_bundle(
@@ -34,14 +53,15 @@ def write_review_bundle(
     sample_size: int = 30,
     seed: int = 20260912,
     api_key: str | None = None,
+    sample_ids: list[str] | None = None,
 ) -> None:
     destination = Path(destination)
     destination.mkdir(parents=True, exist_ok=True)
-    sample = select_review_sample(candidates, sample_size, seed)
+    sample = select_review_sample(candidates, sample_size, seed, sample_ids)
     sample.to_file(destination / "review_queue.gpkg", layer="review_queue", driver="GPKG")
     pd.DataFrame(
         {
-            "parcel_id": sample["parcel_id"],
+            "unit_id": sample["unit_id"],
             "review_label": "",
             "reviewer": "",
             "review_date": "",
@@ -68,10 +88,10 @@ const map=L.map('map');
 L.tileLayer('{tile_url}',
  {{attribution:'{LINZ_ATTRIBUTION}',maxZoom:22}}).addTo(map);
 const layer=L.geoJSON(features,{{style:{{color:'#ff2d55',weight:3,fillOpacity:0.08}},
- onEachFeature:(f,l)=>l.bindPopup('<b>'+f.properties.parcel_id+'</b><br>Status: '+f.properties.status)}}).addTo(map);
+ onEachFeature:(f,l)=>l.bindPopup('<b>'+f.properties.unit_id+'</b><br>Status: '+f.properties.status)}}).addTo(map);
 map.fitBounds(layer.getBounds().pad(0.2));
 L.control({{position:'topright'}}).onAdd=function(){{const d=L.DomUtil.create('div','note');
-d.innerHTML='<b>Screening review queue</b><br>Assign one label: plausible-plantable / already-forested / clearly-not-plantable.<br>Single-reviewer sample; not an accuracy assessment.';return d;}}.addTo(map);
+d.innerHTML='<b>Human review queue</b><br>Inspect imagery and assign one label: plausible-plantable / already-forested / clearly-not-plantable.<br>Record your name, date and evidence note; AI suggestions are not an accuracy assessment.';return d;}}.addTo(map);
 </script></body></html>"""
     (destination / "review_map.html").write_text(html, encoding="utf-8")
 

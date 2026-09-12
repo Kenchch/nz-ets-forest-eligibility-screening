@@ -38,7 +38,7 @@ def width_erosion(geometry: BaseGeometry, half_width_m: float = 15.0) -> bool:
 def compare_width_methods(frame: gpd.GeoDataFrame, threshold_m: float = 30.0) -> pd.DataFrame:
     """Return per-feature results and disagreements for two screening proxies."""
 
-    result = pd.DataFrame({"parcel_id": frame["parcel_id"].astype(str)})
+    result = pd.DataFrame({"unit_id": frame["unit_id"].astype(str)})
     raw_width = frame.geometry.map(width_area_perimeter)
     result["width_area_perimeter_m"] = raw_width.round(3)
     result["area_perimeter_pass"] = raw_width >= threshold_m

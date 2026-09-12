@@ -67,7 +67,7 @@ def plot_screening_overview(
         for _, row in display_results.iterrows():
             point = row.geometry.representative_point()
             ax.annotate(
-                row["parcel_id"],
+                row["unit_id"],
                 (point.x, point.y),
                 ha="center",
                 va="center",
@@ -148,7 +148,7 @@ def plot_layout_pdf(
     destination.parent.mkdir(parents=True, exist_ok=True)
     counts = results["status"].value_counts()
     disagreements = comparison[comparison["methods_disagree"]]
-    example_values = disagreements["parcel_id"].astype(str).head(3).tolist()
+    example_values = disagreements["unit_id"].astype(str).head(3).tolist()
     example_lines = "\n".join(f"  {value}" for value in example_values) or "  none"
 
     fig = plt.figure(figsize=(11.69, 8.27), facecolor="white")
@@ -161,7 +161,7 @@ def plot_layout_pdf(
 
     summary_text = (
         "RUN SUMMARY\n"
-        f"Input features: {len(results)}\n"
+        f"Input LCDB units: {len(results)}\n"
         f"Candidate review: {int(counts.get('candidate_review', 0))}\n"
         f"Quarantine: {int(counts.get('quarantine', 0))}\n"
         f"Excluded by project proxy: {int(counts.get('excluded', 0))}\n"

@@ -44,12 +44,12 @@ def validate_geometry(frame: gpd.GeoDataFrame, name: str) -> None:
 def validate_candidates(frame: gpd.GeoDataFrame) -> None:
     assert_nztm2000(frame, "candidates")
     validate_geometry(frame, "candidates")
-    required = {"parcel_id", "lcdb_class"}
+    required = {"unit_id", "lcdb_class"}
     missing = required - set(frame.columns)
     if missing:
         raise InputValidationError(f"candidates is missing columns: {sorted(missing)}")
-    if frame["parcel_id"].isna().any() or frame["parcel_id"].duplicated().any():
-        raise InputValidationError("parcel_id must be present and unique")
+    if frame["unit_id"].isna().any() or frame["unit_id"].duplicated().any():
+        raise InputValidationError("unit_id must be present and unique")
     polygonal = frame.geometry.geom_type.eq("Polygon")
     if not polygonal.all():
         raise InputValidationError(

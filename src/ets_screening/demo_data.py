@@ -1,6 +1,6 @@
 """Deterministic synthetic NZTM fixtures located near Gisborne.
 
-The geometries are invented and must never be represented as real parcels.
+The geometries are invented and must never be represented as real land units.
 They exist so CI can exercise every branch without redistributing source data.
 """
 
@@ -47,7 +47,7 @@ def build_demo_layers() -> tuple[gpd.GeoDataFrame, gpd.GeoDataFrame, gpd.GeoData
     ]
     candidates = gpd.GeoDataFrame(
         rows,
-        columns=["parcel_id", "lcdb_class", "geometry", "demo_case"],
+        columns=["unit_id", "lcdb_class", "geometry", "demo_case"],
         geometry="geometry",
         crs=CRS,
     )

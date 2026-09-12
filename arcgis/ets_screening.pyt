@@ -77,9 +77,8 @@ class ScreenPost1989Candidates:
         ]
         threshold = float(parameters[4].value or 0.80)
         arcpy.AddMessage("Loading inputs and asserting EPSG:2193...")
-        candidates = read_layer(candidate_path, ("parcel_id", "lcdb_class"), "candidates")
+        candidates = read_layer(candidate_path, ("unit_id", "lcdb_class"), "candidates")
         pre1990 = read_layer(pre1990_path, name="pre1990")
         conservation = read_layer(conservation_path, name="conservation")
         manifest = run_screening(candidates, pre1990, conservation, output_path, threshold)
         arcpy.AddMessage(f"Complete: {manifest}")
-

@@ -4,7 +4,7 @@ Checked on 12 September 2026. Links point to the source publisher rather than a 
 
 ## Statutory definitions
 
-- [Climate Change Response Act 2002, section 4 definitions](https://www.legislation.govt.nz/act/public/2002/40/en/latest/sections/DLM158592/), current consolidation checked on 12 September 2026. `Forest land`, `forest species`, `post-1989 forest land`, and `pre-1990 forest land` are all definitions within section 4. Earlier repository links used separate `LMS282060` and `DLM158592` anchors inside this same interpretation section; the register now uses one canonical current URL to avoid implying that they were separate sections.
+- [Climate Change Response Act 2002, section 4 definitions](https://www.legislation.govt.nz/act/public/2002/40/en/latest/sections/DLM158592/), current consolidation checked on 12 September 2026. `Forest land`, `forest species`, `post-1989 forest land`, and `pre-1990 forest land` are all definitions within section 4. The earlier `LMS282060` link was checked in the official site and resolves to **National adaptation plan**, not section 4; it has therefore been removed rather than treated as an alternative anchor.
 
 ## MPI operational guidance
 

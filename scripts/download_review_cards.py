@@ -61,33 +61,52 @@ def _tile(level: int, column: int, row: int) -> Image.Image:
 
 def _draw_card(row) -> Image.Image:
     geometry = row.geometry
-    level = _choose_level(geometry.bounds)
-    centre = geometry.centroid
-    centre_x, centre_y = _global_pixel(centre.x, centre.y, level)
-    tile_column = int(centre_x // TILE_SIZE)
-    tile_row = int(centre_y // TILE_SIZE)
-    origin_x = (tile_column - 1) * TILE_SIZE
-    origin_y = (tile_row - 1) * TILE_SIZE
-    mosaic = Image.new("RGB", (TILE_SIZE * 3, TILE_SIZE * 3))
-    for offset_x, column in enumerate(range(tile_column - 1, tile_column + 2)):
-        for offset_y, tile_row_value in enumerate(range(tile_row - 1, tile_row + 2)):
-            mosaic.paste(
-                _tile(level, column, tile_row_value),
-                (offset_x * TILE_SIZE, offset_y * TILE_SIZE),
-            )
+    overview_level = _choose_level(geometry.bounds)
+    # The service advertises level 11, but coverage is incomplete. Level 10 is
+    # the highest consistently available tier (about 1.32 m per pixel).
+    detail_level = 10
+    centre = geometry.representative_point()
 
-    draw = ImageDraw.Draw(mosaic)
-    polygons = list(geometry.geoms) if geometry.geom_type == "MultiPolygon" else [geometry]
-    for polygon in polygons:
-        points = []
-        for x, y in polygon.exterior.coords:
-            px, py = _global_pixel(x, y, level)
-            points.append((px - origin_x, py - origin_y))
-        draw.line(points, fill=(255, 45, 85), width=5, joint="curve")
-    caption = f"{row.parcel_id} | {row.lcdb_class} | imagery level {level}"
-    draw.rectangle((0, 0, 768, 34), fill=(0, 0, 0))
+    def panel(level: int) -> Image.Image:
+        centre_x, centre_y = _global_pixel(centre.x, centre.y, level)
+        tile_column = int(centre_x // TILE_SIZE)
+        tile_row = int(centre_y // TILE_SIZE)
+        origin_x = (tile_column - 1) * TILE_SIZE
+        origin_y = (tile_row - 1) * TILE_SIZE
+        mosaic = Image.new("RGB", (TILE_SIZE * 3, TILE_SIZE * 3))
+        for offset_x, column in enumerate(range(tile_column - 1, tile_column + 2)):
+            for offset_y, tile_row_value in enumerate(range(tile_row - 1, tile_row + 2)):
+                mosaic.paste(
+                    _tile(level, column, tile_row_value),
+                    (offset_x * TILE_SIZE, offset_y * TILE_SIZE),
+                )
+
+        draw = ImageDraw.Draw(mosaic)
+        polygons = list(geometry.geoms) if geometry.geom_type == "MultiPolygon" else [geometry]
+        for polygon in polygons:
+            points = []
+            for x, y in polygon.exterior.coords:
+                px, py = _global_pixel(x, y, level)
+                points.append((px - origin_x, py - origin_y))
+            draw.line(points, fill=(255, 45, 85), width=5, joint="curve")
+        return mosaic
+
+    overview = panel(overview_level)
+    detail = panel(detail_level)
+    card = Image.new("RGB", (TILE_SIZE * 6, TILE_SIZE * 3))
+    card.paste(overview, (0, 0))
+    card.paste(detail, (TILE_SIZE * 3, 0))
+    draw = ImageDraw.Draw(card)
+    draw.line((TILE_SIZE * 3, 0, TILE_SIZE * 3, TILE_SIZE * 3), fill="white", width=4)
+    draw.line((TILE_SIZE * 4.5 - 10, TILE_SIZE * 1.5, TILE_SIZE * 4.5 + 10, TILE_SIZE * 1.5), fill=(255, 255, 0), width=3)
+    draw.line((TILE_SIZE * 4.5, TILE_SIZE * 1.5 - 10, TILE_SIZE * 4.5, TILE_SIZE * 1.5 + 10), fill=(255, 255, 0), width=3)
+    caption = (
+        f"{row.unit_id} | {row.lcdb_class} | OVERVIEW L{overview_level} / "
+        f"DETAIL L{detail_level} at interior point"
+    )
+    draw.rectangle((0, 0, 1536, 34), fill=(0, 0, 0))
     draw.text((10, 9), caption, fill=(255, 255, 255), font=ImageFont.load_default())
-    return mosaic
+    return card
 
 
 def main() -> None:
@@ -97,21 +116,21 @@ def main() -> None:
     args = parser.parse_args()
     destination = args.output
     destination.mkdir(parents=True, exist_ok=True)
-    queue = gpd.read_file(args.queue).to_crs(2193).sort_values("parcel_id")
+    queue = gpd.read_file(args.queue).to_crs(2193).sort_values("unit_id")
     if len(queue) != 30:
         raise RuntimeError(f"expected a 30-feature review queue, received {len(queue)}")
     cards: list[Path] = []
     for index, (_, row) in enumerate(queue.iterrows(), start=1):
-        path = destination / f"{index:02d}_{row.parcel_id}.jpg"
+        path = destination / f"{index:02d}_{row.unit_id}.jpg"
         _draw_card(row).save(path, quality=88, optimize=True)
         cards.append(path)
-        print(f"{index:02d}/30 {row.parcel_id}")
+        print(f"{index:02d}/30 {row.unit_id}")
 
     for sheet_index in range(3):
-        sheet = Image.new("RGB", (768 * 2, 768 * 5), "white")
+        sheet = Image.new("RGB", (1536 * 2, 768 * 5), "white")
         for slot, path in enumerate(cards[sheet_index * 10 : (sheet_index + 1) * 10]):
             image = Image.open(path)
-            sheet.paste(image, ((slot % 2) * 768, (slot // 2) * 768))
+            sheet.paste(image, ((slot % 2) * 1536, (slot // 2) * 768))
         sheet.save(destination / f"contact_sheet_{sheet_index + 1}.jpg", quality=82, optimize=True)
 
 

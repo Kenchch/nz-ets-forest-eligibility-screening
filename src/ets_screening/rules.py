@@ -16,6 +16,7 @@ class RuleConfig:
     minimum_area_ha: float = 1.0
     width_threshold_m: float = 30.0
     minimum_overlap_area_m2: float = 1.0
+    minimum_overlap_pct: float = 1.0
     plantable_lcdb_classes: frozenset[str] = field(
         default_factory=lambda: frozenset(
             {
@@ -78,11 +79,11 @@ def evaluate_rules(
     out = candidates.copy()
     raw_area_ha = out.geometry.area / 10_000.0
     out["area_ha"] = raw_area_ha.round(4)
-    widths = compare_width_methods(out, config.width_threshold_m).set_index("parcel_id")
-    out["width_ap_m"] = out["parcel_id"].astype(str).map(widths["width_area_perimeter_m"])
-    out["width_ap_pass"] = out["parcel_id"].astype(str).map(widths["area_perimeter_pass"])
-    out["width_core_pass"] = out["parcel_id"].astype(str).map(widths["erosion_core_pass"])
-    out["width_methods_disagree"] = out["parcel_id"].astype(str).map(widths["methods_disagree"])
+    widths = compare_width_methods(out, config.width_threshold_m).set_index("unit_id")
+    out["width_ap_m"] = out["unit_id"].astype(str).map(widths["width_area_perimeter_m"])
+    out["width_ap_pass"] = out["unit_id"].astype(str).map(widths["area_perimeter_pass"])
+    out["width_core_pass"] = out["unit_id"].astype(str).map(widths["erosion_core_pass"])
+    out["width_methods_disagree"] = out["unit_id"].astype(str).map(widths["methods_disagree"])
 
     out["r01_area_pass"] = raw_area_ha >= config.minimum_area_ha
     # Erosion is the primary narrow-strip screen, but either-method disagreement
@@ -94,8 +95,25 @@ def evaluate_rules(
     out["pre1990_overlap_pct"] = (pre1990_ratio * 100).round(4)
     out["conservation_overlap_m2"] = conservation_area.round(2)
     out["conservation_overlap_pct"] = (conservation_ratio * 100).round(4)
-    out["r03_no_pre1990_overlap"] = pre1990_area <= config.minimum_overlap_area_m2
-    out["r04_no_conservation_overlap"] = conservation_area <= config.minimum_overlap_area_m2
+    pre1990_material = (
+        (pre1990_area > config.minimum_overlap_area_m2)
+        & (pre1990_ratio * 100 >= config.minimum_overlap_pct)
+    )
+    conservation_material = (
+        (conservation_area > config.minimum_overlap_area_m2)
+        & (conservation_ratio * 100 >= config.minimum_overlap_pct)
+    )
+    out["r03_no_pre1990_overlap"] = ~pre1990_material
+    out["r04_no_conservation_overlap"] = ~conservation_material
+    out["advisory_rule_ids"] = ""
+    out.loc[
+        (pre1990_area > config.minimum_overlap_area_m2) & ~pre1990_material,
+        "advisory_rule_ids",
+    ] = "R-03-low-overlap"
+    r04_minor = (conservation_area > config.minimum_overlap_area_m2) & ~conservation_material
+    out.loc[r04_minor, "advisory_rule_ids"] = out.loc[r04_minor, "advisory_rule_ids"].map(
+        lambda value: "|".join(filter(None, (value, "R-04-low-overlap")))
+    )
     out["r05_lcdb_proxy_pass"] = out["lcdb_class"].isin(config.plantable_lcdb_classes)
 
     automated = [
@@ -115,15 +133,15 @@ def evaluate_rules(
     rule_meta = {
         "R-01": ("Area at least 1 ha", "r01_area_pass", "area_ha"),
         "R-02": ("30 m width erosion proxy", "r02_width_proxy_pass", "width_core_pass"),
-        "R-03": ("No mapped pre-1990 overlap", "r03_no_pre1990_overlap", "r03_no_pre1990_overlap"),
-        "R-04": ("No public conservation overlap", "r04_no_conservation_overlap", "r04_no_conservation_overlap"),
+        "R-03": ("No material mapped pre-1990 overlap", "r03_no_pre1990_overlap", "r03_no_pre1990_overlap"),
+        "R-04": ("No material public conservation overlap", "r04_no_conservation_overlap", "r04_no_conservation_overlap"),
         "R-05": ("Plantable LCDB proxy class", "r05_lcdb_proxy_pass", "lcdb_class"),
     }
     for _, row in out.iterrows():
         for rule_id, (name, passed_col, observed_col) in rule_meta.items():
             long_rows.append(
                 {
-                    "parcel_id": row["parcel_id"],
+                    "unit_id": row["unit_id"],
                     "rule_id": rule_id,
                     "rule_name": name,
                     "testable_from_open_data": True,
@@ -138,7 +156,7 @@ def evaluate_rules(
         ):
             long_rows.append(
                 {
-                    "parcel_id": row["parcel_id"],
+                    "unit_id": row["unit_id"],
                     "rule_id": rule_id,
                     "rule_name": name,
                     "testable_from_open_data": False,

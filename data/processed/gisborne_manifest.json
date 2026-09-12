@@ -3,13 +3,14 @@
   "crs": "EPSG:2193",
   "feature_counts": {
     "gisborne_boundary.gpkg": 1,
-    "gisborne_candidates.gpkg": 5748,
+    "gisborne_candidates.gpkg": 5712,
     "gisborne_pre1990_evidence.gpkg": 1933,
     "gisborne_conservation.gpkg": 410
   },
+  "discarded_clip_fragments_below_1_m2": 36,
   "sha256": {
     "gisborne_boundary.gpkg": "26f70188dde8f5b621862bb40ffe1e5c4d99a1a6a24016b72e55f2f55555af5f",
-    "gisborne_candidates.gpkg": "0f8bec21fa8bd93d76e057dc0b2b9cfefc72cc0ca4cee8cb402252544f0ffdd6",
+    "gisborne_candidates.gpkg": "d44c2bee7378a74f2b22ad8296a4fd3f5e447a0057c804550937aba4ee5815fc",
     "gisborne_pre1990_evidence.gpkg": "b90d05d9aa175fd6446083928ef699082d34be01aafc8796243b41fbe4642321",
     "gisborne_conservation.gpkg": "510aa4d3b25253a7123311c24a972ff6890dd8e02c23efaf956dddc3dad695f2"
   },

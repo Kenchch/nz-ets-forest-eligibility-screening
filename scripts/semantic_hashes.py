@@ -22,7 +22,7 @@ def semantic_hash(path: Path) -> str:
     geometry_name = frame.geometry.name
     columns = sorted(column for column in frame.columns if column != geometry_name)
     rows: list[str] = []
-    for _, row in frame.sort_values("parcel_id").iterrows():
+    for _, row in frame.sort_values("unit_id").iterrows():
         attributes = []
         for column in columns:
             value = row[column]

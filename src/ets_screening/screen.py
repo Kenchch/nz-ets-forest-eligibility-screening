@@ -52,6 +52,7 @@ def run_screening(
     config: RuleConfig | None = None,
     study_label: str = "User-supplied screening run",
     data_note: str = "Provided inputs",
+    review_sample_ids: list[str] | None = None,
 ) -> dict[str, object]:
     results, audit = evaluate_rules(candidates, pre1990, conservation, config)
     comparison = compare_width_methods(results)
@@ -97,12 +98,21 @@ def run_screening(
             stage / "review",
             sample_size=30,
             api_key=os.getenv("LINZ_BASEMAP_API_KEY"),
+            sample_ids=review_sample_ids,
         )
         normalise_gpkg(stage / "review" / "review_queue.gpkg")
         manifest = {
             "scope": "screening/triage only; not an eligibility determination",
             "crs": "EPSG:2193",
+            "input_feature_type": (
+                "LCDB land-cover mapping units; not cadastral parcels or ETS application areas"
+            ),
             "feature_count": len(results),
+            "overlap_materiality": {
+                "minimum_area_m2_exclusive": (config or RuleConfig()).minimum_overlap_area_m2,
+                "minimum_source_unit_pct_inclusive": (config or RuleConfig()).minimum_overlap_pct,
+                "status_below_both_thresholds": "advisory",
+            },
             "reject_rate": reject_rate,
             "reject_rate_threshold": reject_rate_threshold,
             "unresolved_rules": ["R-03", "R-06", "R-07", "R-08"],
@@ -162,7 +172,7 @@ def main() -> None:
         missing = [name for name in ("candidates", "pre1990", "conservation") if not getattr(args, name)]
         if missing:
             parser.error(f"missing required inputs: {', '.join(missing)}")
-        candidates = read_layer(args.candidates, ("parcel_id", "lcdb_class"), "candidates")
+        candidates = read_layer(args.candidates, ("unit_id", "lcdb_class"), "candidates")
         pre1990 = read_layer(args.pre1990, name="pre1990")
         conservation = read_layer(args.conservation, name="conservation")
 

@@ -19,7 +19,7 @@ def test_dumbbell_exposes_proxy_disagreement():
     dumbbell = unary_union(
         [box(0, 0, 80, 80), box(80, 30, 480, 50), box(480, 0, 560, 80)]
     )
-    frame = gpd.GeoDataFrame({"parcel_id": ["D1"], "geometry": [dumbbell]}, crs=2193)
+    frame = gpd.GeoDataFrame({"unit_id": ["D1"], "geometry": [dumbbell]}, crs=2193)
     result = compare_width_methods(frame)
     assert bool(result.loc[0, "erosion_core_pass"])
     assert bool(result.loc[0, "methods_disagree"])

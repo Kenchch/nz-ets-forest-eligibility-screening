@@ -23,9 +23,15 @@ def main() -> None:
     comparison = pd.read_csv(OUTPUT / "width_method_comparison.csv")
     labels = pd.read_csv(OUTPUT / "review" / "review_labels.csv")
     audit = pd.read_csv(OUTPUT / "rule_results.csv")
-    status_counts = pd.concat(
-        [gpd.read_file(OUTPUT / "candidates.gpkg"), gpd.read_file(OUTPUT / "quarantine.gpkg")]
-    )["status"].value_counts()
+    screened = gpd.GeoDataFrame(
+        pd.concat(
+            [gpd.read_file(OUTPUT / "candidates.gpkg"), gpd.read_file(OUTPUT / "quarantine.gpkg")],
+            ignore_index=True,
+        ),
+        geometry="geometry",
+        crs=2193,
+    )
+    status_counts = screened["status"].value_counts()
     failed_counts = audit[audit["passed"] == False].groupby("rule_id").size()  # noqa: E712
 
     nztm_pass = candidates.geometry.area >= 10_000.0
@@ -38,10 +44,20 @@ def main() -> None:
         ["area_perimeter_pass", "erosion_core_pass"]
     ).size()
     label_counts = labels["review_label"].value_counts()
+    unit_area_ha = candidates.geometry.area / 10_000.0
+    legacy_r03 = screened["pre1990_overlap_m2"] > 1.0
+    legacy_r04 = screened["conservation_overlap_m2"] > 1.0
+    material_r03 = legacy_r03 & (screened["pre1990_overlap_pct"] >= 1.0)
+    material_r04 = legacy_r04 & (screened["conservation_overlap_pct"] >= 1.0)
+    low_r03 = legacy_r03 & ~material_r03
+    low_r04 = legacy_r04 & ~material_r04
 
     findings = {
         "study_area": "Gisborne District",
-        "input_candidates": len(candidates),
+        "input_lcdb_units": len(candidates),
+        "lcdb_unit_area_ha_min": round(float(unit_area_ha.min()), 4),
+        "lcdb_unit_area_ha_median": round(float(unit_area_ha.median()), 4),
+        "lcdb_unit_area_ha_max": round(float(unit_area_ha.max()), 4),
         "candidate_review": int(status_counts.get("candidate_review", 0)),
         "quarantine": int(status_counts.get("quarantine", 0)),
         "excluded": int(status_counts.get("excluded", 0)),
@@ -56,13 +72,28 @@ def main() -> None:
         "width_disagreement_rate": round(float(len(disagreements) / len(candidates)), 4),
         "ap_fail_erosion_pass": int(direction.get((False, True), 0)),
         "ap_pass_erosion_fail": int(direction.get((True, False), 0)),
-        "width_example_ids": disagreements["parcel_id"].astype(str).head(3).tolist(),
+        "width_example_ids": disagreements["unit_id"].astype(str).head(3).tolist(),
         "nztm_area_pass": int(nztm_pass.sum()),
         "naive_wgs84_area_pass": int(naive_wgs84_pass.sum()),
         "false_rejections_if_square_degrees_treated_as_square_metres": int(
             (nztm_pass & ~naive_wgs84_pass).sum()
         ),
         "false_qualifications_in_same_error": int((~nztm_pass & naive_wgs84_pass).sum()),
+        "legacy_r03_area_only_flags": int(legacy_r03.sum()),
+        "material_r03_flags_at_1pct": int(material_r03.sum()),
+        "r03_low_overlap_units_reclassified_to_advisory": int(low_r03.sum()),
+        "legacy_r04_area_only_flags": int(legacy_r04.sum()),
+        "material_r04_flags_at_1pct": int(material_r04.sum()),
+        "r04_low_overlap_units_reclassified_to_advisory": int(low_r04.sum()),
+        "r04_low_overlap_source_unit_area_ha": round(
+            float(screened.loc[low_r04].geometry.area.sum() / 10_000.0), 1
+        ),
+        "r04_all_area_only_flagged_source_unit_area_ha": round(
+            float(screened.loc[legacy_r04].geometry.area.sum() / 10_000.0), 1
+        ),
+        "r04_low_overlap_actual_intersection_area_ha": round(
+            float(screened.loc[low_r04, "conservation_overlap_m2"].sum() / 10_000.0), 1
+        ),
         "visual_review_n": len(labels),
         "visual_plausible_plantable": int(label_counts.get("plausible-plantable", 0)),
         "visual_already_forested": int(label_counts.get("already-forested", 0)),
@@ -71,7 +102,7 @@ def main() -> None:
             float(label_counts.get("plausible-plantable", 0) / len(labels)), 4
         ),
         "visual_review_limitation": (
-            "Single AI-assisted visual review of 2024 imagery; no independent ground truth."
+            "Preliminary AI-assisted labels only; awaiting Feng Jiang's independent visual review."
         ),
     }
     (OUTPUT / "findings.json").write_text(json.dumps(findings, indent=2), encoding="utf-8")
@@ -80,7 +111,7 @@ def main() -> None:
     )
 
     examples = disagreements.head(3).merge(
-        candidates[["parcel_id", "geometry"]], on="parcel_id", how="left"
+        candidates[["unit_id", "geometry"]], on="unit_id", how="left"
     )
     fig, axes = plt.subplots(1, 3, figsize=(12, 4), constrained_layout=True)
     for axis, (_, row) in zip(axes, examples.iterrows()):
@@ -94,7 +125,7 @@ def main() -> None:
                 ax=axis, color="#f59e0b", alpha=0.65, edgecolor="#b45309"
             )
         axis.set_title(
-            f"{row.parcel_id}\n2A/P={row.width_area_perimeter_m:.1f} m; erosion=pass",
+            f"{row.unit_id}\n2A/P={row.width_area_perimeter_m:.1f} m; erosion=pass",
             fontsize=9,
         )
         axis.set_aspect("equal")

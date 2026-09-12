@@ -6,8 +6,8 @@ from ets_screening.demo_data import build_demo_layers
 from ets_screening.rules import evaluate_rules
 
 
-def by_id(results, parcel_id):
-    return results.set_index("parcel_id").loc[parcel_id]
+def by_id(results, unit_id):
+    return results.set_index("unit_id").loc[unit_id]
 
 
 def test_each_demo_rule_fails_for_its_own_reason():
@@ -40,13 +40,13 @@ def test_quarantine_preserves_all_features_and_reasons():
 def test_rule_audit_has_eight_rows_per_feature():
     candidates, pre1990, conservation = build_demo_layers()
     _, audit = evaluate_rules(candidates, pre1990, conservation)
-    counts = audit.groupby("parcel_id")["rule_id"].nunique()
+    counts = audit.groupby("unit_id")["rule_id"].nunique()
     assert (counts == 8).all()
 
 
 def test_boundary_contact_is_not_polygon_overlap():
     candidates = gpd.GeoDataFrame(
-        {"parcel_id": ["touch"], "lcdb_class": ["Low Producing Grassland"]},
+        {"unit_id": ["touch"], "lcdb_class": ["Low Producing Grassland"]},
         geometry=[box(0, 0, 100, 100)],
         crs=2193,
     )
@@ -58,9 +58,25 @@ def test_boundary_contact_is_not_polygon_overlap():
     assert row["pre1990_overlap_m2"] == 0
 
 
+def test_sub_one_percent_overlap_is_advisory_not_whole_unit_failure():
+    candidates = gpd.GeoDataFrame(
+        {"unit_id": ["large-unit"], "lcdb_class": ["Low Producing Grassland"]},
+        geometry=[box(0, 0, 1000, 1000)],
+        crs=2193,
+    )
+    minor_overlap = gpd.GeoDataFrame(geometry=[box(0, 0, 50, 100)], crs=2193)
+    empty = gpd.GeoDataFrame(geometry=[], crs=2193)
+    results, _ = evaluate_rules(candidates, minor_overlap, empty)
+    row = results.iloc[0]
+    assert row["pre1990_overlap_m2"] == 5000
+    assert row["pre1990_overlap_pct"] == 0.5
+    assert bool(row["r03_no_pre1990_overlap"])
+    assert row["advisory_rule_ids"] == "R-03-low-overlap"
+
+
 def test_unrounded_area_controls_threshold_decision():
     candidates = gpd.GeoDataFrame(
-        {"parcel_id": ["just-short"], "lcdb_class": ["Low Producing Grassland"]},
+        {"unit_id": ["just-short"], "lcdb_class": ["Low Producing Grassland"]},
         geometry=[box(0, 0, 100, 99.9996)],
         crs=2193,
     )
@@ -77,7 +93,7 @@ def test_mutated_copies_trigger_each_target_rule():
 
     def evaluate(geometry, lcdb_class="Low Producing Grassland", pre=None, pcl=None):
         frame = gpd.GeoDataFrame(
-            {"parcel_id": ["copy"], "lcdb_class": [lcdb_class]},
+            {"unit_id": ["copy"], "lcdb_class": [lcdb_class]},
             geometry=[geometry],
             crs=2193,
         )

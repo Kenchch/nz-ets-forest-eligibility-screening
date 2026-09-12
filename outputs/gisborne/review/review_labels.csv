@@ -1,4 +1,4 @@
-parcel_id,review_label,reviewer,review_date,evidence_note
+unit_id,review_label,reviewer,review_date,evidence_note
 lcdb1000012117,already-forested,Codex visual review,2026-09-12,Dense closed woody cover is visible across the polygon; low-resolution single-image interpretation.
 lcdb1000034948,clearly-not-plantable,Codex visual review,2026-09-12,Long narrow polygon follows an active river margin within intensively managed flats.
 lcdb1000035223,plausible-plantable,Codex visual review,2026-09-12,Open or recently cleared patch is visible within a wooded setting; no obvious built or water constraint.

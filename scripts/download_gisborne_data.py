@@ -64,6 +64,7 @@ NON_PLANTABLE_CONTROL_CLASSES = {
     "Urban Parkland/Open Space",
 }
 CANDIDATE_SOURCE_CLASSES = PLANTABLE_CLASSES | NON_PLANTABLE_CONTROL_CLASSES
+MINIMUM_FRAGMENT_AREA_M2 = 1.0
 
 
 def _request_json(url: str, params: dict[str, object], *, post: bool = False) -> dict:
@@ -212,13 +213,15 @@ def main() -> None:
 
     candidates = _clip(lcdb, boundary)
     candidates = candidates[candidates["Name_2023"].isin(CANDIDATE_SOURCE_CLASSES)].copy()
+    fragment_count = int((candidates.geometry.area < MINIMUM_FRAGMENT_AREA_M2).sum())
+    candidates = candidates[candidates.geometry.area >= MINIMUM_FRAGMENT_AREA_M2].copy()
     candidates = candidates.sort_values("LCDB_UID").reset_index(drop=True)
     part = candidates.groupby("LCDB_UID").cumcount() + 1
     total_parts = candidates.groupby("LCDB_UID")["LCDB_UID"].transform("size")
-    candidates["parcel_id"] = candidates["LCDB_UID"].astype(str)
-    candidates.loc[total_parts > 1, "parcel_id"] += "-part-" + part.astype(str)
+    candidates["unit_id"] = candidates["LCDB_UID"].astype(str)
+    candidates.loc[total_parts > 1, "unit_id"] += "-part-" + part.astype(str)
     candidates["lcdb_class"] = candidates["Name_2023"]
-    candidates = candidates[["parcel_id", "lcdb_class", "geometry"]].sort_values("parcel_id")
+    candidates = candidates[["unit_id", "lcdb_class", "geometry"]].sort_values("unit_id")
 
     # This is mapped evidence only: the Act's complete pre-1990 definition also
     # requires land-history and liability facts that LUCAS cannot establish.
@@ -246,6 +249,7 @@ def main() -> None:
         "study_area": "Gisborne District",
         "crs": "EPSG:2193",
         "feature_counts": {name: len(frame) for name, frame in outputs.items()},
+        "discarded_clip_fragments_below_1_m2": fragment_count,
         "sha256": {name: _sha256(PROCESSED / name) for name in outputs},
         "sources": {
             "boundary": BOUNDARY_URL,

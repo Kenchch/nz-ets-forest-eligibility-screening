@@ -4,6 +4,7 @@ import pytest
 
 from ets_screening.demo_data import build_demo_layers
 from ets_screening.screen import RejectRateExceeded, run_screening
+from ets_screening.sample_review import select_review_sample
 
 
 def test_demo_pipeline_writes_auditable_outputs(tmp_path):
@@ -41,3 +42,12 @@ def test_main_pipeline_propagates_linz_api_key(tmp_path, monkeypatch):
     html = (tmp_path / "review" / "review_map.html").read_text(encoding="utf-8")
     assert "api=test-key-not-secret" in html
     assert "YOUR_API_KEY" not in html
+
+
+def test_review_sample_is_stable_when_unselected_rows_are_removed():
+    candidates, _, _ = build_demo_layers()
+    first = select_review_sample(candidates, sample_size=5, seed=42)
+    unselected = set(candidates["unit_id"]) - set(first["unit_id"])
+    reduced = candidates[~candidates["unit_id"].isin(list(unselected)[:2])]
+    second = select_review_sample(reduced, sample_size=5, seed=42)
+    assert first["unit_id"].tolist() == second["unit_id"].tolist()
