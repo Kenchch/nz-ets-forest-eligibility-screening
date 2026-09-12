@@ -1,4 +1,6 @@
 import pandas as pd
+import geopandas as gpd
+from shapely.geometry import box
 
 from ets_screening.demo_data import build_demo_layers
 from ets_screening.rules import evaluate_rules
@@ -31,6 +33,8 @@ def test_quarantine_preserves_all_features_and_reasons():
     assert "R-03" in by_id(results, "G07")["failed_rule_ids"]
     assert by_id(results, "G05")["status"] == "excluded"
     assert by_id(results, "G01")["status"] == "candidate_review"
+    assert by_id(results, "G04")["status"] == "quarantine"
+    assert "R-02" in by_id(results, "G04")["failed_rule_ids"]
 
 
 def test_rule_audit_has_eight_rows_per_feature():
@@ -39,3 +43,52 @@ def test_rule_audit_has_eight_rows_per_feature():
     counts = audit.groupby("parcel_id")["rule_id"].nunique()
     assert (counts == 8).all()
 
+
+def test_boundary_contact_is_not_polygon_overlap():
+    candidates = gpd.GeoDataFrame(
+        {"parcel_id": ["touch"], "lcdb_class": ["Low Producing Grassland"]},
+        geometry=[box(0, 0, 100, 100)],
+        crs=2193,
+    )
+    touching = gpd.GeoDataFrame(geometry=[box(100, 0, 200, 100)], crs=2193)
+    distant = gpd.GeoDataFrame(geometry=[box(300, 0, 400, 100)], crs=2193)
+    results, _ = evaluate_rules(candidates, touching, distant)
+    row = results.iloc[0]
+    assert bool(row["r03_no_pre1990_overlap"])
+    assert row["pre1990_overlap_m2"] == 0
+
+
+def test_unrounded_area_controls_threshold_decision():
+    candidates = gpd.GeoDataFrame(
+        {"parcel_id": ["just-short"], "lcdb_class": ["Low Producing Grassland"]},
+        geometry=[box(0, 0, 100, 99.9996)],
+        crs=2193,
+    )
+    empty = gpd.GeoDataFrame(geometry=[], crs=2193)
+    results, _ = evaluate_rules(candidates, empty, empty)
+    assert results.iloc[0]["area_ha"] == 1.0
+    assert not bool(results.iloc[0]["r01_area_pass"])
+
+
+def test_mutated_copies_trigger_each_target_rule():
+    """Start with valid geometry, then damage one input dimension at a time."""
+
+    empty = gpd.GeoDataFrame(geometry=[], crs=2193)
+
+    def evaluate(geometry, lcdb_class="Low Producing Grassland", pre=None, pcl=None):
+        frame = gpd.GeoDataFrame(
+            {"parcel_id": ["copy"], "lcdb_class": [lcdb_class]},
+            geometry=[geometry],
+            crs=2193,
+        )
+        return evaluate_rules(frame, pre if pre is not None else empty, pcl if pcl is not None else empty)[0].iloc[0]
+
+    valid = box(0, 0, 120, 120)
+    assert evaluate(valid)["failed_rule_ids"] == ""
+    assert evaluate(box(0, 0, 50, 100))["failed_rule_ids"] == "R-01"
+    assert "R-02" in evaluate(box(0, 0, 20, 600))["failed_rule_ids"]
+
+    overlap = gpd.GeoDataFrame(geometry=[box(10, 10, 80, 80)], crs=2193)
+    assert evaluate(valid, pre=overlap)["failed_rule_ids"] == "R-03"
+    assert evaluate(valid, pcl=overlap)["status"] == "excluded"
+    assert evaluate(valid, lcdb_class="Built-up Area")["failed_rule_ids"] == "R-05"

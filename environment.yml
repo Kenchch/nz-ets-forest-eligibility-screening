@@ -6,6 +6,7 @@ dependencies:
   - geopandas>=1.0
   - matplotlib>=3.9
   - pandas>=2.2
+  - pillow>=11.0
   - pyogrio>=0.10
   - pyproj>=3.7
   - shapely>=2.0
@@ -13,4 +14,3 @@ dependencies:
   - pip
   - pip:
       - -e .
-

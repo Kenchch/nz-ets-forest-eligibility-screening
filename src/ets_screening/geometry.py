@@ -39,11 +39,11 @@ def compare_width_methods(frame: gpd.GeoDataFrame, threshold_m: float = 30.0) ->
     """Return per-feature results and disagreements for two screening proxies."""
 
     result = pd.DataFrame({"parcel_id": frame["parcel_id"].astype(str)})
-    result["width_area_perimeter_m"] = frame.geometry.map(width_area_perimeter).round(3)
-    result["area_perimeter_pass"] = result["width_area_perimeter_m"] >= threshold_m
+    raw_width = frame.geometry.map(width_area_perimeter)
+    result["width_area_perimeter_m"] = raw_width.round(3)
+    result["area_perimeter_pass"] = raw_width >= threshold_m
     result["erosion_core_pass"] = frame.geometry.map(
         lambda geometry: width_erosion(geometry, threshold_m / 2.0)
     )
     result["methods_disagree"] = result["area_perimeter_pass"] != result["erosion_core_pass"]
     return result
-

@@ -14,6 +14,7 @@ import pandas as pd
 
 from .demo_data import build_demo_layers, write_demo_layers
 from .geometry import compare_width_methods
+from .io_utils import normalise_gpkg
 from .load import read_layer
 from .report import plot_layout_pdf, plot_screening_overview, plot_width_comparison
 from .rules import RuleConfig, evaluate_rules
@@ -47,8 +48,10 @@ def run_screening(
     pre1990: gpd.GeoDataFrame,
     conservation: gpd.GeoDataFrame,
     output_dir: str | Path,
-    reject_rate_threshold: float = 0.90,
+    reject_rate_threshold: float = 0.80,
     config: RuleConfig | None = None,
+    study_label: str = "User-supplied screening run",
+    data_note: str = "Provided inputs",
 ) -> dict[str, object]:
     results, audit = evaluate_rules(candidates, pre1990, conservation, config)
     comparison = compare_width_methods(results)
@@ -67,6 +70,8 @@ def run_screening(
         review_out = results[results["status"] != "candidate_review"].copy()
         candidates_out.to_file(stage / "candidates.gpkg", layer="candidates", driver="GPKG")
         review_out.to_file(stage / "quarantine.gpkg", layer="quarantine", driver="GPKG")
+        normalise_gpkg(stage / "candidates.gpkg")
+        normalise_gpkg(stage / "quarantine.gpkg")
         audit.to_csv(stage / "rule_results.csv", index=False)
         summary = _summary(results, comparison)
         summary.to_csv(stage / "summary.csv", index=False)
@@ -84,8 +89,16 @@ def run_screening(
             results,
             comparison,
             stage / "layout_map.pdf",
+            study_label,
+            data_note,
         )
-        write_review_bundle(candidates_out, stage / "review", sample_size=30)
+        write_review_bundle(
+            candidates_out,
+            stage / "review",
+            sample_size=30,
+            api_key=os.getenv("LINZ_BASEMAP_API_KEY"),
+        )
+        normalise_gpkg(stage / "review" / "review_queue.gpkg")
         manifest = {
             "scope": "screening/triage only; not an eligibility determination",
             "crs": "EPSG:2193",
@@ -106,7 +119,6 @@ def run_screening(
             "run_manifest.json",
             "layout_map.pdf",
             "figures",
-            "review",
         }
         for child in (output_dir / name for name in managed_names):
             if not child.exists():
@@ -115,7 +127,17 @@ def run_screening(
                 shutil.rmtree(child)
             else:
                 child.unlink()
+        generated_review = stage / "review"
+        output_review = output_dir / "review"
+        output_review.mkdir(parents=True, exist_ok=True)
+        for name in ("review_queue.gpkg", "review_labels_template.csv", "review_map.html"):
+            target = output_review / name
+            if target.exists():
+                target.unlink()
+            shutil.copy2(generated_review / name, target)
         for child in stage.iterdir():
+            if child.name == "review":
+                continue
             os.replace(child, output_dir / child.name)
     finally:
         shutil.rmtree(stage, ignore_errors=True)
@@ -128,8 +150,10 @@ def main() -> None:
     parser.add_argument("--pre1990")
     parser.add_argument("--conservation")
     parser.add_argument("--output", default="outputs")
-    parser.add_argument("--reject-rate-threshold", type=float, default=0.90)
+    parser.add_argument("--reject-rate-threshold", type=float, default=0.80)
     parser.add_argument("--demo", action="store_true", help="Run deterministic synthetic NZTM fixtures")
+    parser.add_argument("--study-label", default="User-supplied screening run")
+    parser.add_argument("--data-note", default="Provided inputs")
     args = parser.parse_args()
 
     if args.demo:
@@ -148,6 +172,8 @@ def main() -> None:
         conservation,
         args.output,
         args.reject_rate_threshold,
+        study_label=args.study_label,
+        data_note=args.data_note,
     )
     print(json.dumps(manifest, indent=2))
 

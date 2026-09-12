@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
+from datetime import datetime, timezone
 
 import geopandas as gpd
 import matplotlib
@@ -27,7 +28,7 @@ def plot_screening_overview(
     conservation: gpd.GeoDataFrame,
     pre1990: gpd.GeoDataFrame,
     destination: str | Path,
-    title: str = "Gisborne study design - synthetic demonstration",
+    title: str = "Spatial eligibility screening",
 ) -> None:
     destination = Path(destination)
     destination.parent.mkdir(parents=True, exist_ok=True)
@@ -49,14 +50,30 @@ def plot_screening_overview(
     for status, colour in STATUS_COLOURS.items():
         subset = display_results[display_results["status"] == status]
         if not subset.empty:
-            subset.plot(ax=ax, facecolor=colour, edgecolor="#222222", linewidth=0.8, alpha=0.78)
+            subset.plot(
+                ax=ax,
+                facecolor=colour,
+                edgecolor="#222222",
+                linewidth=0.15 if len(results) > 200 else 0.8,
+                alpha=0.78,
+            )
     if not display_conservation.empty:
         display_conservation.boundary.plot(ax=ax, color="#6a3d9a", linewidth=2.0, linestyle="--")
     if not display_pre1990.empty:
         display_pre1990.boundary.plot(ax=ax, color="#1f78b4", linewidth=2.0, linestyle=":")
-    for _, row in display_results.iterrows():
-        point = row.geometry.representative_point()
-        ax.annotate(row["parcel_id"], (point.x, point.y), ha="center", va="center", fontsize=8, weight="bold")
+    # Labels help with tiny diagnostic fixtures but make a district-scale run
+    # unreadable. Real feature IDs remain available in the GeoPackages.
+    if len(display_results) <= 50:
+        for _, row in display_results.iterrows():
+            point = row.geometry.representative_point()
+            ax.annotate(
+                row["parcel_id"],
+                (point.x, point.y),
+                ha="center",
+                va="center",
+                fontsize=8,
+                weight="bold",
+            )
     handles = [
         Line2D([0], [0], marker="s", color="none", markerfacecolor=colour, markeredgecolor="#222", markersize=10, label=status.replace("_", " ").title())
         for status, colour in STATUS_COLOURS.items()
@@ -72,7 +89,7 @@ def plot_screening_overview(
     ax.text(
         0.0,
         1.015,
-        "Screening / triage only - not an eligibility determination. Synthetic parcels in EPSG:2193.",
+        "Screening / triage only - not an eligibility determination. Polygons in EPSG:2193.",
         transform=ax.transAxes,
         fontsize=9,
         color="#444444",
@@ -91,14 +108,21 @@ def plot_screening_overview(
 def plot_width_comparison(comparison: pd.DataFrame, destination: str | Path) -> None:
     destination = Path(destination)
     destination.parent.mkdir(parents=True, exist_ok=True)
-    ordered = comparison.sort_values("width_area_perimeter_m")
+    ordered = comparison.sort_values("width_area_perimeter_m").reset_index(drop=True)
     colours = ordered["methods_disagree"].map({True: "#d95f02", False: "#2b8c4b"})
     fig, ax = plt.subplots(figsize=(10, 5.5))
-    ax.bar(ordered["parcel_id"], ordered["width_area_perimeter_m"], color=colours)
+    ax.scatter(
+        ordered.index,
+        ordered["width_area_perimeter_m"],
+        c=colours,
+        s=16 if len(ordered) <= 100 else 5,
+        alpha=0.75,
+        linewidths=0,
+    )
     ax.axhline(30.0, color="#333333", linestyle="--", linewidth=1.2, label="30 m threshold")
     ax.set_ylabel("2A/P width proxy (m)")
-    ax.set_xlabel("Synthetic parcel")
-    ax.set_title("Two width proxies disagree on irregular shapes", loc="left", weight="bold")
+    ax.set_xlabel("Features ranked by 2A/P width")
+    ax.set_title("Width-proxy comparison", loc="left", weight="bold")
     handles = [
         Line2D([0], [0], color="#333333", lw=1.2, ls="--", label="30 m threshold"),
         Line2D([0], [0], marker="s", color="none", markerfacecolor="#d95f02", markersize=10, label="Methods disagree"),
@@ -115,6 +139,8 @@ def plot_layout_pdf(
     results: gpd.GeoDataFrame,
     comparison: pd.DataFrame,
     destination: str | Path,
+    study_label: str = "User-supplied screening run",
+    data_note: str = "Provided inputs",
 ) -> None:
     """Build an A4 landscape reference sheet from the reproducible run."""
 
@@ -122,11 +148,12 @@ def plot_layout_pdf(
     destination.parent.mkdir(parents=True, exist_ok=True)
     counts = results["status"].value_counts()
     disagreements = comparison[comparison["methods_disagree"]]
-    disagreement_ids = ", ".join(disagreements["parcel_id"].astype(str)) or "none"
+    example_values = disagreements["parcel_id"].astype(str).head(3).tolist()
+    example_lines = "\n".join(f"  {value}" for value in example_values) or "  none"
 
     fig = plt.figure(figsize=(11.69, 8.27), facecolor="white")
     fig.text(0.05, 0.955, "NZ ETS forest-land spatial screening", fontsize=20, weight="bold", color="#1a1a1a")
-    fig.text(0.05, 0.925, "Gisborne study design - synthetic demonstration", fontsize=11, color="#555555")
+    fig.text(0.05, 0.925, study_label, fontsize=11, color="#555555")
 
     image_ax = fig.add_axes([0.045, 0.39, 0.91, 0.50])
     image_ax.imshow(plt.imread(overview_png))
@@ -142,7 +169,9 @@ def plot_layout_pdf(
     )
     width_text = (
         "WIDTH DIAGNOSTIC\n"
-        f"Proxy disagreements: {len(disagreements)} ({disagreement_ids})\n"
+        f"Proxy disagreements: {len(disagreements)}\n"
+        "Examples:\n"
+        f"{example_lines}\n"
         "2A/P and -15 m erosion are triage only.\n"
         "Formal MPI width uses centre-line samples\n"
         "at 20 m intervals."
@@ -155,12 +184,12 @@ def plot_layout_pdf(
         "rule IDs and geometry for review."
     )
     fig.text(0.06, 0.29, summary_text, fontsize=9.5, linespacing=1.45, va="top")
-    fig.text(0.37, 0.29, width_text, fontsize=9.5, linespacing=1.45, va="top")
-    fig.text(0.69, 0.29, boundary_text, fontsize=9.5, linespacing=1.45, va="top")
+    fig.text(0.36, 0.29, width_text, fontsize=8.5, linespacing=1.35, va="top")
+    fig.text(0.72, 0.29, boundary_text, fontsize=9.0, linespacing=1.4, va="top")
     fig.text(
         0.05,
         0.045,
-        "SCREENING / TRIAGE ONLY - NOT AN ELIGIBILITY DETERMINATION | EPSG:2193 | Synthetic geometries",
+        f"SCREENING / TRIAGE ONLY - NOT AN ELIGIBILITY DETERMINATION | EPSG:2193 | {data_note}",
         fontsize=9,
         weight="bold",
         color="#8c2f39",
@@ -168,6 +197,11 @@ def plot_layout_pdf(
     fig.savefig(
         destination,
         format="pdf",
-        metadata={"Title": "NZ ETS forest-land spatial screening - synthetic demonstration", "Author": "Feng Jiang"},
+        metadata={
+            "Title": f"NZ ETS forest-land spatial screening - {study_label}",
+            "Author": "Feng Jiang",
+            "CreationDate": datetime(2026, 9, 12, tzinfo=timezone.utc),
+            "ModDate": datetime(2026, 9, 12, tzinfo=timezone.utc),
+        },
     )
     plt.close(fig)

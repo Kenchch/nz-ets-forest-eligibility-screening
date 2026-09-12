@@ -33,3 +33,11 @@ def test_reject_rate_gate_aborts_before_publication(tmp_path):
         run_screening(candidates, pre1990, conservation, tmp_path, 0.10)
     assert not tmp_path.exists() or not any(tmp_path.iterdir())
 
+
+def test_main_pipeline_propagates_linz_api_key(tmp_path, monkeypatch):
+    candidates, pre1990, conservation = build_demo_layers()
+    monkeypatch.setenv("LINZ_BASEMAP_API_KEY", "test-key-not-secret")
+    run_screening(candidates, pre1990, conservation, tmp_path, 0.90)
+    html = (tmp_path / "review" / "review_map.html").read_text(encoding="utf-8")
+    assert "api=test-key-not-secret" in html
+    assert "YOUR_API_KEY" not in html

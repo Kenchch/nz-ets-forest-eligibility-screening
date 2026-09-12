@@ -50,7 +50,13 @@ def write_review_bundle(
     ).to_csv(destination / "review_labels_template.csv", index=False)
 
     geojson = json.loads(sample.to_crs(4326).to_json())
-    api_key = api_key or "YOUR_API_KEY"
+    api_key = api_key or os.getenv("LINZ_BASEMAP_API_KEY")
+    tile_url = (
+        "https://basemaps.linz.govt.nz/v1/tiles/aerial/WebMercatorQuad/"
+        "{z}/{x}/{y}.webp"
+    )
+    if api_key:
+        tile_url += f"?api={api_key}"
     html = f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><title>ETS review queue</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
@@ -59,7 +65,7 @@ def write_review_bundle(
 <script>
 const features={json.dumps(geojson)};
 const map=L.map('map');
-L.tileLayer('https://basemaps.linz.govt.nz/v1/tiles/aerial/WebMercatorQuad/{{z}}/{{x}}/{{y}}.webp?api={api_key}',
+L.tileLayer('{tile_url}',
  {{attribution:'{LINZ_ATTRIBUTION}',maxZoom:22}}).addTo(map);
 const layer=L.geoJSON(features,{{style:{{color:'#ff2d55',weight:3,fillOpacity:0.08}},
  onEachFeature:(f,l)=>l.bindPopup('<b>'+f.properties.parcel_id+'</b><br>Status: '+f.properties.status)}}).addTo(map);
@@ -89,4 +95,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
