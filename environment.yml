@@ -1,0 +1,16 @@
+name: nz-ets-screening
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - geopandas>=1.0
+  - matplotlib>=3.9
+  - pandas>=2.2
+  - pyogrio>=0.10
+  - pyproj>=3.7
+  - shapely>=2.0
+  - pytest>=8.3
+  - pip
+  - pip:
+      - -e .
+
