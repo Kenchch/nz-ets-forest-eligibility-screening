@@ -4,8 +4,7 @@ Checked on 12 September 2026. Links point to the source publisher rather than a 
 
 ## Statutory definitions
 
-- [Climate Change Response Act 2002, section 4 definitions](https://legislation.govt.nz/act/public/2002/0040/latest/LMS282060.html), version as at 1 January 2026. The definition of `forest land` supplies the one-hectare, crown-cover and average-width requirements. The definition of `forest species` supplies the mature-height requirement and excludes species managed primarily for fruit or nut crops.
-- [Definition of pre-1990 forest land](https://www.legislation.govt.nz/act/public/2002/0040/latest/DLM158592.html). This is the historic-status boundary that the project can only proxy with a supplied evidence layer.
+- [Climate Change Response Act 2002, section 4 definitions](https://www.legislation.govt.nz/act/public/2002/40/en/latest/sections/DLM158592/), current consolidation checked on 12 September 2026. `Forest land`, `forest species`, `post-1989 forest land`, and `pre-1990 forest land` are all definitions within section 4. Earlier repository links used separate `LMS282060` and `DLM158592` anchors inside this same interpretation section; the register now uses one canonical current URL to avoid implying that they were separate sections.
 
 ## MPI operational guidance
 
@@ -18,9 +17,11 @@ Checked on 12 September 2026. Links point to the source publisher rather than a 
 ## Open-data and basemap documentation
 
 - [LCDB v6.0](https://lris.scinfo.org.nz/layer/123148-lcdb-v60-land-cover-database-version-60-mainland-new-zealand/) is the current land-cover source identified during research. The original project plan named v5.0; the data instructions use v6.0 and require the downloaded layer metadata and licence to be retained.
+- [LUCAS NZ Land Use Map 2020 v005](https://data.mfe.govt.nz/layer/117733-lucas-nz-land-use-map-2020-v005/) supplies nominal 1989, 2007, 2012, 2016 and 2020 land-use classes. This project uses 1989/2007 planted-forest polygons as mapped evidence only.
+- [Territorial Authority 2026](https://datafinder.stats.govt.nz/layer/123497-territorial-authority-2026/) is the definitive Stats NZ district boundary source used to clip Gisborne.
+- [DOC Public Conservation Land](https://services1.arcgis.com/3JjYDyG3oajxU6HO/arcgis/rest/services/DOC_Public_Conservation_Land/FeatureServer/0) is streamed from DOC's public ArcGIS organisation.
 - [LINZ Basemaps technical documentation](https://basemaps.linz.govt.nz/docs/user-guide/technical-documentation/) documents aerial WMTS/XYZ access in NZTM2000 and Web Mercator and the required attribution.
 
 ## Interpretation decisions
 
 R-04 and R-05 are project triage policies, not statutory eligibility rules. Public conservation land is not automatically legally ineligible, and an LCDB class cannot establish plantability, species, future height or future crown cover. Their results therefore prioritise or remove cases from this specific opportunity-screening queue; they do not decide ETS eligibility.
-

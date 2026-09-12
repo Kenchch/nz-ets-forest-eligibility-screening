@@ -20,9 +20,11 @@ jobs:
         run: python -m pip install -e ".[dev]"
       - name: Test
         run: pytest
-      - name: Verify pinned demonstration inputs
+      - name: Verify pinned inputs
         run: python scripts/verify_checksums.py
-      - name: Reproduce demonstration outputs
+      - name: Reproduce Gisborne outputs
         run: python scripts/reproduce.py
-      - name: Verify committed summaries are reproducible
-        run: git diff --exit-code -- outputs/summary.csv outputs/rule_results.csv outputs/width_method_comparison.csv
+      - name: Verify deterministic evidence tables
+        run: git diff --exit-code -- outputs/gisborne/summary.csv outputs/gisborne/rule_results.csv outputs/gisborne/width_method_comparison.csv outputs/gisborne/findings.csv outputs/gisborne/findings.json
+      - name: Verify semantic GeoPackage content
+        run: python scripts/semantic_hashes.py
