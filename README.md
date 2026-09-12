@@ -65,10 +65,14 @@ accuracy claim is made.
 
 | Result | Polygons |
 |---|---:|
-| Candidate review | 2,687 |
+| Candidate review - clean | 2,520 |
+| Candidate review - with advisory flag | 167 |
+| **Candidate review total** | **2,687** |
 | Quarantine | 2,801 |
 | Excluded by project conservation policy | 224 |
 
+The clean and advisory rows sum to the 2,687 candidate-review total. They are
+shown separately so assessors can prioritise cases with minor mapped overlaps.
 The automated reject/exclude rate is **52.96%**, below the consistent 80% batch
 abort threshold. Failures remain in `quarantine.gpkg` with rule IDs, overlap
 area and overlap percentage; no geometry is silently deleted.

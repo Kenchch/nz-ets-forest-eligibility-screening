@@ -32,6 +32,10 @@ def main() -> None:
         crs=2193,
     )
     status_counts = screened["status"].value_counts()
+    advisory_candidates = (
+        (screened["status"] == "candidate_review")
+        & screened["advisory_rule_ids"].fillna("").ne("")
+    )
     failed_counts = audit[audit["passed"] == False].groupby("rule_id").size()  # noqa: E712
 
     nztm_pass = candidates.geometry.area >= 10_000.0
@@ -59,6 +63,10 @@ def main() -> None:
         "lcdb_unit_area_ha_median": round(float(unit_area_ha.median()), 4),
         "lcdb_unit_area_ha_max": round(float(unit_area_ha.max()), 4),
         "candidate_review": int(status_counts.get("candidate_review", 0)),
+        "candidate_review_clean": int(
+            status_counts.get("candidate_review", 0) - advisory_candidates.sum()
+        ),
+        "candidate_review_with_advisory": int(advisory_candidates.sum()),
         "quarantine": int(status_counts.get("quarantine", 0)),
         "excluded": int(status_counts.get("excluded", 0)),
         "automated_reject_rate": round(

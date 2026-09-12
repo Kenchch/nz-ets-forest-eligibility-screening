@@ -5,6 +5,8 @@
   "lcdb_unit_area_ha_median": 2.4853,
   "lcdb_unit_area_ha_max": 36801.4156,
   "candidate_review": 2687,
+  "candidate_review_clean": 2520,
+  "candidate_review_with_advisory": 167,
   "quarantine": 2801,
   "excluded": 224,
   "automated_reject_rate": 0.5296,

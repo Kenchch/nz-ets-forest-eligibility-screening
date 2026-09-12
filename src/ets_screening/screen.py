@@ -28,10 +28,19 @@ class RejectRateExceeded(RuntimeError):
 def _summary(results: gpd.GeoDataFrame, comparison: pd.DataFrame) -> pd.DataFrame:
     total = len(results)
     counts = results["status"].value_counts()
+    advisory_candidates = (
+        (results["status"] == "candidate_review")
+        & results["advisory_rule_ids"].fillna("").ne("")
+    )
     return pd.DataFrame(
         [
             ("total_features", str(total)),
             ("candidate_review", str(int(counts.get("candidate_review", 0)))),
+            (
+                "candidate_review_clean",
+                str(int(counts.get("candidate_review", 0) - advisory_candidates.sum())),
+            ),
+            ("candidate_review_with_advisory", str(int(advisory_candidates.sum()))),
             ("quarantine", str(int(counts.get("quarantine", 0)))),
             ("excluded", str(int(counts.get("excluded", 0)))),
             ("automated_reject_rate", f"{float((results['status'] != 'candidate_review').mean()):.4f}"),

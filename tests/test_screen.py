@@ -3,7 +3,9 @@ import pandas as pd
 import pytest
 
 from ets_screening.demo_data import build_demo_layers
-from ets_screening.screen import RejectRateExceeded, run_screening
+from ets_screening.geometry import compare_width_methods
+from ets_screening.rules import evaluate_rules
+from ets_screening.screen import RejectRateExceeded, _summary, run_screening
 from ets_screening.sample_review import select_review_sample
 
 
@@ -51,3 +53,17 @@ def test_review_sample_is_stable_when_unselected_rows_are_removed():
     reduced = candidates[~candidates["unit_id"].isin(list(unselected)[:2])]
     second = select_review_sample(reduced, sample_size=5, seed=42)
     assert first["unit_id"].tolist() == second["unit_id"].tolist()
+
+
+def test_summary_separates_candidate_advisories():
+    candidates, pre1990, conservation = build_demo_layers()
+    results, _ = evaluate_rules(candidates, pre1990, conservation)
+    results.loc[results["status"] == "candidate_review", "advisory_rule_ids"] = "R-03-low-overlap"
+    comparison = compare_width_methods(results)
+
+    summary = dict(_summary(results, comparison).itertuples(index=False, name=None))
+
+    assert int(summary["candidate_review_with_advisory"]) == int(
+        (results["status"] == "candidate_review").sum()
+    )
+    assert int(summary["candidate_review_clean"]) == 0
