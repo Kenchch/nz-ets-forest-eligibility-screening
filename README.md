@@ -17,7 +17,27 @@ layers; the small synthetic fixtures remain only for isolated tests.
 
 ## Findings
 
-### 1. Width is materially method-dependent
+### 1. Boundary mismatch can dominate whole-unit decisions
+
+Under the earlier `>1 m²` rule, R-04 excluded 302 LCDB units. **78 had less
+than 1% conservation overlap, yet those large source units represented
+275,035.5 ha of the 283,698.7 ha flagged.** Their actual DOC intersection was
+only 679.3 ha. R-03 had the same pattern: 209 of 900 flags were below 1%.
+
+Independently mapped, differently generalised boundaries produce sliver
+intersections. Testing `intersects` promotes those slivers into whole-unit
+rejections, so a few square metres of mapping disagreement can remove a
+thousand-hectare unit from consideration.
+
+The project now treats an overlay as material only when it is both **greater
+than 1 m² and at least 1% of the LCDB unit**; smaller positive intersections
+remain explicit advisory flags, listed per unit and worst-overlap-first in
+[`advisory_candidates.csv`](outputs/gisborne/advisory_candidates.csv). The 1%
+value is a documented sensitivity threshold, not law. For assessment work,
+clipping authoritative parcel or applicant stand geometry by verified overlap is
+preferable to rejecting an entire land-cover mapping unit.
+
+### 2. Width is materially method-dependent
 
 The `2A/P` and `-15 m` erosion proxies disagree on **694 of 5,712 units
 (12.15%)**. All 694 run in the same direction: a local 30 m core survives, but
@@ -31,61 +51,31 @@ of average width: every disagreement is quarantined under R-02. Long branching,
 dumbbell and highly concave polygons can retain a core while still failing
 MPI's formal centre-line average.
 
-### 2. The real CRS failure mode is false rejection
-
-In EPSG:2193, **4,223** polygons meet the 1 ha area threshold. If the same
-geometries are transformed to EPSG:4326 and square degrees are naively compared
-with 10,000 square metres, **all 4,223 are falsely rejected** and none are
-falsely qualified. This corrects the initial project hypothesis rather than
-forcing the result to match it. Every pipeline entry point therefore fails
-loudly unless the CRS is EPSG:2193.
-
 ### 3. Imagery verification of the candidates is outstanding
 
 R-05 can only show that a unit's *mapped* land-cover class is a plausible
 planting proxy. Whether the ground is physically plantable at the imagery date
-is an interpretation question, and it is the weakest link in everything above.
+is an interpretation question, and it is the weakest link in everything above —
+mapped classes age, and riverbeds, coastal margins, roads and erosion scars sit
+inside units the automated rules pass.
 
-A fixed-seed sample of **30** candidates is pinned in
-[`review_sample_ids.csv`](outputs/gisborne/review/review_sample_ids.csv) and
-rendered as [dual-panel cards](outputs/gisborne/review/cards/) against 2024
-Gisborne imagery, but **no visual agreement or false-positive rate is published
-here**. `findings.csv` records `visual_review_status =
+The repository therefore ships this review as an open task rather than as a
+result:
+
+| Artefact | State |
+|---|---|
+| [Fixed-seed sample of 30 candidates](outputs/gisborne/review/review_sample_ids.csv) | Pinned; stable across reruns |
+| [Dual-panel imagery cards](outputs/gisborne/review/cards/) | Rendered from 2024 Gisborne imagery |
+| [Interactive review map](outputs/gisborne/review/review_map.html) | Offline; no CDN or API key required |
+| [Blank label template](outputs/gisborne/review/review_labels_template.csv) | Awaiting an independent human reviewer |
+
+**No visual agreement or false-positive rate is published here.**
+`findings.csv` records `visual_review_status =
 pending_independent_human_review` and nothing more. A rate appears only after a
 named person completes `review_labels.csv` and
 `scripts/ingest_review_labels.py` accepts it. That script refuses any label file
 whose reviewer name looks automated: a model's reading of an aerial image is not
 imagery-interpretation evidence and must not be reported as one.
-
-### 4. Screening disposition remains reviewable
-
-| Result | Polygons |
-|---|---:|
-| Candidate review - clean | 2,520 |
-| Candidate review - with advisory flag | 167 |
-| **Candidate review total** | **2,687** |
-| Quarantine | 2,801 |
-| Excluded by project conservation policy | 224 |
-
-The clean and advisory rows sum to the 2,687 candidate-review total. They are
-shown separately so assessors can prioritise cases with minor mapped overlaps.
-The automated reject/exclude rate is **52.96%**, below the consistent 80% batch
-abort threshold. Failures remain in `quarantine.gpkg` with rule IDs, overlap
-area and overlap percentage; no geometry is silently deleted.
-
-### 5. Boundary mismatch can dominate whole-unit decisions
-
-Under the earlier `>1 m²` rule, R-04 excluded 302 LCDB units. **78 had less
-than 1% conservation overlap, yet those large source units represented
-275,035.5 ha of the 283,698.7 ha flagged.** Their actual DOC intersection was
-only 679.3 ha. R-03 had the same pattern: 209 of 900 flags were below 1%.
-
-The project now treats an overlay as material only when it is both **greater
-than 1 m² and at least 1% of the LCDB unit**; smaller positive intersections
-remain explicit advisory flags. The 1% value is a documented sensitivity
-threshold, not law. For assessment work, clipping authoritative parcel or
-applicant stand geometry by verified overlap is preferable to rejecting an
-entire land-cover mapping unit.
 
 ## Rules and decision boundary
 
@@ -102,9 +92,7 @@ entire land-cover mapping unit.
 
 Boundary-only contact has zero area and does not fail R-03/R-04. The pipeline
 records exact intersection area and source-unit proportion rather than using
-`intersects`. This exposes sliver overlaps caused by independently mapped,
-differently generalised boundaries instead of turning them into whole-unit
-decisions.
+`intersects`.
 
 The [rule register](rules/rule_register.csv) and [source notes](rules/SOURCES.md)
 link each interpretation to the current Act and MPI guidance.
@@ -121,12 +109,26 @@ The reproducible study uses:
 - Gisborne District Council 2024 satellite imagery, credited by the service to
   LINZ, for the 30-card visual review.
 
-All vector processing is in NZTM2000 (EPSG:2193). The acquisition script queries
-nationwide services by the Gisborne bounding box, repairs invalid source
-geometries, clips to the district, explodes multipart mapping units, removes 36
-numerical fragments below 1 m², and assigns stable `unit_id` values. The source
-includes explicit non-plantable LCDB controls
-so R-05 is tested rather than made tautological by preprocessing.
+All vector processing is in NZTM2000 (EPSG:2193). **The real CRS failure mode is
+false rejection, not false qualification:** 4,223 polygons meet the 1 ha
+threshold in EPSG:2193, and if those same geometries are transformed to
+EPSG:4326 and square degrees are naively compared with 10,000 square metres, all
+4,223 are falsely rejected and none are falsely qualified. That corrects the
+initial project hypothesis, and every pipeline entry point now fails loudly
+unless the CRS is EPSG:2193.
+
+The acquisition script queries nationwide services by the Gisborne bounding box,
+repairs invalid source geometries, clips to the district, explodes multipart
+mapping units, removes 36 numerical fragments below 1 m², and assigns stable
+`unit_id` values. The source includes explicit non-plantable LCDB controls so
+R-05 is tested rather than made tautological by preprocessing.
+
+**Every disposition stays reviewable.** The run yields 2,687 candidates for
+review (2,520 clean and 167 carrying an advisory flag), 2,801 quarantined and
+224 excluded by project conservation policy — an automated reject/exclude rate
+of 52.96%, below the 80% batch abort threshold. Failures keep their rule IDs,
+overlap area and overlap percentage in `quarantine.gpkg`; no geometry is
+silently deleted.
 
 ```text
 official boundary + LCDB + LUCAS + DOC
@@ -139,7 +141,9 @@ official boundary + LCDB + LUCAS + DOC
                  |
     candidate / quarantine / excluded
                  |
-  fixed-seed 30-card imagery review
+  fixed-seed 30-card imagery review queue
+                 |
+     independent human labels (outstanding)
 ```
 
 ## Reproduce
@@ -179,12 +183,16 @@ reaches `findings.csv`.
 
 `LINZ_BASEMAP_API_KEY` is optional for the interactive review map. The main
 pipeline propagates it when present and otherwise writes a valid key-free URL;
-it never writes `YOUR_API_KEY`. Static committed review cards use the official
-Gisborne imagery service and require no secret.
+it never writes `YOUR_API_KEY`. Leaflet is bundled into `review_map.html` rather
+than loaded from a CDN, so the map opens on a restricted network, and the static
+committed review cards use the official Gisborne imagery service and require no
+secret.
 
 CI runs the test suite, verifies every pinned input, reproduces the real
 Gisborne run and compares deterministic CSV findings plus semantic GeoPackage
-content hashes. Volatile GeoPackage timestamps and PDF metadata are normalised.
+content hashes. GeoPackage output is byte-stable within an environment:
+volatile timestamps and the SQLite writer-version stamp are normalised, so
+rerunning the pipeline on unchanged inputs produces no diff to commit.
 
 ## Tests and peer-review controls
 
@@ -219,6 +227,10 @@ ArcGIS-authored layout.
   fragments, unit areas still range from 0.0001 ha to 36,801.4 ha (median
   2.4853 ha). Production screening should intersect original LCDB coverage with
   LINZ NZ Primary Parcels or, preferably, applicant-supplied stand boundaries.
+- Multipart mapping units are exploded, and each fragment is then screened
+  independently under its own `-part-N` `unit_id`. One LCDB polygon can
+  therefore appear as several separate dispositions; its parts are neither
+  re-aggregated nor tested against R-01 or R-02 as a single area.
 - R-02 remains a proxy. Formal MPI width uses perpendicular measurements at
   20 m intervals along a centre line following the longest path.
 - LUCAS is mapped evidence, not a register of ETS status, liabilities or
@@ -238,11 +250,12 @@ rules/       rule register and verified primary sources
 data/        pinned real inputs, hashes, provenance and synthetic test fixtures
 src/         validation, geometry diagnostics, rules, pipeline and review queue
 tests/       corrupted-fixture and publication-gate tests
-outputs/     real Gisborne findings, maps, GeoPackages and imagery review
-notebooks/   executed real-data width/CRS/review walkthrough
+outputs/     real Gisborne findings, maps, GeoPackages and imagery review queue
+notebooks/   executed real-data derivation of the width, CRS and overlay findings
 arcgis/      thin ArcGIS Pro wrapper and reference PDF
 ```
 
 Code is MIT licensed. Source data retain their publishers' licences and
-attribution requirements. This independent portfolio project is not endorsed by
-MPI, EPA, LINZ, MfE, DOC, Stats NZ, Gisborne District Council or Manaaki Whenua.
+attribution requirements. Leaflet 1.9.4 is bundled under its BSD-2-Clause
+licence. This independent portfolio project is not endorsed by MPI, EPA, LINZ,
+MfE, DOC, Stats NZ, Gisborne District Council or Manaaki Whenua.
