@@ -1,7 +1,6 @@
 """Rebuild committed Gisborne screening outputs from pinned processed inputs."""
 
 from pathlib import Path
-import shutil
 
 import geopandas as gpd
 import pandas as pd
@@ -38,10 +37,9 @@ def main() -> None:
     build_findings()
     if ingest_review_labels() != 0:
         raise SystemExit("review labels rejected; see the message above")
-    shutil.copy2(
-        ROOT / "outputs" / "gisborne" / "layout_map.pdf",
-        ROOT / "arcgis" / "layout_map.pdf",
-    )
+    # arcgis/layout_map.pdf is deliberately not refreshed here. It is exported
+    # from ArcGIS Pro by arcgis/build_layout.py; copying the Matplotlib PDF over
+    # it would silently replace the cartographic output on every run.
     print(manifest)
 
 
