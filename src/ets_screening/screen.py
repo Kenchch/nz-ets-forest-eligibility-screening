@@ -52,6 +52,40 @@ def _summary(results: gpd.GeoDataFrame, comparison: pd.DataFrame) -> pd.DataFram
     )
 
 
+def _advisory_candidates(results: gpd.GeoDataFrame) -> pd.DataFrame:
+    """List candidates carrying a non-material overlap flag, worst overlap first.
+
+    These units passed screening but touch mapped pre-1990 or conservation
+    polygons below the materiality thresholds. The summary count alone is not
+    enough to act on, so they are also emitted as a sortable list: these are the
+    cases where substituting an authoritative parcel or stand boundary is most
+    likely to change the answer.
+    """
+
+    advisory = results[
+        (results["status"] == "candidate_review")
+        & results["advisory_rule_ids"].fillna("").ne("")
+    ]
+    listing = pd.DataFrame(
+        {
+            "unit_id": advisory["unit_id"],
+            "lcdb_class": advisory["lcdb_class"],
+            "area_ha": (advisory.geometry.area / 10_000.0).round(4),
+            "advisory_rule_ids": advisory["advisory_rule_ids"],
+            "pre1990_overlap_m2": advisory["pre1990_overlap_m2"],
+            "pre1990_overlap_pct": advisory["pre1990_overlap_pct"],
+            "conservation_overlap_m2": advisory["conservation_overlap_m2"],
+            "conservation_overlap_pct": advisory["conservation_overlap_pct"],
+        }
+    )
+    listing["max_overlap_pct"] = listing[
+        ["pre1990_overlap_pct", "conservation_overlap_pct"]
+    ].max(axis=1)
+    return listing.sort_values(
+        ["max_overlap_pct", "unit_id"], ascending=[False, True]
+    ).reset_index(drop=True)
+
+
 def run_screening(
     candidates: gpd.GeoDataFrame,
     pre1990: gpd.GeoDataFrame,
@@ -86,6 +120,9 @@ def run_screening(
         summary = _summary(results, comparison)
         summary.to_csv(stage / "summary.csv", index=False)
         comparison.to_csv(stage / "width_method_comparison.csv", index=False)
+        _advisory_candidates(results).to_csv(
+            stage / "advisory_candidates.csv", index=False
+        )
         overview_path = stage / "figures" / "screening_overview.png"
         plot_screening_overview(
             results,
@@ -135,6 +172,7 @@ def run_screening(
             "summary.csv",
             "rule_results.csv",
             "width_method_comparison.csv",
+            "advisory_candidates.csv",
             "run_manifest.json",
             "layout_map.pdf",
             "figures",

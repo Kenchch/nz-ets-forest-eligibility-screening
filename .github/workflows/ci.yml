@@ -25,6 +25,7 @@ jobs:
       - name: Reproduce Gisborne outputs
         run: python scripts/reproduce.py
       - name: Verify deterministic evidence tables
-        run: git diff --exit-code -- outputs/gisborne/summary.csv outputs/gisborne/rule_results.csv outputs/gisborne/width_method_comparison.csv outputs/gisborne/findings.csv outputs/gisborne/findings.json
+        run: |
+          git diff --exit-code -- "outputs/gisborne/*.csv" "outputs/gisborne/findings.json" "outputs/gisborne/review/*.csv"
       - name: Verify semantic GeoPackage content
         run: python scripts/semantic_hashes.py

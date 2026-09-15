@@ -18,6 +18,7 @@ def test_demo_pipeline_writes_auditable_outputs(tmp_path):
         "summary.csv",
         "rule_results.csv",
         "width_method_comparison.csv",
+        "advisory_candidates.csv",
         "run_manifest.json",
         "layout_map.pdf",
     }
@@ -67,6 +68,20 @@ def test_summary_separates_candidate_advisories():
         (results["status"] == "candidate_review").sum()
     )
     assert int(summary["candidate_review_clean"]) == 0
+
+
+def test_advisory_candidates_are_listed_for_assessor_triage(tmp_path):
+    candidates, pre1990, conservation = build_demo_layers()
+    run_screening(candidates, pre1990, conservation, tmp_path, 0.90)
+    summary = dict(
+        pd.read_csv(tmp_path / "summary.csv", dtype=str).itertuples(index=False)
+    )
+    listing = pd.read_csv(tmp_path / "advisory_candidates.csv")
+
+    assert len(listing) == int(summary["candidate_review_with_advisory"])
+    assert listing["advisory_rule_ids"].ne("").all()
+    # Sorted worst overlap first so an assessor can work down the list.
+    assert listing["max_overlap_pct"].is_monotonic_decreasing
 
 
 def test_geopackage_bytes_are_stable_across_runs(tmp_path):
