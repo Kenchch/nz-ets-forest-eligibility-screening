@@ -29,9 +29,6 @@ r04_low_overlap_units_reclassified_to_advisory,78
 r04_low_overlap_source_unit_area_ha,275035.5
 r04_all_area_only_flagged_source_unit_area_ha,283698.7
 r04_low_overlap_actual_intersection_area_ha,679.3
-visual_review_n,30
-visual_plausible_plantable,13
-visual_already_forested,5
-visual_clearly_not_plantable,12
-visual_agreement_rate,0.4333
-visual_review_limitation,Preliminary AI-assisted labels only; awaiting Feng Jiang's independent visual review.
+visual_review_status,pending_independent_human_review
+visual_review_sample_size,30
+visual_review_labels_recorded,0

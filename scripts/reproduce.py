@@ -8,6 +8,7 @@ import pandas as pd
 
 from ets_screening.screen import run_screening
 from build_findings import main as build_findings
+from ingest_review_labels import main as ingest_review_labels
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -18,12 +19,12 @@ def main() -> None:
     candidates = gpd.read_file(data / "gisborne_candidates.gpkg")
     pre1990 = gpd.read_file(data / "gisborne_pre1990_evidence.gpkg")
     conservation = gpd.read_file(data / "gisborne_conservation.gpkg")
-    labels_path = ROOT / "outputs" / "gisborne" / "review" / "review_labels.csv"
+    # The review sample is pinned by its own ID list, so reruns keep labelling
+    # the same 30 polygons whether or not the human review has been completed.
+    pinned_path = ROOT / "outputs" / "gisborne" / "review" / "review_sample_ids.csv"
     review_sample_ids = None
-    if labels_path.exists():
-        labels = pd.read_csv(labels_path)
-        id_column = "unit_id" if "unit_id" in labels.columns else "parcel_id"
-        review_sample_ids = labels[id_column].astype(str).tolist()
+    if pinned_path.exists():
+        review_sample_ids = pd.read_csv(pinned_path, dtype=str)["unit_id"].tolist()
     manifest = run_screening(
         candidates,
         pre1990,
@@ -35,6 +36,8 @@ def main() -> None:
         review_sample_ids=review_sample_ids,
     )
     build_findings()
+    if ingest_review_labels() != 0:
+        raise SystemExit("review labels rejected; see the message above")
     shutil.copy2(
         ROOT / "outputs" / "gisborne" / "layout_map.pdf",
         ROOT / "arcgis" / "layout_map.pdf",

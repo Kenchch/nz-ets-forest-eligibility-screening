@@ -679,5 +679,5 @@ const layer=L.geoJSON(features,{style:{color:'#ff2d55',weight:3,fillOpacity:0.08
  onEachFeature:(f,l)=>l.bindPopup('<b>'+f.properties.unit_id+'</b><br>Status: '+f.properties.status)}).addTo(map);
 map.fitBounds(layer.getBounds().pad(0.2));
 L.control({position:'topright'}).onAdd=function(){const d=L.DomUtil.create('div','note');
-d.innerHTML='<b>Human review queue</b><br>Inspect imagery and assign one label: plausible-plantable / already-forested / clearly-not-plantable.<br>Record your name, date and evidence note; AI suggestions are not an accuracy assessment.';return d;}.addTo(map);
+d.innerHTML='<b>Human review queue</b><br>Inspect the imagery and assign one label: plausible-plantable / already-forested / clearly-not-plantable.<br>Record your own name, the date and what you actually saw. This review must be completed by a named person; the pipeline refuses machine-generated labels.';return d;}.addTo(map);
 </script></body></html>

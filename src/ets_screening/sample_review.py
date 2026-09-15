@@ -12,6 +12,7 @@ import geopandas as gpd
 import pandas as pd
 
 from .load import assert_nztm2000
+from .review_labels import LABEL_VOCABULARY, REVIEW_COLUMNS
 
 LINZ_ATTRIBUTION = (
     'LINZ CC BY 4.0 © Imagery Basemap contributors - '
@@ -67,15 +68,13 @@ def write_review_bundle(
     destination.mkdir(parents=True, exist_ok=True)
     sample = select_review_sample(candidates, sample_size, seed, sample_ids)
     sample.to_file(destination / "review_queue.gpkg", layer="review_queue", driver="GPKG")
-    pd.DataFrame(
-        {
-            "unit_id": sample["unit_id"],
-            "review_label": "",
-            "reviewer": "",
-            "review_date": "",
-            "evidence_note": "",
-        }
-    ).to_csv(destination / "review_labels_template.csv", index=False)
+
+    # The pinned ID list keeps the review sample stable across reruns without
+    # depending on a label file that may not exist yet.
+    sample[["unit_id"]].to_csv(destination / "review_sample_ids.csv", index=False)
+    template = pd.DataFrame({column: "" for column in REVIEW_COLUMNS}, index=sample.index)
+    template["unit_id"] = sample["unit_id"].to_numpy()
+    template.to_csv(destination / "review_labels_template.csv", index=False)
 
     geojson = json.loads(sample.to_crs(4326).to_json())
     api_key = api_key or os.getenv("LINZ_BASEMAP_API_KEY")
@@ -87,6 +86,7 @@ def write_review_bundle(
         tile_url += f"?api={api_key}"
     leaflet_css = (VENDOR / "leaflet.css").read_text(encoding="utf-8")
     leaflet_js = (VENDOR / "leaflet.js").read_text(encoding="utf-8")
+    labels = " / ".join(LABEL_VOCABULARY)
     html = f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><title>ETS review queue</title>
 <!-- {LEAFLET_ATTRIBUTION} -->
@@ -102,7 +102,7 @@ const layer=L.geoJSON(features,{{style:{{color:'#ff2d55',weight:3,fillOpacity:0.
  onEachFeature:(f,l)=>l.bindPopup('<b>'+f.properties.unit_id+'</b><br>Status: '+f.properties.status)}}).addTo(map);
 map.fitBounds(layer.getBounds().pad(0.2));
 L.control({{position:'topright'}}).onAdd=function(){{const d=L.DomUtil.create('div','note');
-d.innerHTML='<b>Human review queue</b><br>Inspect imagery and assign one label: plausible-plantable / already-forested / clearly-not-plantable.<br>Record your name, date and evidence note; AI suggestions are not an accuracy assessment.';return d;}}.addTo(map);
+d.innerHTML='<b>Human review queue</b><br>Inspect the imagery and assign one label: {labels}.<br>Record your own name, the date and what you actually saw. This review must be completed by a named person; the pipeline refuses machine-generated labels.';return d;}}.addTo(map);
 </script></body></html>"""
     (destination / "review_map.html").write_text(html, encoding="utf-8")
 

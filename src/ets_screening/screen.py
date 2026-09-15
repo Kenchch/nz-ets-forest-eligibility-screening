@@ -187,7 +187,12 @@ def run_screening(
         generated_review = stage / "review"
         output_review = output_dir / "review"
         output_review.mkdir(parents=True, exist_ok=True)
-        for name in ("review_queue.gpkg", "review_labels_template.csv", "review_map.html"):
+        for name in (
+            "review_queue.gpkg",
+            "review_sample_ids.csv",
+            "review_labels_template.csv",
+            "review_map.html",
+        ):
             target = output_review / name
             if target.exists():
                 target.unlink()

@@ -40,26 +40,22 @@ falsely qualified. This corrects the initial project hypothesis rather than
 forcing the result to match it. Every pipeline entry point therefore fails
 loudly unless the CRS is EPSG:2193.
 
-### 3. Preliminary imagery triage suggests substantial false positives
+### 3. Imagery verification of the candidates is outstanding
 
-A fixed sample of **30** automated candidates was triaged against 2024
-Gisborne imagery by an AI reviewer:
+R-05 can only show that a unit's *mapped* land-cover class is a plausible
+planting proxy. Whether the ground is physically plantable at the imagery date
+is an interpretation question, and it is the weakest link in everything above.
 
-| Visual label | Count |
-|---|---:|
-| Plausible plantable | 13 |
-| Already forested | 5 |
-| Clearly not plantable | 12 |
-
-The preliminary agreement rate is **13/30 (43.3%)**. Suggested false positives mainly
-follow active riverbeds, coastal margins, roads or erosion features; five
-others appear already forested or recently harvested. The [dated labels and
-evidence notes](outputs/gisborne/review/review_labels.csv), [30 image
-cards](outputs/gisborne/review/cards/) and higher-resolution dual-panel contact
-sheets are committed. These labels are suggestions, not evidence that the
-project author interpreted aerial imagery. A blank human-review template is
-included and must be completed independently before any personal capability or
-accuracy claim is made.
+A fixed-seed sample of **30** candidates is pinned in
+[`review_sample_ids.csv`](outputs/gisborne/review/review_sample_ids.csv) and
+rendered as [dual-panel cards](outputs/gisborne/review/cards/) against 2024
+Gisborne imagery, but **no visual agreement or false-positive rate is published
+here**. `findings.csv` records `visual_review_status =
+pending_independent_human_review` and nothing more. A rate appears only after a
+named person completes `review_labels.csv` and
+`scripts/ingest_review_labels.py` accepts it. That script refuses any label file
+whose reviewer name looks automated: a model's reading of an aerial image is not
+imagery-interpretation evidence and must not be reported as one.
 
 ### 4. Screening disposition remains reviewable
 
@@ -168,6 +164,19 @@ python scripts/reproduce.py
 python scripts/download_review_cards.py
 ```
 
+To record the outstanding imagery review, copy the blank template, label all 30
+cards, then ingest the result:
+
+```bash
+cp outputs/gisborne/review/review_labels_template.csv outputs/gisborne/review/review_labels.csv
+python scripts/ingest_review_labels.py
+python scripts/reproduce.py
+```
+
+The ingest step validates the label vocabulary, the reviewer, the date format,
+the evidence notes and the unit IDs against the pinned sample before any number
+reaches `findings.csv`.
+
 `LINZ_BASEMAP_API_KEY` is optional for the interactive review map. The main
 pipeline propagates it when present and otherwise writes a valid key-free URL;
 it never writes `YOUR_API_KEY`. Static committed review cards use the official
@@ -179,14 +188,16 @@ content hashes. Volatile GeoPackage timestamps and PDF metadata are normalised.
 
 ## Tests and peer-review controls
 
-- 20 tests cover CRS, area, both width methods, boundary-only contact, true
-  overlap, each rule's own failure reason, API-key propagation and the 80%
-  publication gate.
+- 41 tests cover CRS, area, both width methods, boundary-only contact, true
+  overlap, each rule's own failure reason, API-key propagation, GeoPackage byte
+  stability, review-label validation and the 80% publication gate.
 - The 0.99996 ha fixture displays as 1.0000 ha but correctly fails because the
   raw value controls R-01.
 - Corrupted copies independently trigger small area, narrow geometry, wrong
   CRS, pre-1990 overlap and conservation overlap.
 - `manual_review_rule_ids` always carries R-03/R-06/R-07/R-08 forward.
+- Machine-generated reviewer names are rejected by the imagery-review ingest, so
+  automated labels cannot enter the committed evidence chain.
 
 ## ArcGIS Pro
 
@@ -214,9 +225,9 @@ ArcGIS-authored layout.
   satisfied surrender obligations.
 - LCDB class age and interpretation create false positives and negatives.
 - R-04 and R-05 are prioritisation policies, not statutory eligibility tests.
-- The committed imagery labels are preliminary AI suggestions. They do not
-  demonstrate the author's imagery interpretation and require independent
-  human completion of `review_labels_template.csv`.
+- No imagery verification has been carried out. The automated candidate set has
+  not been checked against what is visible on the ground, so the proportion of
+  false positives within it is unmeasured.
 - Species, future height/crown cover, title, forestry rights and evidence
   authenticity remain outside the automated scope.
 

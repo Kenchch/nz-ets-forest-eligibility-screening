@@ -12,16 +12,51 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import pandas as pd
 
+from ets_screening.review_labels import load_review_labels
+
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data" / "processed" / "gisborne_candidates.gpkg"
 OUTPUT = ROOT / "outputs" / "gisborne"
 
 
+def _visual_review_findings(review_dir: Path) -> dict[str, object]:
+    """Report the imagery review only when a named person has completed it.
+
+    Until then the findings record the pending state rather than a rate, so no
+    accuracy number in this repository can be read as the author's own imagery
+    interpretation when it is not.
+    """
+
+    expected = pd.read_csv(review_dir / "review_sample_ids.csv", dtype=str)["unit_id"]
+    labels_path = review_dir / "review_labels.csv"
+    if not labels_path.exists():
+        return {
+            "visual_review_status": "pending_independent_human_review",
+            "visual_review_sample_size": int(len(expected)),
+            "visual_review_labels_recorded": 0,
+        }
+    labels = load_review_labels(labels_path, expected.tolist())
+    counts = labels["review_label"].value_counts()
+    plausible = int(counts.get("plausible-plantable", 0))
+    return {
+        "visual_review_status": "complete",
+        "visual_review_sample_size": int(len(expected)),
+        "visual_review_labels_recorded": int(len(labels)),
+        "visual_plausible_plantable": plausible,
+        "visual_already_forested": int(counts.get("already-forested", 0)),
+        "visual_clearly_not_plantable": int(counts.get("clearly-not-plantable", 0)),
+        "visual_agreement_rate": round(plausible / len(labels), 4),
+        "visual_reviewer": "; ".join(sorted(set(labels["reviewer"]))),
+        "visual_review_limitation": (
+            "Single-reviewer interpretation of one imagery date; no ground truth"
+        ),
+    }
+
+
 def main() -> None:
     candidates = gpd.read_file(DATA)
     comparison = pd.read_csv(OUTPUT / "width_method_comparison.csv")
-    labels = pd.read_csv(OUTPUT / "review" / "review_labels.csv")
     audit = pd.read_csv(OUTPUT / "rule_results.csv")
     screened = gpd.GeoDataFrame(
         pd.concat(
@@ -47,7 +82,6 @@ def main() -> None:
     direction = disagreements.groupby(
         ["area_perimeter_pass", "erosion_core_pass"]
     ).size()
-    label_counts = labels["review_label"].value_counts()
     unit_area_ha = candidates.geometry.area / 10_000.0
     legacy_r03 = screened["pre1990_overlap_m2"] > 1.0
     legacy_r04 = screened["conservation_overlap_m2"] > 1.0
@@ -102,17 +136,8 @@ def main() -> None:
         "r04_low_overlap_actual_intersection_area_ha": round(
             float(screened.loc[low_r04, "conservation_overlap_m2"].sum() / 10_000.0), 1
         ),
-        "visual_review_n": len(labels),
-        "visual_plausible_plantable": int(label_counts.get("plausible-plantable", 0)),
-        "visual_already_forested": int(label_counts.get("already-forested", 0)),
-        "visual_clearly_not_plantable": int(label_counts.get("clearly-not-plantable", 0)),
-        "visual_agreement_rate": round(
-            float(label_counts.get("plausible-plantable", 0) / len(labels)), 4
-        ),
-        "visual_review_limitation": (
-            "Preliminary AI-assisted labels only; awaiting Feng Jiang's independent visual review."
-        ),
     }
+    findings.update(_visual_review_findings(OUTPUT / "review"))
     (OUTPUT / "findings.json").write_text(json.dumps(findings, indent=2), encoding="utf-8")
     pd.DataFrame(findings.items(), columns=["finding", "value"]).to_csv(
         OUTPUT / "findings.csv", index=False
