@@ -67,3 +67,15 @@ def test_summary_separates_candidate_advisories():
         (results["status"] == "candidate_review").sum()
     )
     assert int(summary["candidate_review_clean"]) == 0
+
+
+def test_geopackage_bytes_are_stable_across_runs(tmp_path):
+    candidates, pre1990, conservation = build_demo_layers()
+    first = tmp_path / "first"
+    second = tmp_path / "second"
+    run_screening(candidates, pre1990, conservation, first, 0.90)
+    run_screening(candidates, pre1990, conservation, second, 0.90)
+    # Identical content must produce identical bytes, otherwise every rerun
+    # rewrites the committed evidence and inflates the repository history.
+    for name in ("candidates.gpkg", "quarantine.gpkg"):
+        assert (first / name).read_bytes() == (second / name).read_bytes()
