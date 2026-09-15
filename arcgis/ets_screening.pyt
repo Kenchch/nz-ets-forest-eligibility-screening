@@ -43,12 +43,15 @@ class ScreenPost1989Candidates:
             parameterType="Required",
             direction="Input",
         )
+        # Declared as an input folder on purpose. As direction="Output",
+        # ArcGIS raises ERROR 000725 whenever the folder already exists, and
+        # this tool is designed to refresh a results folder in place.
         output = arcpy.Parameter(
             displayName="Output folder",
             name="output",
             datatype="DEFolder",
             parameterType="Required",
-            direction="Output",
+            direction="Input",
         )
         threshold = arcpy.Parameter(
             displayName="Reject-rate abort threshold",

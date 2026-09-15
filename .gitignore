@@ -11,3 +11,6 @@ outputs/ets-screen-*/
 *.egg-info/
 .idea/
 .vscode/
+
+# ArcGIS auto-generates empty metadata stubs beside a .pyt on first import.
+*.pyt.xml

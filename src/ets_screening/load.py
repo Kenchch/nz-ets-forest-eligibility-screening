@@ -7,6 +7,8 @@ from typing import Iterable
 
 import geopandas as gpd
 
+from .arcgis_paths import split_dataset_path
+
 EXPECTED_EPSG = 2193
 
 
@@ -63,7 +65,10 @@ def validate_candidates(frame: gpd.GeoDataFrame) -> None:
 
 
 def read_layer(path: str | Path, required_columns: Iterable[str] = (), name: str = "layer") -> gpd.GeoDataFrame:
-    frame = gpd.read_file(path)
+    # An ArcGIS toolbox hands over a catalog path such as
+    # "gisborne.gpkg\main.units", which GDAL cannot open directly.
+    container, layer = split_dataset_path(path)
+    frame = gpd.read_file(container) if layer is None else gpd.read_file(container, layer=layer)
     assert_nztm2000(frame, name)
     validate_geometry(frame, name)
     missing = set(required_columns) - set(frame.columns)
