@@ -6,7 +6,7 @@ from ets_screening.demo_data import build_demo_layers
 from ets_screening.geometry import compare_width_methods
 from ets_screening.rules import evaluate_rules
 from ets_screening.screen import RejectRateExceeded, _summary, run_screening
-from ets_screening.sample_review import select_review_sample
+from ets_screening.sample_review import select_review_sample, write_review_bundle
 
 
 def test_demo_pipeline_writes_auditable_outputs(tmp_path):
@@ -79,3 +79,14 @@ def test_geopackage_bytes_are_stable_across_runs(tmp_path):
     # rewrites the committed evidence and inflates the repository history.
     for name in ("candidates.gpkg", "quarantine.gpkg"):
         assert (first / name).read_bytes() == (second / name).read_bytes()
+
+
+def test_review_map_runs_without_a_cdn(tmp_path):
+    candidates, _, _ = build_demo_layers()
+    write_review_bundle(candidates, tmp_path, sample_size=2)
+
+    html = (tmp_path / "review_map.html").read_text(encoding="utf-8")
+    # Leaflet is inlined, so the map opens behind a proxy that blocks CDNs.
+    assert "unpkg.com" not in html
+    assert "<script src=" not in html and "<link rel=\"stylesheet\"" not in html
+    assert "L.map(" in html and "Leaflet 1.9.4" in html

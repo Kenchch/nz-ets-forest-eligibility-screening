@@ -1,4 +1,4 @@
-"""Create a fixed-seed assessor review queue and optional LINZ aerial web map."""
+"""Create a fixed-seed assessor review queue and an offline LINZ aerial web map."""
 
 from __future__ import annotations
 
@@ -16,6 +16,14 @@ from .load import assert_nztm2000
 LINZ_ATTRIBUTION = (
     'LINZ CC BY 4.0 © Imagery Basemap contributors - '
     'https://www.linz.govt.nz/data/linz-data/linz-basemaps/data-attribution'
+)
+
+# Leaflet is vendored rather than loaded from a CDN so the review map opens on
+# an air-gapped or proxy-restricted assessor workstation.
+VENDOR = Path(__file__).resolve().parent / "vendor" / "leaflet-1.9.4"
+LEAFLET_ATTRIBUTION = (
+    "Leaflet 1.9.4, BSD-2-Clause, (c) 2010-2023 Volodymyr Agafonkin - "
+    "bundled offline from https://leafletjs.com"
 )
 
 
@@ -77,11 +85,14 @@ def write_review_bundle(
     )
     if api_key:
         tile_url += f"?api={api_key}"
+    leaflet_css = (VENDOR / "leaflet.css").read_text(encoding="utf-8")
+    leaflet_js = (VENDOR / "leaflet.js").read_text(encoding="utf-8")
     html = f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><title>ETS review queue</title>
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-<style>html,body,#map{{height:100%;margin:0}} .note{{background:white;padding:8px}}</style></head>
-<body><div id="map"></div><script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<!-- {LEAFLET_ATTRIBUTION} -->
+<style>{leaflet_css}</style>
+<style>html,body,#map{{height:100%;margin:0}} .note{{background:white;padding:8px;max-width:26em}}</style></head>
+<body><div id="map"></div><script>{leaflet_js}</script>
 <script>
 const features={json.dumps(geojson)};
 const map=L.map('map');
