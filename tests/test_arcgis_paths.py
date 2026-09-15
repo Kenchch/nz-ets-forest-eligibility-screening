@@ -57,3 +57,35 @@ def test_read_layer_opens_an_arcgis_style_geopackage_path(tmp_path):
     )
     assert len(loaded) == 1
     assert loaded.crs.to_epsg() == 2193
+
+
+def test_backslash_paths_split_on_every_platform():
+    # pathlib resolves to PurePosixPath off Windows, where a backslash is an
+    # ordinary character, so this used to return the path unsplit on Linux CI
+    # while passing on the developer's Windows machine.
+    container, layer = split_dataset_path(r"C:\data\gisborne.gpkg\main.units")
+    assert (container, layer) == (r"C:\data\gisborne.gpkg", "units")
+
+
+def test_container_keeps_the_separator_style_it_arrived_with():
+    posix_container, _ = split_dataset_path("/srv/data/gisborne.gpkg/main.units")
+    assert posix_container == "/srv/data/gisborne.gpkg"
+
+    windows_container, _ = split_dataset_path(r"C:\data\gisborne.gpkg\main.units")
+    assert windows_container == r"C:\data\gisborne.gpkg"
+
+
+def test_a_suffix_inside_a_longer_name_is_not_a_boundary():
+    path = r"C:\data\gisborne.gpkg.backup\units"
+    container, layer = split_dataset_path(path)
+    assert (container, layer) == (path, None)
+
+
+def test_a_trailing_separator_leaves_no_layer():
+    container, layer = split_dataset_path("C:/data/gisborne.gpkg/")
+    assert (container, layer) == ("C:/data/gisborne.gpkg", None)
+
+
+def test_the_deepest_container_wins():
+    container, layer = split_dataset_path(r"C:\archive.gdb\gisborne.gpkg\main.units")
+    assert (container, layer) == (r"C:\archive.gdb\gisborne.gpkg", "units")
