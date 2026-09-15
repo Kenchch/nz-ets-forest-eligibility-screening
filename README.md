@@ -51,6 +51,16 @@ of average width: every disagreement is quarantined under R-02. Long branching,
 dumbbell and highly concave polygons can retain a core while still failing
 MPI's formal centre-line average.
 
+That shape class is measurable rather than rhetorical. In **181 of the 694
+(26.1%)** the surviving core is not one piece: the `-15 m` erosion splits it
+into two or more separate parts, so the unit holds 30 m of width only in
+disconnected lobes joined by necks narrower than 30 m. How many units qualify
+depends on how small a fragment still counts as a lobe — requiring every part
+to exceed 500 m² gives 53, and 1,000 m² gives 23. Like the 1% overlap rule,
+that is a **documented sensitivity threshold, not a fixed property of the
+data**; the headline 181 applies no threshold at all. The
+[ArcGIS Pro layout](arcgis/layout_map.pdf) insets one of these units.
+
 ### 3. Imagery verification of the candidates is outstanding
 
 R-05 can only show that a unit's *mapped* land-cover class is a plausible
@@ -196,7 +206,7 @@ rerunning the pipeline on unchanged inputs produces no diff to commit.
 
 ## Tests and peer-review controls
 
-- 49 tests cover CRS, area, both width methods, boundary-only contact, true
+- 54 tests cover CRS, area, both width methods, boundary-only contact, true
   overlap, each rule's own failure reason, API-key propagation, GeoPackage byte
   stability, ArcGIS catalog-path translation, review-label validation and the
   80% publication gate.
@@ -238,7 +248,10 @@ reporting output and are unrelated to this layout.
 - The LCDB streaming mirror simplifies geometry at 15 m, which can affect
   narrow-feature diagnostics. That tolerance is half the 30 m width threshold,
   so R-02 conclusions for narrow shapes are not reliable until the workflow is
-  rerun from the original LRIS geometry.
+  rerun from the original LRIS geometry. The multi-lobe count above inherits the
+  same weakness: a 15 m erosion applied to geometry generalised at 15 m can
+  sever a core at a neck the original mapping never had, so an unknown share of
+  the smallest lobes are simplification artefacts rather than real shape.
 - LCDB features are land-cover mapping units, **not cadastral parcels, ETS
   application areas, or forest stands**. After removing 36 sub-1 m² clipping
   fragments, unit areas still range from 0.0001 ha to 36,801.4 ha (median
