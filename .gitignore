@@ -14,3 +14,12 @@ outputs/ets-screen-*/
 
 # ArcGIS auto-generates empty metadata stubs beside a .pyt on first import.
 *.pyt.xml
+
+# ArcGIS Pro project artefacts. Projects belong outside the repository;
+# arcgis/build_layout.py writes its .aprx to the temp directory.
+arcgis/MyProject/
+*.aprx
+*.atbx
+*.gdb/
+.backups/
+ImportLog/
