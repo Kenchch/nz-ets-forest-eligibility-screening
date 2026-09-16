@@ -129,6 +129,7 @@ def run_screening(
             conservation,
             pre1990,
             overview_path,
+            title=study_label,
         )
         plot_width_comparison(comparison, stage / "figures" / "width_method_comparison.png")
         plot_layout_pdf(

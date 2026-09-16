@@ -105,3 +105,23 @@ def test_review_map_runs_without_a_cdn(tmp_path):
     assert "unpkg.com" not in html
     assert "<script src=" not in html and "<link rel=\"stylesheet\"" not in html
     assert "L.map(" in html and "Leaflet 1.9.4" in html
+
+
+def test_study_label_titles_the_overview_figure(tmp_path, monkeypatch):
+    # study_label used to reach only the PDF, so the district overview PNG that
+    # the README leads with carried the generic default title.
+    import ets_screening.screen as screen
+
+    seen = {}
+    original = screen.plot_screening_overview
+
+    def recording(*args, **kwargs):
+        seen["title"] = kwargs.get("title")
+        return original(*args, **kwargs)
+
+    monkeypatch.setattr(screen, "plot_screening_overview", recording)
+    candidates, pre1990, conservation = build_demo_layers()
+    run_screening(
+        candidates, pre1990, conservation, tmp_path, 0.90, study_label="Test District run"
+    )
+    assert seen["title"] == "Test District run"
