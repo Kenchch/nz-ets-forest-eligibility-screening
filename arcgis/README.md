@@ -12,10 +12,10 @@ committed Gisborne inputs, not merely reviewed statically. The run screened all
 `scripts/reproduce.py` — the GeoPackages match by semantic content hash and the
 tables match byte for byte.
 
-That verification ran against the rule set at commit `622e3b8`. The toolbox
-still only forwards to `run_screening`, so the 2026-09-23 rule revision (sliver
-filtering, clip-required overlaps, equivalent-rectangle width and contiguity)
-reaches it unchanged, but it has not been re-executed under ArcGIS Pro since.
+That verification was first run at commit `622e3b8`, and repeated on
+2026-09-24 with the revised rules and the refreshed inputs: the toolbox took
+54 seconds and again matched the CLI tables byte for byte and the GeoPackages
+by semantic hash.
 Expected failures (wrong CRS, invalid geometry, the reject-rate gate, a
 non-empty output folder that the tool did not create) are reported with
 `arcpy.AddError` rather than as a Python traceback.
@@ -44,20 +44,27 @@ been replaced.
 
 The stock `arcgispro-py3` environment ships `arcpy`, `pandas` and `matplotlib`
 but **not** `geopandas`, `shapely`, `pyogrio` or `pyproj`. ESRI treats that
-environment as read-only, so clone it before adding anything:
+environment as read-only, so clone it and add the packages to the clone.
+
+**Do not use `conda install geopandas` in the clone.** At Pro 3.7 the solver
+resolves it by *removing `arcpy`* and downgrading Esri's `libxml2`/`lxml`. The
+2026-09-24 verification used pip wheels instead, which bundle their own GDAL,
+GEOS and PROJ, with `numpy` and `pandas` pinned to the versions `arcpy` was
+built against:
 
 ```bat
-"%PROGRAMFILES%\ArcGIS\Pro\bin\Python\Scripts\conda-proclone.exe" --name arcgispro-py3-ets
-proswap arcgispro-py3-ets
-conda install -c conda-forge geopandas pyogrio
-pip install -e path\to\nz-ets-forest-eligibility-screening
+"%PROGRAMFILES%\ArcGIS\Pro\bin\Python\Scripts\conda-proclone.exe" -i arcgispro-py3 "%LOCALAPPDATA%\ESRI\conda\envs\arcgispro-py3-ets"
+set ENV=%LOCALAPPDATA%\ESRI\conda\envs\arcgispro-py3-ets
+"%ENV%\python.exe" -m pip install geopandas==1.1.4 shapely==2.1.2 pyogrio==0.13.0 pyproj==3.7.2 numpy==2.3.5 pandas==3.0.0
+"%ENV%\python.exe" -m pip install --no-deps -e path\to\nz-ets-forest-eligibility-screening
 ```
 
-The verification above instead side-loaded the dependencies with
-`pip install --target <dir> geopandas pyogrio shapely pyproj` and put `<dir>`
-plus this repository's `src` on `PYTHONPATH`, which leaves the ArcGIS
-installation untouched. `numpy` and `pandas` must be pruned from that directory
-so `arcpy` keeps the versions it was compiled against.
+The `numpy` and `pandas` pins are the versions shipped with Pro 3.7; check
+`"%ENV%\python.exe" -c "import numpy, pandas; print(numpy.__version__, pandas.__version__)"`
+first on another release. `pip check` then reports only the conflicts the stock
+environment already has. To use the toolbox from the Pro interface, select the
+clone under *Settings → Package Manager*; headless runs just call its
+`python.exe`.
 
 ## Use
 

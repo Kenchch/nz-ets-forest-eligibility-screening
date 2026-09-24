@@ -31,29 +31,51 @@ rules, and the first two both failed on real data:
   generalised layers into whole-unit rejections: R-04 flagged 302 units and
   R-03 900.
 - **At least 1% of the unit** fixed that, but 1% of a large unit is hundreds of
-  hectares. **48 units carried at least 1 ha of mapped pre-1990 planted forest
-  (1,012.4 ha in total, up to 146.9 ha in one unit) and 25 carried at least
-  1 ha of DOC land (668.6 ha, up to 297.2 ha) while being reported as minor
-  "low-overlap" advisories.** These were real blocks of land, not slivers, and
-  R-03 recorded them as passed.
+  hectares. On the earlier planted-forest-only evidence layer, **48 units
+  carried at least 1 ha of mapped pre-1990 planted forest (1,012.4 ha in
+  total, up to 146.9 ha in one unit), and 25 carried at least 1 ha of DOC land
+  (668.6 ha, up to 297.2 ha), while being reported as minor "low-overlap"
+  advisories.** These were real blocks of land, not slivers, and R-03 recorded
+  them as passed.
 
 The current rule does three things. Parts of an intersection **narrower than
 15 m are removed first** by morphological opening, matching the mirror's 15 m
-simplification; 73 pre-1990 and 20 conservation flags that the 1% rule treated
-as material consisted only of such slivers. What remains is **material at 1%
+simplification; 20 conservation flags that the 1% rule treated as material
+consisted only of such slivers (73 on the earlier pre-1990 layer, 348 on the
+current one). What remains is **material at 1%
 of the unit**. Remaining overlap of **1 ha or more below 1% is flagged
 `clip-required`**, recorded as an advisory rather than a pass, and taken out of
 the unit's `conflict_free_area_ha`. Excluding those units outright would be the
 opposite error: the 25 DOC cases alone cover about 241,500 ha.
 
-Candidates now total 309,480.7 ha, of which 307,934.1 ha is outside every
-mapped conflict. The 1% and 1 ha values are documented sensitivity thresholds,
-not law. Every flagged candidate is listed worst overlap first in
+The 1% and 1 ha values are documented sensitivity thresholds, not law. Every flagged candidate is listed worst overlap first in
 [`advisory_candidates.csv`](outputs/gisborne/advisory_candidates.csv). For
 assessment work, clipping authoritative parcel or applicant stand geometry by
 the verified overlap remains better than any whole-unit decision.
 
-### 2. Width is materially method-dependent
+### 2. Natural forest in 1989 is the largest exclusion, and it was missing
+
+Post-1989 status through para (a)(i) needs land that was *not forest land* on
+31 December 1989, natural or planted. The first evidence layer held only LUCAS
+planted forest (class 72). The 2026-09-24 refresh adds natural forest (class 71):
+the evidence grew from 1,933 to 11,109 polygons, and natural forest present in
+both 1989 and 2007 covers 232,944 ha of the district extent against 89,309 ha of
+planted forest.
+
+**Material R-03 overlaps rose from 603 to 2,388 units, and 1,684 units
+(231,127 ha) are now quarantined for R-03 alone.** Candidates fell from 3,069
+units (309,481 ha) to **1,641 units (115,060 ha, 114,105 ha outside every mapped
+conflict)**, and the automated reject rate rose to 71.27% — below the 80% batch
+gate, but close enough that a further conservative evidence layer could trip it.
+Land that was forest in 1989 but not in 2007 is not excluded: para (a)(ii) can
+still make it post-1989 forest land, so 256 units carry the advisory
+`R-03-deforested-1990-2007` for manual review instead.
+
+This moves the result in the conservative direction the project claims to take.
+LUCAS remains mapped evidence, with its own minimum mapping unit and
+generalisation, not a record of legal status.
+
+### 3. Width is materially method-dependent
 
 The earlier `2A/P` proxy and the `-15 m` erosion test disagreed on **694 of
 5,712 units (12.15%)**, always in the same direction. That direction is not an
@@ -79,19 +101,19 @@ are sensitivity counts, not properties of the land; `build_findings.py`
 computes all three. The [ArcGIS Pro layout](arcgis/layout_map_arcgispro.pdf)
 insets one of these units.
 
-### 3. Area and width are properties of forest areas, not of mapping units
+### 4. Area and width are properties of forest areas, not of mapping units
 
 A unit under 1 ha, or narrower than 30 m, can still belong to eligible forest
 land through its neighbours: paragraph (c)(ii) keeps narrow areas contiguous
 with qualifying land, and MPI excludes small areas only when they are more than
 15 m from adjacent forest. Plantable units with no material conflict are now
-chained into blocks wherever they lie within 15 m of each other. **288
-candidates pass R-01 only through their block (`R-01-contiguous`) and 141 pass
+chained into blocks wherever they lie within 15 m of each other. **133
+candidates pass R-01 only through their block (`R-01-contiguous`) and 69 pass
 R-02 only through a qualifying neighbour (`R-02-contiguous`).** Both stay
 flagged, because mapped land cover stands in for forest and the shelter-belt
 exclusion in (c)(i) cannot be separated from other narrow land.
 
-### 4. Imagery verification of the candidates is outstanding
+### 5. Imagery verification of the candidates is outstanding
 
 R-05 can only show that a unit's *mapped* land-cover class is a plausible
 planting proxy. Whether the ground is physically plantable at the imagery date
@@ -99,29 +121,33 @@ is an interpretation question, and it is the weakest link in everything above.
 
 | Artefact | State |
 |---|---|
-| [Pinned sample of 30 candidates](outputs/gisborne/review/review_sample_ids.csv) | Pinned; see the caveats below |
-| [Dual-panel imagery cards](outputs/gisborne/review/cards/) | Rendered from 2024 Gisborne imagery; **must be re-rendered before review** |
+| [Stratified sample of 30 candidates](outputs/gisborne/review/review_sample_ids.csv) | Drawn 2026-09-24: 18 clean and 12 flagged candidates, pinned for reruns |
+| [Dual-panel imagery cards](outputs/gisborne/review/cards/) | Rendered 2026-09-24 from 2024 Gisborne imagery; crosshair on the unit's interior point |
+| [Review version](outputs/gisborne/review/review_version.json) | Records the sampler, sampling frame hash and card renderer |
 | [Interactive review map](outputs/gisborne/review/review_map.html) | Offline controls and polygons; live LINZ imagery requires internet and a session API key |
 | [Blank label template](outputs/gisborne/review/review_labels_template.csv) | Awaiting an independent human reviewer |
 
-Three things must be fixed before a reviewer starts, and none of them can be
-fixed without network access to the imagery service:
+The sample and cards were replaced on 2026-09-24. The earlier sample had been
+drawn by a since-removed sampler (`DataFrame.sample(n=30,
+random_state=20260912)` over the 2,520 candidates without an advisory flag), so
+flagged candidates — the ones most likely to change the answer — could not be
+selected, and its cards drew the crosshair at the panel centre rather than on
+the unit. The new sample is hash-ranked within two strata, clean and flagged,
+in proportion to their size and with at least five flagged units; the cards
+mark the unit's interior point and use an overview at least three zoom levels
+wider than the detail panel.
 
-- **The pinned sample cannot be regenerated by the current code.** It was drawn
-  by an earlier sampler, `DataFrame.sample(n=30, random_state=20260912)`, over
-  the 2,520 candidates that then carried no advisory flag. Candidates with an
-  advisory flag — the ones most likely to change the answer — had no chance of
-  selection. All 30 remain candidates under the current rules. A new sample,
-  stratified across clean and flagged candidates, should replace it;
-  `run_manifest.json` now records the size and SHA-256 of the sampling frame.
-- **The committed cards were rendered before the crosshair fix.** Their
-  crosshair was drawn at the panel centre instead of the unit's interior point,
-  and for small units both panels used the same zoom level. The renderer is
-  fixed and tested; the cards need to be rendered again.
-- **The imagery is coarser than its tile grid.** Level 10 tiles are 1.32 m per
-  pixel, but the 2024 satellite mosaic appears to have a native pixel nearer
-  10 m, too coarse for tracks or riverbed edges in 1 ha units. LINZ sub-metre
-  aerial imagery would be the better source.
+`review_version.json` records the sampler, the sampling frame's size and
+SHA-256, and the card renderer and commit. **Labels are refused unless both
+the sample and the cards are current**, so labels made on an outdated set can
+never reach `findings.json`. To draw a new sample, remove the old cards, run
+`python scripts/reproduce.py --resample-review`, then render cards with
+`python scripts/download_review_cards.py`.
+
+One limit remains: **the imagery is coarser than its tile grid.** Level 10
+tiles are 1.32 m per pixel, but the 2024 satellite mosaic appears to have a
+native pixel nearer 10 m (the cards show it), too coarse for tracks or riverbed
+edges in 1 ha units. LINZ sub-metre aerial imagery would be the better source.
 
 **No visual agreement or false-positive rate is published here.**
 `findings.json` records `visual_review_status =
@@ -140,7 +166,7 @@ and the measured values behind it.
 |---|---|---|
 | R-01 area at least 1 ha | Raw metric area; a smaller unit passes with advisory if its 15 m block reaches 1 ha; units under 1.05 ha are flagged near-threshold | Other criteria remain |
 | R-02 average width at least 30 m | Erosion core **and** equivalent-rectangle width; a narrow unit passes with advisory next to a qualifying unit | MPI centre-line measurement is still required |
-| R-03 post-1989 rather than mapped pre-1990 | Sliver-filtered overlap ≥1% of the unit is material; ≥1 ha below 1% is clip-required; smaller overlaps are advisory | Evidence layer holds planted forest only (see limitations); absence of mapped overlap cannot prove land history |
+| R-03 post-1989 rather than mapped pre-1990 | LUCAS forest (natural or planted) in both 1989 and 2007: sliver-filtered overlap ≥1% is material, ≥1 ha below 1% is clip-required, smaller overlaps are advisory; forest in 1989 but not 2007 is an advisory for para (a)(ii) | Absence of mapped overlap cannot prove land history |
 | R-04 public conservation overlap | As R-03; material overlap excludes the unit from this queue | Project policy, not statutory ineligibility |
 | R-05 potentially plantable current cover | Configurable LCDB proxy allow-list | Current cover cannot prove future forest |
 | R-06 forest species | Not automated | Manual evidence required |
@@ -179,17 +205,19 @@ unless the CRS is NZTM2000 (a compound NZTM + vertical CRS is accepted).
 
 The acquisition script queries nationwide services by the Gisborne bounding box,
 repairs invalid source geometries, clips to the district, explodes multipart
-mapping units and removes 36 numerical fragments below 1 m². It now numbers the
+mapping units and removes 36 numerical fragments below 1 m². It numbers the
 parts of a multipart unit by their own geometry, largest first, so a refresh
-cannot silently move a `-part-N` ID to different land; the committed inputs were
-numbered by row order before that fix. The source includes explicit
+cannot silently move a `-part-N` ID to different land. The 2026-09-24 refresh
+applied that numbering for the first time: 326 part IDs now name a different
+part of the same LCDB polygon than before, although the set of geometries is
+unchanged. The source includes explicit
 non-plantable LCDB controls so R-05 is tested rather than made tautological by
 preprocessing.
 
-**Every disposition stays reviewable.** The run yields 3,069 candidates for
-review (2,509 clean and 560 carrying an advisory flag), 2,443 quarantined and
+**Every disposition stays reviewable.** The run yields 1,641 candidates for
+review (965 clean and 676 carrying an advisory flag), 3,871 quarantined and
 200 excluded by project conservation policy — an automated reject/exclude rate
-of 46.27%, below the 80% batch abort threshold. Failures keep their rule IDs
+of 71.27%, below the 80% batch abort threshold. Failures keep their rule IDs
 and measurements in `quarantine.gpkg`; no geometry is silently deleted.
 
 ```text
@@ -245,8 +273,10 @@ python scripts/download_review_cards.py
 ```
 
 A refresh is not expected to reproduce the committed input checksums: the
-services are live, the original raw downloads were not archived, and
-GeoPackage bytes vary with the GDAL version. See
+services are live and GeoPackage bytes vary with the GDAL version. Compare
+`data/semantic_hashes.json` instead, which hashes content. The 2026-09-24
+refresh recorded service versions, queries, retrieval times and raw-file hashes
+in `gisborne_manifest.json`; the raw files themselves are not yet archived. See
 [data/README.md](data/README.md#provenance-limits-of-the-committed-inputs).
 
 To record the outstanding imagery review, copy the blank template, label all 30
@@ -328,10 +358,10 @@ non-blocking job tests the latest dependency releases weekly.
 
 [`arcgis/ets_screening.pyt`](arcgis/ets_screening.pyt) is a thin ArcGIS Pro
 wrapper around the tested package and uses the same 80% threshold. It was
-**executed under ArcGIS Pro 3.7** against the committed Gisborne inputs at the
-previous rule set and reproduced the CLI results exactly; it forwards to the
-same `run_screening`, but has not been re-executed since the rule revision.
-Expected failures are reported through `arcpy.AddError`. See
+**re-executed under ArcGIS Pro 3.7 on 2026-09-24** against the current inputs
+and rules, from a clone of `arcgispro-py3` with the geospatial dependencies
+added, and reproduced the CLI tables byte for byte and the GeoPackages by
+semantic hash. Expected failures are reported through `arcpy.AddError`. See
 [`arcgis/README.md`](arcgis/README.md) for the environment setup and the one
 expected difference in the review sample.
 
@@ -347,19 +377,19 @@ pipeline's own Matplotlib page, `outputs/gisborne/layout_map.pdf`.
 
 ## Limitations
 
-- **Pre-1990 evidence is incomplete.** The committed LUCAS layer holds only land
-  classed as planted forest (72) in both 1989 and 2007. Land that was natural
-  forest in 1989 (71) cannot become post-1989 forest land through para (a)(i)
-  either, and 71→72 land can be pre-1990 forest land; neither is screened.
-  R-03 therefore misses conflicts, in the unconservative direction.
+- **Pre-1990 evidence is mapped land use, not legal status.** R-03 treats LUCAS
+  forest in both 1989 and 2007 as material and forest cleared by 2007 as an
+  advisory. LUCAS generalisation, its minimum mapping unit and the other
+  statutory routes ((a)(iii)–(vii), exemptions, liabilities) are not assessed.
 - **LUC class 1–6 registration limits are not screened.** MPI notes
-  restrictions on registering exotic forest on LUC 1–6 land, and 92% of the
+  restrictions on registering exotic forest on LUC 1–6 land, and 94.6% of the
   candidate area is High Producing Exotic Grassland, the farm-to-forest case
   those limits target. The provisions have not been verified by this project
   and no LUC layer is used (R-09).
-- **Input provenance ends at the committed files.** The upstream services are
-  live and the raw downloads were not archived, so the processed inputs cannot
-  be re-derived byte for byte; archiving them with a DOI is outstanding.
+- **The raw downloads are not archived.** The manifest now records each
+  service version, query and raw-file hash, but the upstream services are live,
+  so the processed inputs cannot be re-derived later; archiving the raw files
+  with a DOI (for example on Zenodo) is outstanding.
 - The LCDB streaming mirror simplifies geometry at 15 m, which can affect
   narrow-feature diagnostics. That tolerance is half the 30 m width threshold,
   so R-02 conclusions for narrow shapes are not reliable until the workflow is
@@ -384,9 +414,9 @@ pipeline's own Matplotlib page, `outputs/gisborne/layout_map.pdf`.
   satisfied surrender obligations.
 - LCDB class age and interpretation create false positives and negatives.
 - R-04 and R-05 are prioritisation policies, not statutory eligibility tests.
-- No imagery verification has been carried out, and the committed sample and
-  cards need replacing first (Finding 4). The proportion of false positives in
-  the candidate set is unmeasured.
+- No imagery verification has been carried out; the sample and cards are ready
+  for a named reviewer (Finding 5). The proportion of false positives in the
+  candidate set is unmeasured.
 - Existing but unregistered post-1989 forest, such as regenerating mānuka or
   kānuka, is outside the input classes and is not screened.
 - Species, future height and crown cover, title, forestry rights, existing

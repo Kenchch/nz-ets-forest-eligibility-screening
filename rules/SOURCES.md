@@ -140,13 +140,12 @@ exclusion is for species grown or managed primarily for fruit or nut crops.
 R-03 screens for the most common route into post-1989 status, paragraph (a)(i):
 land that was not forest land on 31 December 1989. Mapped 1989/2007 planted
 forest overlap is evidence against that route. **Land that was natural forest in
-1989 is equally excluded from that route**, but the committed evidence layer was
-filtered to LUCAS class 72 (planted forest) in both 1989 and 2007 and holds no
-class 71 (natural forest) polygons. Nor does it hold 71→72 land, which can be
-pre-1990 forest land. R-03 therefore under-detects conflicts; widening the
-filter to `LUCID_1989 LIKE '71%' OR LUCID_1989 LIKE '72%'` and separating the
-land-history paths is the next data refresh, not a change that can be made to
-the committed inputs in place. Routes (a)(ii)–(vii) depend on
+1989 is equally excluded from that route**, so since the 2026-09-24 refresh the
+evidence layer holds LUCAS natural (71) as well as planted (72) forest in 1989,
+with the 2007 class kept. Forest on both dates is material. Forest in 1989 that
+was no longer forest in 2007 may be post-1989 forest land through para (a)(ii),
+which depends on the deforestation date, so it is only an advisory
+(`R-03-deforested-1990-2007`). Routes (a)(ii)–(vii) depend on
 deforestation dates, surrender liabilities and statutory status that no open
 spatial layer records, and pre-1990 paragraph (a)(i)(C) depends on the species
 composition on 31 December 2007, so R-03 cannot establish either status.
