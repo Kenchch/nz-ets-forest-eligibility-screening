@@ -1,6 +1,10 @@
 {
-  "sample_algorithm": "legacy-dataframe-sample-v1",
-  "sample_note": "DataFrame.sample(n=30, random_state=20260912) over the 2,520 clean candidates of the earlier rule set; advisory candidates could not be selected",
-  "card_renderer": "tile-centre-crosshair-v1",
-  "card_note": "crosshair drawn at the panel centre, not the interior point; must be re-rendered"
+  "sample_algorithm": "stratified-sha256-rank-v2",
+  "sample_seed": 20260912,
+  "sample_size": 30,
+  "sampling_frame_count": 1641,
+  "sampling_frame_sha256": "590c6ded864fea14c10d733e68b3b84682b471b035869469a193eb40ce2c68ef",
+  "card_renderer": "interior-point-crosshair-v2",
+  "cards_rendered_at": "2026-09-24T09:59:25Z",
+  "cards_renderer_commit": "26d9fe6338c64385773f7d2706d9433f576f985a"
 }

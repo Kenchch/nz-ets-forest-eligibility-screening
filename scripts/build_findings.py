@@ -186,6 +186,7 @@ def main() -> None:
                 "R-02-contiguous",
                 "R-03-clip-required",
                 "R-03-low-overlap",
+                "R-03-deforested-1990-2007",
                 "R-04-clip-required",
                 "R-04-low-overlap",
             )

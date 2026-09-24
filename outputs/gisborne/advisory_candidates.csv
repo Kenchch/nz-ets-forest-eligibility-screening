@@ -1,561 +1,677 @@
 unit_id,lcdb_class,area_ha,conflict_free_area_ha,contiguous_plantable_ha,advisory_rule_ids,pre1990_overlap_m2,pre1990_overlap_pct,conservation_overlap_m2,conservation_overlap_pct,max_overlap_pct
-lcdb1000419102,High Producing Exotic Grassland,0.8722,0.8722,316.3633,R-01-contiguous|R-03-low-overlap,911.7,10.4528,0.0,0.0,10.4528
-lcdb1000113765,Low Producing Grassland,0.2418,0.2418,45506.0974,R-01-contiguous|R-02-contiguous|R-03-low-overlap,243.45,10.0676,0.0,0.0,10.0676
-lcdb2000507731,Low Producing Grassland,3.7016,3.7016,178357.0452,R-03-low-overlap,3188.72,8.6145,0.0,0.0,8.6145
-lcdb1000414828,High Producing Exotic Grassland,1.4221,1.4221,1.4221,R-03-low-overlap,1204.98,8.4732,0.0,0.0,8.4732
+lcdb1000035680-part-119,High Producing Exotic Grassland,0.0014,0.0014,91893.8649,R-01-contiguous|R-02-contiguous|R-03-low-overlap,13.54,100.0,0.0,0.0,100.0
+lcdb1000420686,High Producing Exotic Grassland,0.6438,0.6438,863.7194,R-01-contiguous|R-02-contiguous|R-03-low-overlap,749.14,11.6366,0.0,0.0,11.6366
+lcdb1000416452,Low Producing Grassland,1.1554,1.1554,1.1554,R-03-low-overlap,1168.81,10.1161,0.0,0.0,10.1161
+lcdb1000415903,Low Producing Grassland,1.1102,1.1102,1.1102,R-03-low-overlap,1021.37,9.1995,0.0,0.0,9.1995
+lcdb1000034975,High Producing Exotic Grassland,0.735,0.735,1.877,R-01-contiguous|R-03-low-overlap,673.8,9.1679,0.0,0.0,9.1679
+lcdb1000035310,Low Producing Grassland,2.1356,2.1356,2.1356,R-03-low-overlap,1895.36,8.875,0.0,0.0,8.875
+lcdb1000036253,High Producing Exotic Grassland,1.18,1.18,1.18,R-03-low-overlap,998.97,8.466,0.0,0.0,8.466
+lcdb1000034517,High Producing Exotic Grassland,1.0917,1.0917,1.0917,R-03-low-overlap,891.47,8.166,0.0,0.0,8.166
 lcdb1000043182,High Producing Exotic Grassland,0.5287,0.5287,4.5328,R-01-contiguous|R-03-low-overlap,426.25,8.0616,0.0,0.0,8.0616
-lcdb1000415732,High Producing Exotic Grassland,1.2366,1.2366,1.2366,R-04-low-overlap,0.0,0.0,989.59,8.0027,8.0027
-lcdb1000035411,High Producing Exotic Grassland,1.3392,1.3392,1.3392,R-04-low-overlap,0.0,0.0,1063.27,7.9398,7.9398
-lcdb1000416206,High Producing Exotic Grassland,1.2521,1.2521,11853.5785,R-03-low-overlap,952.14,7.604,0.0,0.0,7.604
-lcdb1000036685,High Producing Exotic Grassland,2.0419,2.0419,2.0419,R-04-low-overlap,0.0,0.0,1254.12,6.1419,6.1419
+lcdb1000415732,High Producing Exotic Grassland,1.2366,1.2366,1.2366,R-03-low-overlap|R-04-low-overlap,54.07,0.4372,989.59,8.0027,8.0027
+lcdb1000461104,Low Producing Grassland,1.0391,1.0391,1.0391,R-01-near-threshold|R-03-low-overlap,795.85,7.6589,0.0,0.0,7.6589
+lcdb1000412931,High Producing Exotic Grassland,1.9231,1.9231,1.9231,R-03-low-overlap,1403.82,7.2997,0.0,0.0,7.2997
+lcdb1000414141,High Producing Exotic Grassland,1.5007,1.5007,1.5007,R-03-low-overlap,1094.67,7.2945,0.0,0.0,7.2945
+lcdb1000414073,High Producing Exotic Grassland,1.4481,1.4481,1.4481,R-03-low-overlap|R-03-deforested-1990-2007,1043.83,7.2084,0.0,0.0,7.2084
+lcdb2000515228,Low Producing Grassland,1.0125,1.0125,863.7194,R-01-near-threshold|R-03-low-overlap,709.94,7.0118,0.0,0.0,7.0118
+lcdb1000417770,Gorse and/or Broom,1.0134,1.0134,160.8388,R-01-near-threshold|R-03-low-overlap,706.58,6.9723,0.0,0.0,6.9723
+lcdb1000035467,High Producing Exotic Grassland,1.1575,1.1575,1.1575,R-03-low-overlap,794.95,6.8676,0.0,0.0,6.8676
+lcdb2000512303,High Producing Exotic Grassland,1.7665,1.7665,1.7665,R-03-low-overlap,1206.82,6.8318,0.0,0.0,6.8318
+lcdb1000416612,High Producing Exotic Grassland,1.0207,1.0207,1.0207,R-01-near-threshold|R-03-low-overlap,681.67,6.6787,0.0,0.0,6.6787
+lcdb2000512588,Low Producing Grassland,1.6176,1.6176,1.6176,R-03-low-overlap,1019.59,6.3029,0.0,0.0,6.3029
+lcdb1000416651,High Producing Exotic Grassland,1.1313,1.1313,1.1313,R-03-low-overlap,709.85,6.2746,0.0,0.0,6.2746
+lcdb1000611488,High Producing Exotic Grassland,1.2427,1.2427,1.2427,R-03-low-overlap,765.07,6.1564,0.0,0.0,6.1564
+lcdb1000413837,High Producing Exotic Grassland,1.6723,1.6723,1.6723,R-03-low-overlap,1006.96,6.0213,0.0,0.0,6.0213
 lcdb1000057691,Low Producing Grassland,1.1775,1.1775,1.1775,R-03-low-overlap,707.97,6.0124,0.0,0.0,6.0124
-lcdb2000508747,Mixed Exotic Shrubland,1.108,1.108,1.108,R-03-low-overlap,634.87,5.7298,0.0,0.0,5.7298
-lcdb2000508855,Mixed Exotic Shrubland,3.1389,3.1389,3.1389,R-03-low-overlap,1569.25,4.9994,0.0,0.0,4.9994
-lcdb1000412930,Mixed Exotic Shrubland,1.695,1.695,1.695,R-03-low-overlap,825.42,4.8699,0.0,0.0,4.8699
-lcdb1000059947,Low Producing Grassland,3.1412,3.1412,3.1412,R-03-low-overlap,1513.44,4.818,0.0,0.0,4.818
-lcdb1000035378-part-17,High Producing Exotic Grassland,1.2008,1.2008,1.2008,R-03-low-overlap,523.84,4.3626,0.0,0.0,4.3626
-lcdb1000412388,High Producing Exotic Grassland,1.8435,1.8435,1.8435,R-03-low-overlap,787.49,4.2717,0.0,0.0,4.2717
-lcdb1000035292,High Producing Exotic Grassland,1.1069,1.1069,1.1069,R-04-low-overlap,0.0,0.0,441.18,3.9858,3.9858
-lcdb1000415903,Low Producing Grassland,1.1102,1.1102,1.1102,R-03-low-overlap,394.88,3.5567,0.0,0.0,3.5567
-lcdb1000611697,Low Producing Grassland,2.8767,2.8767,2.8767,R-03-low-overlap,977.96,3.3996,0.0,0.0,3.3996
+lcdb1000414060,High Producing Exotic Grassland,1.7356,1.7356,5.2779,R-03-low-overlap,987.69,5.6907,0.0,0.0,5.6907
+lcdb1000408975,Low Producing Grassland,2.3,2.3,2.3,R-03-low-overlap,1268.59,5.5156,0.0,0.0,5.5156
+lcdb1000411754,High Producing Exotic Grassland,2.1791,2.1791,2.1791,R-03-low-overlap|R-03-deforested-1990-2007,1192.29,5.4714,0.0,0.0,5.4714
+lcdb1000418095,High Producing Exotic Grassland,0.7265,0.7265,649.7095,R-01-contiguous|R-03-low-overlap|R-03-deforested-1990-2007,396.61,5.4595,0.0,0.0,5.4595
+lcdb1000037119,High Producing Exotic Grassland,1.8801,1.8801,1.8801,R-03-low-overlap,1009.73,5.3705,0.0,0.0,5.3705
+lcdb1000407984,High Producing Exotic Grassland,3.9552,3.9552,3.9552,R-03-low-overlap,2123.23,5.3681,0.0,0.0,5.3681
+lcdb1000035353,Low Producing Grassland,1.1967,1.1967,1.1967,R-03-low-overlap,604.91,5.0548,0.0,0.0,5.0548
+lcdb2000510068,Low Producing Grassland,2.7257,2.7257,2.7257,R-03-low-overlap,1361.54,4.9951,0.0,0.0,4.9951
+lcdb1000411110,Low Producing Grassland,2.4253,2.4253,2.4253,R-03-low-overlap,1196.73,4.9343,0.0,0.0,4.9343
+lcdb1000412930,Mixed Exotic Shrubland,1.695,1.695,1.695,R-03-low-overlap|R-03-deforested-1990-2007,825.42,4.8699,0.0,0.0,4.8699
+lcdb2000511770,Low Producing Grassland,1.9668,1.9668,1.9668,R-03-low-overlap,954.83,4.8547,0.0,0.0,4.8547
+lcdb1000072355,Low Producing Grassland,3.3643,3.3643,3.3643,R-03-low-overlap,1589.98,4.7261,0.0,0.0,4.7261
+lcdb1000138626,Low Producing Grassland,1.1692,1.1692,1.1692,R-03-low-overlap|R-03-deforested-1990-2007,544.35,4.6559,0.0,0.0,4.6559
+lcdb1000036198,High Producing Exotic Grassland,1.5098,1.5098,1.5098,R-03-low-overlap,702.72,4.6544,0.0,0.0,4.6544
+lcdb1000058046-part-2,Low Producing Grassland,1.3244,1.3244,1.3244,R-03-low-overlap,606.36,4.5786,0.0,0.0,4.5786
+lcdb1000413992,High Producing Exotic Grassland,1.5717,1.5717,2.5676,R-03-low-overlap|R-03-deforested-1990-2007,700.27,4.4555,0.0,0.0,4.4555
+lcdb1000404150,High Producing Exotic Grassland,1.3876,1.3876,1.3876,R-03-low-overlap,616.92,4.4458,0.0,0.0,4.4458
+lcdb1000040787,High Producing Exotic Grassland,2.722,2.722,2.722,R-03-low-overlap,1203.14,4.42,0.0,0.0,4.42
+lcdb2000513501,High Producing Exotic Grassland,1.4424,1.4424,1.4424,R-03-low-overlap,633.11,4.3891,0.0,0.0,4.3891
+lcdb1000035378-part-16,High Producing Exotic Grassland,1.2008,1.2008,1.2008,R-03-low-overlap,523.84,4.3626,0.0,0.0,4.3626
+lcdb1000413558,High Producing Exotic Grassland,1.7854,1.7854,1.7854,R-03-low-overlap,751.2,4.2074,0.0,0.0,4.2074
+lcdb2000508053,Low Producing Grassland,3.4664,3.4664,3.4664,R-03-low-overlap,1435.08,4.14,0.0,0.0,4.14
+lcdb1000035090,High Producing Exotic Grassland,1.6107,1.6107,2011.0088,R-03-low-overlap,641.92,3.9855,0.0,0.0,3.9855
+lcdb1000414541,High Producing Exotic Grassland,1.4704,1.4704,1.4704,R-03-low-overlap,578.79,3.9362,0.0,0.0,3.9362
+lcdb2000512939,Low Producing Grassland,1.5357,1.5357,1.5357,R-03-low-overlap,593.29,3.8633,0.0,0.0,3.8633
+lcdb1000464177,High Producing Exotic Grassland,0.3955,0.3955,4.3529,R-01-contiguous|R-02-contiguous|R-03-low-overlap,152.15,3.8471,0.0,0.0,3.8471
+lcdb1000416715,High Producing Exotic Grassland,1.0706,1.0706,1.0706,R-03-low-overlap,400.35,3.7394,0.0,0.0,3.7394
+lcdb1000460236,High Producing Exotic Grassland,1.2803,1.2803,1.2803,R-03-low-overlap,457.69,3.5749,0.0,0.0,3.5749
+lcdb1000034490,High Producing Exotic Grassland,4.1261,4.1261,4.1261,R-03-low-overlap,1456.24,3.5293,0.0,0.0,3.5293
+lcdb1000415914,Low Producing Grassland,1.1269,1.1269,1.1269,R-03-low-overlap,388.63,3.4485,0.0,0.0,3.4485
+lcdb1000044268,Low Producing Grassland,10.2639,10.2639,91893.8649,R-03-low-overlap,3485.27,3.3956,0.0,0.0,3.3956
 lcdb1000411313,High Producing Exotic Grassland,2.4012,2.4012,2.4012,R-03-low-overlap,809.81,3.3725,0.0,0.0,3.3725
-lcdb1000035459,High Producing Exotic Grassland,3.2186,3.2186,3.2186,R-03-low-overlap,972.61,3.0219,0.0,0.0,3.0219
-lcdb1000423002,Low Producing Grassland,0.2563,0.2563,178357.0452,R-01-contiguous|R-02-contiguous|R-03-low-overlap,76.84,2.9984,0.0,0.0,2.9984
+lcdb1000406093,High Producing Exotic Grassland,5.2093,5.2093,5.2093,R-03-low-overlap,1737.68,3.3358,0.0,0.0,3.3358
+lcdb2000514482,Low Producing Grassland,1.2161,1.2161,1.2161,R-03-low-overlap,401.12,3.2983,0.0,0.0,3.2983
+lcdb1000074702,High Producing Exotic Grassland,4.195,4.195,4.195,R-03-low-overlap,1374.42,3.2763,0.0,0.0,3.2763
+lcdb1000036288,High Producing Exotic Grassland,8.1645,8.1043,8.1645,R-03-low-overlap,2616.07,3.2042,0.0,0.0,3.2042
+lcdb1000409525,High Producing Exotic Grassland,3.1174,3.1174,3.1174,R-03-low-overlap|R-03-deforested-1990-2007,985.33,3.1608,0.0,0.0,3.1608
+lcdb2000508584,Low Producing Grassland,3.5423,3.5423,5.2779,R-03-low-overlap,1101.71,3.1101,0.0,0.0,3.1101
+lcdb1000413144,Low Producing Grassland,1.8184,1.8184,1.8184,R-03-low-overlap,560.89,3.0846,0.0,0.0,3.0846
+lcdb1000036112,High Producing Exotic Grassland,1.2072,1.2072,1.2072,R-03-low-overlap,370.55,3.0695,0.0,0.0,3.0695
+lcdb1000415699,Low Producing Grassland,1.3095,1.3095,1.3095,R-03-low-overlap,399.95,3.0542,0.0,0.0,3.0542
+lcdb1000611766,Low Producing Grassland,1.4359,1.4359,1615.86,R-03-low-overlap,434.08,3.0231,0.0,0.0,3.0231
+lcdb1000423002,Low Producing Grassland,0.2563,0.2563,91893.8649,R-01-contiguous|R-02-contiguous|R-03-low-overlap|R-03-deforested-1990-2007,76.84,2.9984,0.0,0.0,2.9984
+lcdb1000058083,Low Producing Grassland,4.1367,4.0963,4.1367,R-03-low-overlap,1211.15,2.9278,0.0,0.0,2.9278
+lcdb1000412067,High Producing Exotic Grassland,2.0263,2.0263,2.0263,R-03-low-overlap,589.11,2.9073,0.0,0.0,2.9073
+lcdb1000410762,High Producing Exotic Grassland,2.3397,2.3397,2.3397,R-03-low-overlap,658.29,2.8136,0.0,0.0,2.8136
+lcdb1000415301,High Producing Exotic Grassland,1.2566,1.2566,156.2814,R-03-low-overlap,345.35,2.7484,0.0,0.0,2.7484
 lcdb1000408600,Low Producing Grassland,3.3569,3.3569,3.3569,R-03-low-overlap,907.88,2.7045,0.0,0.0,2.7045
-lcdb1000611864,Low Producing Grassland,1.7304,1.7304,1.7304,R-03-low-overlap,467.88,2.704,0.0,0.0,2.704
-lcdb2000513558,Low Producing Grassland,1.2544,1.2544,178357.0452,R-03-low-overlap,331.76,2.6449,0.0,0.0,2.6449
-lcdb1000407742,Mixed Exotic Shrubland,4.1292,4.1292,4.1292,R-03-low-overlap,1060.09,2.5673,0.0,0.0,2.5673
-lcdb1000034924,High Producing Exotic Grassland,8.4728,8.4728,8.4728,R-03-low-overlap,2064.74,2.4369,0.0,0.0,2.4369
+lcdb1000057668,Low Producing Grassland,1.5799,1.5799,1.5799,R-03-low-overlap,420.08,2.6589,0.0,0.0,2.6589
+lcdb1000414235,Low Producing Grassland,1.4098,1.4098,37.1891,R-03-low-overlap,358.82,2.5452,0.0,0.0,2.5452
+lcdb1000406722,High Producing Exotic Grassland,4.8487,4.8487,4.8487,R-03-low-overlap|R-03-deforested-1990-2007,1228.82,2.5344,0.0,0.0,2.5344
+lcdb1000410368,Low Producing Grassland,2.5808,2.5808,2.5808,R-03-low-overlap,647.83,2.5102,0.0,0.0,2.5102
+lcdb1000413617,Low Producing Grassland,1.6579,1.6579,1.6579,R-03-low-overlap,409.46,2.4697,0.0,0.0,2.4697
+lcdb1000414920,High Producing Exotic Grassland,1.4596,1.4596,1.4596,R-03-low-overlap,356.9,2.4452,0.0,0.0,2.4452
+lcdb1000057813,Low Producing Grassland,6.7682,6.7682,6.7682,R-03-low-overlap,1647.46,2.4341,0.0,0.0,2.4341
+lcdb1000040418,High Producing Exotic Grassland,11.0527,11.0527,91893.8649,R-03-low-overlap,2640.06,2.3886,0.0,0.0,2.3886
+lcdb1000414798,High Producing Exotic Grassland,1.3436,1.3436,1.3436,R-03-low-overlap,317.98,2.3666,0.0,0.0,2.3666
+lcdb1000035355,High Producing Exotic Grassland,1.7974,1.7974,1.7974,R-03-low-overlap,425.3,2.3662,0.0,0.0,2.3662
 lcdb1000057882,Low Producing Grassland,2.3194,2.3194,2.3194,R-03-low-overlap,545.94,2.3538,0.0,0.0,2.3538
-lcdb2000518801,High Producing Exotic Grassland,0.116,0.116,1829.726,R-01-contiguous|R-02-contiguous|R-03-low-overlap,26.32,2.2687,0.0,0.0,2.2687
-lcdb1000035378-part-15,High Producing Exotic Grassland,1.005,1.005,45506.0974,R-01-near-threshold|R-03-low-overlap,225.91,2.2478,0.0,0.0,2.2478
+lcdb1000414973,Low Producing Grassland,1.3103,1.3103,1.3103,R-03-low-overlap,308.09,2.3513,0.0,0.0,2.3513
+lcdb1000401680,High Producing Exotic Grassland,11.0821,11.007,62.9562,R-03-low-overlap,2562.6,2.3124,0.0,0.0,2.3124
+lcdb2000512246,High Producing Exotic Grassland,1.7532,1.7532,163.4623,R-03-low-overlap,397.04,2.2647,0.0,0.0,2.2647
+lcdb1000417955,High Producing Exotic Grassland,1.0051,1.0051,1.0051,R-01-near-threshold|R-03-low-overlap,226.91,2.2575,0.0,0.0,2.2575
+lcdb1000035378-part-17,High Producing Exotic Grassland,1.005,1.005,1.005,R-01-near-threshold|R-03-low-overlap|R-03-deforested-1990-2007,225.91,2.2478,0.0,0.0,2.2478
+lcdb1000074706,High Producing Exotic Grassland,2.0584,2.0584,3.1328,R-03-low-overlap,458.96,2.2298,0.0,0.0,2.2298
 lcdb1000034380,High Producing Exotic Grassland,2.029,2.029,2.029,R-03-low-overlap,446.27,2.1994,0.0,0.0,2.1994
-lcdb1000072361,Gorse and/or Broom,6.0841,6.0841,502.0974,R-03-low-overlap,1287.83,2.1167,0.0,0.0,2.1167
-lcdb1000414973,Low Producing Grassland,1.3103,1.3103,1.3103,R-03-low-overlap,273.92,2.0905,0.0,0.0,2.0905
-lcdb1000452836,Low Producing Grassland,3.8104,3.8104,3.8104,R-03-low-overlap,787.24,2.066,0.0,0.0,2.066
-lcdb1000405524,Low Producing Grassland,6.1737,6.123,6.1737,R-03-low-overlap,1191.3,1.9296,0.0,0.0,1.9296
-lcdb1000058046-part-2,Low Producing Grassland,1.3244,1.3244,174.6622,R-03-low-overlap,242.02,1.8274,0.0,0.0,1.8274
-lcdb1000188737,High Producing Exotic Grassland,24.2227,24.0077,27.1925,R-03-low-overlap,4340.41,1.7919,0.0,0.0,1.7919
-lcdb1000037180,High Producing Exotic Grassland,4.3358,4.3358,4.3358,R-03-low-overlap,712.25,1.6427,0.0,0.0,1.6427
-lcdb1000451927,Low Producing Grassland,5.5979,5.5979,58.3278,R-04-low-overlap,0.0,0.0,901.31,1.6101,1.6101
+lcdb1000410595,High Producing Exotic Grassland,2.3916,2.3916,2.3916,R-03-low-overlap,523.93,2.1907,0.0,0.0,2.1907
+lcdb1000412263,High Producing Exotic Grassland,1.998,1.998,6.9801,R-03-low-overlap,429.42,2.1493,0.0,0.0,2.1493
+lcdb2000505287,Low Producing Grassland,6.5,6.4562,6.5,R-03-low-overlap,1385.66,2.1318,0.0,0.0,2.1318
+lcdb1000072326,Gorse and/or Broom,4.1551,4.1551,4.1551,R-03-low-overlap,867.26,2.0872,0.0,0.0,2.0872
+lcdb1000408182,Low Producing Grassland,3.5367,3.5367,3.5367,R-03-low-overlap,738.07,2.0869,0.0,0.0,2.0869
+lcdb1000064256,High Producing Exotic Grassland,1.756,1.756,3.8801,R-03-low-overlap,366.4,2.0866,0.0,0.0,2.0866
+lcdb1000057588,Low Producing Grassland,1.0216,1.0216,1.0216,R-01-near-threshold|R-03-low-overlap,212.05,2.0757,0.0,0.0,2.0757
+lcdb2000512967,Low Producing Grassland,1.6573,1.6573,1.6573,R-03-low-overlap,343.92,2.0752,0.0,0.0,2.0752
+lcdb1000036846,High Producing Exotic Grassland,5.1849,5.1849,5.1849,R-03-low-overlap|R-03-deforested-1990-2007,1074.75,2.0729,0.0,0.0,2.0729
+lcdb2000513471,Low Producing Grassland,1.5699,1.5699,1.5699,R-03-low-overlap,316.13,2.0136,0.0,0.0,2.0136
+lcdb1000412703,High Producing Exotic Grassland,1.7944,1.7944,117.9164,R-03-low-overlap,358.92,2.0002,0.0,0.0,2.0002
+lcdb1000405524,Low Producing Grassland,6.1737,6.123,6.1737,R-03-low-overlap,1192.89,1.9322,0.0,0.0,1.9322
+lcdb1000036975,High Producing Exotic Grassland,6.8058,6.8058,6.8058,R-03-low-overlap,1281.9,1.8835,0.0,0.0,1.8835
+lcdb2000508318,Low Producing Grassland,3.3308,3.3308,3.3308,R-03-low-overlap,625.58,1.8782,0.0,0.0,1.8782
+lcdb1000036332,High Producing Exotic Grassland,15.3393,15.1983,15.3393,R-03-low-overlap|R-03-deforested-1990-2007,2858.66,1.8636,0.0,0.0,1.8636
+lcdb1000185467,High Producing Exotic Grassland,6.1411,6.1411,91893.8649,R-03-low-overlap,1139.05,1.8548,0.0,0.0,1.8548
+lcdb1000414633,High Producing Exotic Grassland,1.5082,1.5082,1.5082,R-03-low-overlap,276.16,1.831,0.0,0.0,1.831
+lcdb2000513294,Low Producing Grassland,1.6846,1.6846,61.3388,R-03-low-overlap,305.05,1.8108,0.0,0.0,1.8108
+lcdb1000402549,High Producing Exotic Grassland,16.4817,16.4817,16.4817,R-03-low-overlap,2983.2,1.81,0.0,0.0,1.81
+lcdb1000188737,High Producing Exotic Grassland,24.2227,24.0077,27.1925,R-03-low-overlap|R-03-deforested-1990-2007,4340.41,1.7919,0.0,0.0,1.7919
+lcdb1000036368,High Producing Exotic Grassland,17.1086,17.0034,17.1086,R-03-low-overlap,3051.05,1.7833,0.0,0.0,1.7833
+lcdb1000409450,High Producing Exotic Grassland,3.2869,3.2869,25.7261,R-03-low-overlap,583.91,1.7765,0.0,0.0,1.7765
+lcdb1000402210,High Producing Exotic Grassland,19.7605,19.6207,19.7605,R-03-low-overlap,3479.96,1.7611,0.0,0.0,1.7611
+lcdb1000611776,Low Producing Grassland,4.1209,4.1209,4.1209,R-03-low-overlap,724.79,1.7588,0.0,0.0,1.7588
+lcdb1000412350,High Producing Exotic Grassland,3.844,3.844,3.844,R-03-low-overlap,675.46,1.7572,0.0,0.0,1.7572
+lcdb1000074775,Low Producing Grassland,15.2884,15.1676,15.2884,R-03-low-overlap,2676.66,1.7508,0.0,0.0,1.7508
+lcdb1000060001,Low Producing Grassland,8.4499,8.4499,8.4499,R-03-low-overlap,1472.59,1.7427,0.0,0.0,1.7427
+lcdb1000405850,High Producing Exotic Grassland,5.7654,5.7182,5.7654,R-03-low-overlap,996.71,1.7288,0.0,0.0,1.7288
+lcdb1000036365,Low Producing Grassland,43.4355,43.0957,43.4355,R-03-low-overlap,7451.04,1.7154,0.0,0.0,1.7154
+lcdb1000036110,Low Producing Grassland,8.3491,8.3491,8.3491,R-03-low-overlap,1414.76,1.6945,0.0,0.0,1.6945
+lcdb1000061227,Mixed Exotic Shrubland,2.8042,2.8042,2.8042,R-03-low-overlap,470.16,1.6766,0.0,0.0,1.6766
+lcdb1000409240,High Producing Exotic Grassland,3.0831,3.0831,9.811,R-03-low-overlap,513.57,1.6658,0.0,0.0,1.6658
+lcdb1000404476,High Producing Exotic Grassland,8.2329,8.2329,8.2329,R-03-low-overlap,1346.0,1.6349,0.0,0.0,1.6349
+lcdb1000411501,High Producing Exotic Grassland,2.3026,2.3026,2.3026,R-03-low-overlap,373.31,1.6212,0.0,0.0,1.6212
+lcdb2000504665,Low Producing Grassland,7.3837,7.3109,14.4386,R-03-low-overlap|R-03-deforested-1990-2007,1175.82,1.5925,0.0,0.0,1.5925
+lcdb1000034901,High Producing Exotic Grassland,0.4231,0.4231,91893.8649,R-01-contiguous|R-03-low-overlap,66.65,1.5754,0.0,0.0,1.5754
 lcdb1000057892,Low Producing Grassland,5.2803,5.2322,5.2803,R-03-low-overlap,824.64,1.5617,0.0,0.0,1.5617
-lcdb1000034490,High Producing Exotic Grassland,4.1261,4.1261,4.1261,R-03-low-overlap,637.92,1.5461,0.0,0.0,1.5461
+lcdb1000416216,High Producing Exotic Grassland,1.1002,1.1002,649.7095,R-03-low-overlap|R-03-deforested-1990-2007,171.03,1.5545,0.0,0.0,1.5545
+lcdb1000075088,High Producing Exotic Grassland,11.7119,11.6471,11.7119,R-03-low-overlap|R-03-deforested-1990-2007,1817.31,1.5517,0.0,0.0,1.5517
+lcdb1000036307,High Producing Exotic Grassland,101.3792,100.4749,102.0579,R-03-low-overlap,15662.59,1.545,0.0,0.0,1.545
+lcdb2000511124,Low Producing Grassland,2.2018,2.2018,2.2018,R-03-low-overlap,339.26,1.5408,0.0,0.0,1.5408
+lcdb1000611665,Low Producing Grassland,0.6098,0.6098,91893.8649,R-01-contiguous|R-03-low-overlap,93.94,1.5406,0.0,0.0,1.5406
 lcdb1000034825,High Producing Exotic Grassland,1.9001,1.9001,1.9001,R-03-low-overlap,289.34,1.5227,0.0,0.0,1.5227
+lcdb1000405008,Low Producing Grassland,7.1126,7.0544,7.1126,R-03-low-overlap,1082.22,1.5215,0.0,0.0,1.5215
+lcdb1000407047,Low Producing Grassland,4.6799,4.6799,4.6799,R-03-low-overlap,703.86,1.504,0.0,0.0,1.504
 lcdb1000407287,High Producing Exotic Grassland,4.4209,4.4209,4.4209,R-03-low-overlap,662.12,1.4977,0.0,0.0,1.4977
-lcdb1000404710,Low Producing Grassland,3.2158,3.2158,178357.0452,R-03-low-overlap,476.69,1.4823,0.0,0.0,1.4823
-lcdb1000035651,High Producing Exotic Grassland,8.9254,8.8699,8.9254,R-03-low-overlap,1224.1,1.3715,0.0,0.0,1.3715
-lcdb1000059951,Low Producing Grassland,30.1464,29.8965,30.1464,R-03-low-overlap,3898.28,1.2931,0.0,0.0,1.2931
+lcdb1000408458,Low Producing Grassland,3.5499,3.5499,3.5499,R-03-low-overlap,531.42,1.497,0.0,0.0,1.497
+lcdb1000036143,High Producing Exotic Grassland,4.0173,4.0173,4.0173,R-03-low-overlap,598.43,1.4896,0.0,0.0,1.4896
+lcdb1000404710,Low Producing Grassland,3.2158,3.2158,91893.8649,R-03-low-overlap,476.69,1.4823,0.0,0.0,1.4823
+lcdb1000403078,High Producing Exotic Grassland,12.9987,12.8919,12.9987,R-03-low-overlap,1919.01,1.4763,0.0,0.0,1.4763
+lcdb1000415302,High Producing Exotic Grassland,1.0691,1.0691,1.0691,R-03-low-overlap,156.83,1.4669,0.0,0.0,1.4669
+lcdb1000035437,High Producing Exotic Grassland,2.6473,2.6473,2.6473,R-03-low-overlap,383.26,1.4478,0.0,0.0,1.4478
+lcdb1000404264,High Producing Exotic Grassland,8.7136,8.7136,8.7136,R-03-low-overlap,1254.54,1.4397,0.0,0.0,1.4397
+lcdb1000058022,Low Producing Grassland,1.1595,1.1595,1.1595,R-03-low-overlap,166.65,1.4372,0.0,0.0,1.4372
+lcdb1000057996,Low Producing Grassland,2.4361,2.4361,2.4361,R-03-low-overlap,349.33,1.4339,0.0,0.0,1.4339
+lcdb1000414293,Low Producing Grassland,1.491,1.491,1.491,R-03-low-overlap,213.29,1.4305,0.0,0.0,1.4305
+lcdb1000402627,Low Producing Grassland,13.9719,13.8575,19.9317,R-03-low-overlap,1977.47,1.4153,0.0,0.0,1.4153
+lcdb1000057053,Low Producing Grassland,3.9856,3.9856,3.9856,R-03-low-overlap,561.8,1.4096,0.0,0.0,1.4096
+lcdb1000034387,Low Producing Grassland,53.5161,53.08,53.5161,R-03-low-overlap,7346.53,1.3728,0.0,0.0,1.3728
+lcdb1000059882,High Producing Exotic Grassland,2.796,2.796,2.796,R-03-low-overlap,383.25,1.3707,0.0,0.0,1.3707
+lcdb1000036792,High Producing Exotic Grassland,6.9111,6.9111,6.9111,R-03-low-overlap,936.98,1.3558,0.0,0.0,1.3558
+lcdb1000417583,High Producing Exotic Grassland,1.0043,1.0043,1.0043,R-01-near-threshold|R-03-low-overlap,134.77,1.342,0.0,0.0,1.342
+lcdb1000226088,Low Producing Grassland,7.825,7.825,91893.8649,R-03-low-overlap,1031.96,1.3188,0.0,0.0,1.3188
+lcdb1000405353,High Producing Exotic Grassland,6.3917,6.3917,10.6949,R-03-low-overlap|R-03-deforested-1990-2007,822.57,1.2869,0.0,0.0,1.2869
+lcdb1000403805,High Producing Exotic Grassland,10.3205,10.2333,47.3824,R-03-low-overlap,1328.02,1.2868,0.0,0.0,1.2868
+lcdb1000036355,High Producing Exotic Grassland,22.0321,21.8539,22.0321,R-03-low-overlap,2813.25,1.2769,0.0,0.0,1.2769
+lcdb2000507513,Mixed Exotic Shrubland,3.691,3.691,3.691,R-03-low-overlap,470.23,1.274,0.0,0.0,1.274
+lcdb1000036866,High Producing Exotic Grassland,3.8174,3.8174,3.8174,R-03-low-overlap,484.96,1.2704,0.0,0.0,1.2704
+lcdb1000404870,Low Producing Grassland,7.3332,7.3332,8.4793,R-03-low-overlap,926.78,1.2638,0.0,0.0,1.2638
 lcdb1000403689,High Producing Exotic Grassland,10.6718,10.6193,10.6718,R-03-low-overlap,1348.03,1.2632,0.0,0.0,1.2632
-lcdb2000502817,Low Producing Grassland,13.8058,13.7424,931.6255,R-03-low-overlap,1716.12,1.243,0.0,0.0,1.243
+lcdb1000404768,High Producing Exotic Grassland,7.9612,7.9612,7.9612,R-03-low-overlap,999.92,1.256,0.0,0.0,1.256
+lcdb1000401245,High Producing Exotic Grassland,31.4871,31.3349,31.4871,R-03-low-overlap,3934.66,1.2496,0.0,0.0,1.2496
+lcdb1000058357,Low Producing Grassland,3.9036,3.8673,3.9036,R-03-low-overlap,486.7,1.2468,0.0,0.0,1.2468
+lcdb1000408680,High Producing Exotic Grassland,3.6027,3.6027,6.1947,R-03-low-overlap,449.06,1.2465,0.0,0.0,1.2465
+lcdb2000502817,Low Producing Grassland,13.8058,13.7424,863.7194,R-03-low-overlap,1716.12,1.243,0.0,0.0,1.243
+lcdb2000508808,Low Producing Grassland,3.0632,3.0632,3.0632,R-03-low-overlap,375.62,1.2262,0.0,0.0,1.2262
+lcdb2000514540,Low Producing Grassland,1.2463,1.2463,1.2463,R-03-low-overlap,152.14,1.2208,0.0,0.0,1.2208
+lcdb1000036145,High Producing Exotic Grassland,6.4638,6.4638,6.4638,R-03-low-overlap,789.05,1.2207,0.0,0.0,1.2207
+lcdb1000405152,Low Producing Grassland,6.8858,6.8374,6.8858,R-03-low-overlap,837.09,1.2157,0.0,0.0,1.2157
+lcdb2000500155,High Producing Exotic Grassland,230.7235,228.7786,230.7235,R-03-clip-required,27787.33,1.2044,0.0,0.0,1.2044
+lcdb1000036012,High Producing Exotic Grassland,11.5222,11.4818,11.5222,R-03-low-overlap,1382.81,1.2001,0.0,0.0,1.2001
+lcdb1000058309,Low Producing Grassland,55.8482,55.4047,65.9439,R-03-low-overlap,6698.92,1.1995,0.0,0.0,1.1995
+lcdb1000113767,High Producing Exotic Grassland,11.8816,11.7896,11.8816,R-03-low-overlap,1415.75,1.1915,0.0,0.0,1.1915
+lcdb1000035203,High Producing Exotic Grassland,1.1348,1.1348,7.2594,R-03-low-overlap|R-03-deforested-1990-2007,134.45,1.1847,0.0,0.0,1.1847
+lcdb1000057598,Low Producing Grassland,16.6631,16.5622,16.6631,R-03-low-overlap,1962.7,1.1779,0.0,0.0,1.1779
+lcdb1000036135,High Producing Exotic Grassland,9.0184,8.9716,9.0184,R-03-low-overlap,1059.07,1.1743,0.0,0.0,1.1743
 lcdb1000405439,High Producing Exotic Grassland,6.2013,6.2013,6.2013,R-03-low-overlap,728.04,1.174,0.0,0.0,1.174
-lcdb1000036287,High Producing Exotic Grassland,422.1408,418.4794,503.1487,R-03-clip-required,49523.13,1.1731,0.0,0.0,1.1731
-lcdb1000035518,High Producing Exotic Grassland,1510.6646,1497.205,1690.6186,R-03-clip-required,166299.22,1.1008,0.0,0.0,1.1008
-lcdb1000036451,Low Producing Grassland,56.1697,55.6318,56.1697,R-03-low-overlap,6139.48,1.093,0.0,0.0,1.093
-lcdb1000057732,Low Producing Grassland,76.2928,75.6011,76.2928,R-03-low-overlap,8147.95,1.068,0.0,0.0,1.068
-lcdb1000036738,High Producing Exotic Grassland,1728.8426,1712.2272,1829.726,R-03-clip-required|R-04-low-overlap,184288.92,1.066,582.26,0.0034,1.066
-lcdb1000035763,High Producing Exotic Grassland,31.6211,31.5004,31.6211,R-03-low-overlap,3340.11,1.0563,0.0,0.0,1.0563
+lcdb1000413164,Low Producing Grassland,1.7878,1.7878,1.7878,R-03-low-overlap,209.63,1.1725,0.0,0.0,1.1725
+lcdb1000035680-part-10,High Producing Exotic Grassland,643.7307,636.4743,649.7095,R-03-clip-required|R-03-deforested-1990-2007|R-04-low-overlap,74728.65,1.1609,8253.55,0.1282,1.1609
+lcdb1000409943,High Producing Exotic Grassland,2.5291,2.5291,3.5759,R-02-contiguous|R-03-low-overlap,292.94,1.1583,0.0,0.0,1.1583
+lcdb1000035173,High Producing Exotic Grassland,2.1433,2.1433,2.1433,R-03-low-overlap,246.83,1.1516,0.0,0.0,1.1516
+lcdb1000036394,High Producing Exotic Grassland,22.5969,22.4547,22.5969,R-03-low-overlap,2582.22,1.1427,0.0,0.0,1.1427
+lcdb1000035680-part-2,High Producing Exotic Grassland,35180.9684,34685.6966,91893.8649,R-03-clip-required|R-03-deforested-1990-2007|R-04-clip-required,3977287.98,1.1305,1688006.63,0.4798,1.1305
+lcdb2000508302,Low Producing Grassland,3.2925,3.2925,3.2925,R-03-low-overlap,371.97,1.1298,0.0,0.0,1.1298
+lcdb1000409466,Low Producing Grassland,3.0853,3.0853,3.0853,R-03-low-overlap,342.5,1.1101,0.0,0.0,1.1101
+lcdb1000408127,High Producing Exotic Grassland,2.139,2.139,2.139,R-03-low-overlap,237.17,1.1088,0.0,0.0,1.1088
+lcdb1000412443,Low Producing Grassland,1.8756,1.8756,1.8756,R-03-low-overlap|R-03-deforested-1990-2007,204.83,1.0921,0.0,0.0,1.0921
+lcdb1000036286,High Producing Exotic Grassland,5.7835,5.7835,21.9873,R-03-low-overlap,630.86,1.0908,0.0,0.0,1.0908
+lcdb1000058188,Low Producing Grassland,3.8931,3.8931,3.8931,R-03-low-overlap,422.5,1.0852,0.0,0.0,1.0852
+lcdb1000036085,High Producing Exotic Grassland,8.28,8.28,8.28,R-03-low-overlap,892.82,1.0783,0.0,0.0,1.0783
+lcdb1000041152,High Producing Exotic Grassland,184.505,182.7194,184.505,R-03-clip-required,19894.26,1.0783,0.0,0.0,1.0783
+lcdb1000071624,Gorse and/or Broom,3.3959,3.3959,160.8388,R-03-low-overlap,363.19,1.0695,0.0,0.0,1.0695
+lcdb2000500132,Low Producing Grassland,257.9133,255.6647,257.9133,R-03-clip-required,27262.52,1.057,0.0,0.0,1.057
+lcdb1000611430,High Producing Exotic Grassland,2.6469,2.6469,2.6469,R-03-low-overlap,279.31,1.0552,0.0,0.0,1.0552
+lcdb1000402618,Low Producing Grassland,17.0085,17.0085,17.0085,R-03-low-overlap,1792.49,1.0539,0.0,0.0,1.0539
 lcdb1000450182,High Producing Exotic Grassland,54.4467,54.0541,54.4467,R-03-low-overlap,5713.69,1.0494,0.0,0.0,1.0494
+lcdb1000611216,High Producing Exotic Grassland,1.1537,1.1537,1.1537,R-03-low-overlap,120.75,1.0467,0.0,0.0,1.0467
+lcdb1000034791,High Producing Exotic Grassland,32.3857,32.2415,32.3857,R-03-low-overlap,3375.96,1.0424,0.0,0.0,1.0424
+lcdb1000035402,High Producing Exotic Grassland,2.2691,2.2691,2.2691,R-03-low-overlap,236.31,1.0414,0.0,0.0,1.0414
+lcdb1000400968,Gorse and/or Broom,52.6779,52.2007,2011.0088,R-03-low-overlap,5481.9,1.0406,0.0,0.0,1.0406
+lcdb1000403398,High Producing Exotic Grassland,11.8013,11.8013,11.8013,R-03-low-overlap|R-03-deforested-1990-2007,1217.37,1.0316,0.0,0.0,1.0316
+lcdb1000035394,High Producing Exotic Grassland,1.9901,1.9901,1.9901,R-03-low-overlap,205.28,1.0315,0.0,0.0,1.0315
+lcdb1000402631,Low Producing Grassland,15.7319,15.636,2011.0088,R-03-low-overlap,1618.31,1.0287,0.0,0.0,1.0287
+lcdb1000407145,High Producing Exotic Grassland,4.449,4.449,4.449,R-03-low-overlap,455.33,1.0235,0.0,0.0,1.0235
+lcdb1000036189,High Producing Exotic Grassland,68.653,68.038,68.653,R-03-low-overlap,7020.68,1.0226,0.0,0.0,1.0226
+lcdb1000057824,Low Producing Grassland,8.3219,8.3219,8.3219,R-03-low-overlap,847.84,1.0188,0.0,0.0,1.0188
+lcdb2000505196,High Producing Exotic Grassland,6.5711,6.5711,6.5711,R-03-low-overlap,667.41,1.0157,0.0,0.0,1.0157
+lcdb2000506944,High Producing Exotic Grassland,4.2711,4.2711,4.2711,R-03-low-overlap,432.25,1.012,0.0,0.0,1.012
 lcdb1000612714,High Producing Exotic Grassland,2.9168,2.9168,2.9168,R-03-low-overlap,294.77,1.0106,0.0,0.0,1.0106
-lcdb1000057769,Low Producing Grassland,1.9003,1.9003,1.9003,R-03-low-overlap,190.23,1.001,0.0,0.0,1.001
-lcdb1000036707,High Producing Exotic Grassland,2.4191,2.4191,2.4191,R-04-low-overlap,0.0,0.0,241.93,1.0001,1.0001
-lcdb1000226494,Low Producing Grassland,4.5355,4.4913,178357.0452,R-03-low-overlap,441.56,0.9736,0.0,0.0,0.9736
-lcdb1000034708,High Producing Exotic Grassland,390.8594,387.0913,178357.0452,R-03-clip-required,37681.4,0.9641,0.0,0.0,0.9641
+lcdb1000036212,High Producing Exotic Grassland,819.2401,811.4073,863.7194,R-03-clip-required|R-03-deforested-1990-2007|R-04-clip-required,82753.78,1.0101,16368.35,0.1998,1.0101
+lcdb2000500263,High Producing Exotic Grassland,152.4922,151.4004,163.4623,R-03-clip-required,15396.58,1.0097,0.0,0.0,1.0097
+lcdb1000034987,High Producing Exotic Grassland,1.2561,1.2561,1.2561,R-03-low-overlap,126.16,1.0044,0.0,0.0,1.0044
+lcdb1000072578,Gorse and/or Broom,4.3445,4.3445,7.6346,R-03-low-overlap,431.08,0.9922,0.0,0.0,0.9922
+lcdb1000035214,High Producing Exotic Grassland,0.7022,0.7022,2.6435,R-01-contiguous|R-02-contiguous|R-03-low-overlap,69.62,0.9915,0.0,0.0,0.9915
+lcdb1000034792,High Producing Exotic Grassland,286.3356,282.4195,424.2553,R-03-clip-required|R-04-clip-required,28370.46,0.9908,13275.87,0.4636,0.9908
+lcdb1000403209,High Producing Exotic Grassland,12.4388,12.4388,12.4388,R-03-low-overlap,1216.68,0.9781,0.0,0.0,0.9781
+lcdb1000407188,Low Producing Grassland,4.5823,4.5823,4.5823,R-03-low-overlap,446.74,0.9749,0.0,0.0,0.9749
+lcdb1000226494,Low Producing Grassland,4.5355,4.4913,4.5355,R-03-low-overlap|R-03-deforested-1990-2007,441.56,0.9736,0.0,0.0,0.9736
+lcdb1000035378-part-5,High Producing Exotic Grassland,1828.6849,1812.966,2011.0088,R-03-clip-required|R-03-deforested-1990-2007,177735.87,0.9719,0.0,0.0,0.9719
+lcdb1000036245,High Producing Exotic Grassland,0.9958,0.9958,2.5676,R-01-contiguous|R-03-low-overlap|R-03-deforested-1990-2007,96.61,0.9702,0.0,0.0,0.9702
+lcdb1000035680-part-7,High Producing Exotic Grassland,2780.4588,2752.5592,91893.8649,R-03-clip-required|R-03-deforested-1990-2007|R-04-clip-required,268429.98,0.9654,43833.74,0.1576,0.9654
+lcdb1000034708,High Producing Exotic Grassland,390.8594,387.0913,733.6444,R-03-clip-required,37681.4,0.9641,0.0,0.0,0.9641
+lcdb1000401378,High Producing Exotic Grassland,34.4946,34.3719,37.3548,R-03-low-overlap,3316.54,0.9615,0.0,0.0,0.9615
 lcdb1000035168,High Producing Exotic Grassland,2.1321,2.1321,2.1321,R-04-low-overlap,0.0,0.0,204.68,0.96,0.96
+lcdb1000099614,Low Producing Grassland,170.1662,168.6662,262.9098,R-03-clip-required|R-03-deforested-1990-2007,16299.29,0.9578,0.0,0.0,0.9578
+lcdb1000414578,Low Producing Grassland,1.4688,1.4688,1.4688,R-03-low-overlap,140.54,0.9568,0.0,0.0,0.9568
+lcdb1000036458,High Producing Exotic Grassland,991.7739,985.1023,1615.86,R-03-clip-required|R-03-deforested-1990-2007,93978.85,0.9476,0.0,0.0,0.9476
+lcdb1000036396,High Producing Exotic Grassland,1.9113,1.9113,1.9113,R-03-low-overlap,180.68,0.9453,0.0,0.0,0.9453
 lcdb1000043194,High Producing Exotic Grassland,21.1674,21.1674,21.1674,R-03-low-overlap,1993.24,0.9417,0.0,0.0,0.9417
-lcdb1000057748,Low Producing Grassland,20.0358,19.9188,20.0358,R-03-low-overlap,1838.88,0.9178,0.0,0.0,0.9178
-lcdb1000035378-part-7,High Producing Exotic Grassland,131.9398,131.0787,45506.0974,R-03-low-overlap,11997.13,0.9093,0.0,0.0,0.9093
-lcdb2000500037,High Producing Exotic Grassland,678.2615,672.1203,838.4433,R-03-clip-required,61415.93,0.9055,0.0,0.0,0.9055
-lcdb1000035378-part-11,High Producing Exotic Grassland,16345.5133,16207.4615,45506.0974,R-03-clip-required|R-04-clip-required,1468588.41,0.8985,120791.47,0.0739,0.8985
-lcdb1000404768,High Producing Exotic Grassland,7.9612,7.9612,7.9612,R-03-low-overlap,703.14,0.8832,0.0,0.0,0.8832
-lcdb1000071744,Gorse and/or Broom,11.8506,11.8024,11.8506,R-03-low-overlap,1037.06,0.8751,0.0,0.0,0.8751
+lcdb2000506341,Low Producing Grassland,4.9266,4.9266,4.9266,R-03-low-overlap,458.91,0.9315,0.0,0.0,0.9315
+lcdb1000059879,Low Producing Grassland,5.7363,5.7363,91893.8649,R-03-low-overlap,532.01,0.9274,0.0,0.0,0.9274
+lcdb1000059946,Low Producing Grassland,229.4549,228.0343,394.2955,R-03-clip-required,20987.24,0.9147,0.0,0.0,0.9147
+lcdb1000411308,High Producing Exotic Grassland,2.2439,2.2439,2.2439,R-03-low-overlap,204.16,0.9098,0.0,0.0,0.9098
+lcdb2000500325,Low Producing Grassland,128.0836,126.9984,381.2327,R-03-clip-required,11632.25,0.9082,0.0,0.0,0.9082
+lcdb1000400851,High Producing Exotic Grassland,60.7924,60.3169,60.7924,R-03-low-overlap,5518.42,0.9077,0.0,0.0,0.9077
+lcdb1000400000,High Producing Exotic Grassland,4270.3732,4209.5356,91893.8649,R-03-clip-required|R-04-clip-required,385694.58,0.9032,280938.16,0.6579,0.9032
+lcdb1000035680-part-27,High Producing Exotic Grassland,10.2213,10.1328,10.2213,R-03-low-overlap,906.6,0.887,0.0,0.0,0.887
+lcdb1000034308,High Producing Exotic Grassland,120.6178,119.8624,120.6178,R-03-low-overlap,10684.83,0.8858,0.0,0.0,0.8858
+lcdb2000509560,Low Producing Grassland,2.8117,2.8117,2.8117,R-03-low-overlap,247.62,0.8807,0.0,0.0,0.8807
+lcdb1000611765,Low Producing Grassland,1.5416,1.5416,1615.86,R-03-low-overlap,135.22,0.8771,0.0,0.0,0.8771
+lcdb1000067663,High Producing Exotic Grassland,18.8314,18.7241,18.8314,R-03-low-overlap,1649.41,0.8759,0.0,0.0,0.8759
+lcdb2000501388,High Producing Exotic Grassland,29.7079,29.4643,29.7079,R-03-low-overlap,2599.68,0.8751,0.0,0.0,0.8751
+lcdb1000700882,High Producing Exotic Grassland,43.2497,43.2497,53.3918,R-03-low-overlap,3698.91,0.8552,0.0,0.0,0.8552
+lcdb1000036940,High Producing Exotic Grassland,253.149,251.6247,381.2327,R-03-clip-required,21534.47,0.8507,0.0,0.0,0.8507
 lcdb1000403370,Low Producing Grassland,11.4996,11.4996,11.4996,R-03-low-overlap,977.46,0.85,0.0,0.0,0.85
-lcdb1000700771,High Producing Exotic Grassland,13.9693,13.9693,178357.0452,R-03-low-overlap,1182.23,0.8463,0.0,0.0,0.8463
-lcdb1000034741,High Producing Exotic Grassland,2.3179,2.3179,178357.0452,R-03-low-overlap,192.46,0.8303,0.0,0.0,0.8303
-lcdb1000057816,Low Producing Grassland,16.9411,16.9411,16.9411,R-03-low-overlap,1399.39,0.826,0.0,0.0,0.826
-lcdb1000611256,High Producing Exotic Grassland,27.4739,27.2818,27.4739,R-04-low-overlap,0.0,0.0,2267.66,0.8254,0.8254
-lcdb1000035680-part-70,High Producing Exotic Grassland,17728.4174,17594.4277,178357.0452,R-03-clip-required|R-04-clip-required,1458934.47,0.8229,53242.29,0.03,0.8229
-lcdb1000041152,High Producing Exotic Grassland,184.505,182.9918,8638.2916,R-03-clip-required,15133.62,0.8202,0.0,0.0,0.8202
-lcdb2000501580,High Producing Exotic Grassland,26.2604,26.0483,26.2604,R-04-low-overlap,0.0,0.0,2127.74,0.8102,0.8102
-lcdb1000035680-part-118,High Producing Exotic Grassland,36801.4156,36478.4717,178357.0452,R-03-clip-required|R-04-clip-required,405503.84,0.1102,2972336.33,0.8077,0.8077
-lcdb1000407188,Low Producing Grassland,4.5823,4.5823,4.5823,R-03-low-overlap,367.36,0.8017,0.0,0.0,0.8017
+lcdb1000700771,High Producing Exotic Grassland,13.9693,13.9693,91893.8649,R-03-low-overlap,1182.23,0.8463,0.0,0.0,0.8463
+lcdb1000036393,High Producing Exotic Grassland,4.683,4.683,4.683,R-03-low-overlap,394.54,0.8425,0.0,0.0,0.8425
+lcdb1000036831,High Producing Exotic Grassland,569.264,565.0463,599.406,R-03-clip-required|R-03-deforested-1990-2007|R-04-low-overlap,47785.18,0.8394,207.57,0.0036,0.8394
+lcdb1000034741,High Producing Exotic Grassland,2.3179,2.3179,469.3011,R-03-low-overlap,192.46,0.8303,0.0,0.0,0.8303
+lcdb2000502358,High Producing Exotic Grassland,17.0258,16.9762,117.9164,R-03-low-overlap,1413.21,0.83,0.0,0.0,0.83
+lcdb1000611256,High Producing Exotic Grassland,27.4739,27.2818,27.4739,R-03-low-overlap|R-04-low-overlap,883.55,0.3216,2267.66,0.8254,0.8254
+lcdb1000072467,Gorse and/or Broom,5.6534,5.6534,7.1138,R-03-low-overlap|R-03-deforested-1990-2007,466.28,0.8248,0.0,0.0,0.8248
+lcdb2000501580,High Producing Exotic Grassland,26.2604,26.0483,26.2604,R-03-low-overlap|R-04-low-overlap,88.26,0.0336,2127.74,0.8102,0.8102
+lcdb1000075034,High Producing Exotic Grassland,10.473,10.473,91893.8649,R-03-low-overlap|R-03-deforested-1990-2007,847.76,0.8095,0.0,0.0,0.8095
+lcdb1000090588,High Producing Exotic Grassland,579.8429,577.3302,1615.86,R-03-clip-required|R-03-deforested-1990-2007|R-04-low-overlap,46704.08,0.8055,40.78,0.0007,0.8055
+lcdb1000402217,High Producing Exotic Grassland,20.23,20.23,20.23,R-03-low-overlap,1625.09,0.8033,0.0,0.0,0.8033
+lcdb1000418727,High Producing Exotic Grassland,0.8977,0.8977,17.7016,R-01-contiguous|R-03-low-overlap,71.97,0.8016,0.0,0.0,0.8016
 lcdb1000412398,Low Producing Grassland,2.0307,2.0307,11.0328,R-02-contiguous|R-03-low-overlap,162.72,0.8013,0.0,0.0,0.8013
-lcdb1000058040,Low Producing Grassland,20.8054,20.6415,20.8054,R-03-low-overlap,1665.41,0.8005,0.0,0.0,0.8005
-lcdb1000400913,High Producing Exotic Grassland,57.1338,56.9162,57.1338,R-03-low-overlap,4436.42,0.7765,0.0,0.0,0.7765
-lcdb1000059961,Low Producing Grassland,6667.4663,6622.12,8638.2916,R-03-clip-required|R-04-low-overlap,499721.07,0.7495,4371.72,0.0066,0.7495
-lcdb1000035992,High Producing Exotic Grassland,166.789,165.5608,174.6622,R-04-clip-required,0.0,0.0,12458.04,0.7469,0.7469
-lcdb1000036730,High Producing Exotic Grassland,536.6579,532.8008,638.2503,R-03-clip-required,39488.0,0.7358,0.0,0.0,0.7358
-lcdb1000036854,High Producing Exotic Grassland,562.1412,558.6517,594.2185,R-03-clip-required|R-04-low-overlap,41363.86,0.7358,16.7,0.0003,0.7358
-lcdb1000035378-part-34,High Producing Exotic Grassland,474.2522,470.6809,45506.0974,R-03-low-overlap|R-04-clip-required,4659.74,0.0983,33439.15,0.7051,0.7051
-lcdb1000036940,High Producing Exotic Grassland,253.149,251.8993,3536.0559,R-03-clip-required,17792.17,0.7028,0.0,0.0,0.7028
+lcdb2000505263,Low Producing Grassland,6.4967,6.4967,6.4967,R-03-low-overlap,516.34,0.7948,0.0,0.0,0.7948
+lcdb1000035680-part-6,High Producing Exotic Grassland,16940.901,16813.3969,91893.8649,R-03-clip-required|R-03-deforested-1990-2007|R-04-clip-required,1338903.76,0.7903,65870.44,0.0389,0.7903
+lcdb1000407965,High Producing Exotic Grassland,4.1498,4.1498,4.1498,R-03-low-overlap,325.46,0.7843,0.0,0.0,0.7843
+lcdb1000408341,High Producing Exotic Grassland,3.6373,3.6373,3.6373,R-03-low-overlap,280.25,0.7705,0.0,0.0,0.7705
+lcdb1000401620,High Producing Exotic Grassland,28.2847,28.1512,28.2847,R-03-low-overlap,2156.08,0.7623,0.0,0.0,0.7623
+lcdb2000501336,Low Producing Grassland,30.8022,30.6858,47.3824,R-03-low-overlap,2249.91,0.7304,0.0,0.0,0.7304
+lcdb2000512821,High Producing Exotic Grassland,1.4806,1.4806,1.4806,R-03-low-overlap,108.15,0.7304,0.0,0.0,0.7304
+lcdb2000506055,Low Producing Grassland,5.2665,5.2665,5.2665,R-03-low-overlap,383.39,0.728,0.0,0.0,0.728
+lcdb2000504166,Low Producing Grassland,8.3924,8.3924,8.3924,R-03-low-overlap,609.91,0.7267,0.0,0.0,0.7267
+lcdb2000503081,Low Producing Grassland,12.3021,12.2321,16.3147,R-03-low-overlap,891.81,0.7249,0.0,0.0,0.7249
+lcdb2000508170,Low Producing Grassland,3.4598,3.4598,863.7194,R-03-low-overlap,248.89,0.7194,0.0,0.0,0.7194
+lcdb1000450458,Gorse and/or Broom,10.194,10.1389,20.1379,R-03-low-overlap,719.6,0.7059,0.0,0.0,0.7059
+lcdb1000417306,Low Producing Grassland,2.516,2.516,2.516,R-03-low-overlap,177.57,0.7058,0.0,0.0,0.7058
+lcdb1000036026,Low Producing Grassland,7.5581,7.5154,7.5581,R-03-low-overlap,533.14,0.7054,0.0,0.0,0.7054
+lcdb1000035378-part-8,High Producing Exotic Grassland,474.2522,470.4967,486.3584,R-03-low-overlap|R-04-clip-required,11793.58,0.2487,33439.15,0.7051,0.7051
+lcdb1000035460,High Producing Exotic Grassland,66.0998,65.9098,66.0998,R-03-low-overlap,4627.94,0.7001,0.0,0.0,0.7001
 lcdb1000611763,Low Producing Grassland,2.573,2.573,2.573,R-03-low-overlap,179.8,0.6988,0.0,0.0,0.6988
-lcdb1000036629,Low Producing Grassland,88.5019,88.0043,88.5019,R-03-low-overlap,6104.72,0.6898,0.0,0.0,0.6898
-lcdb1000401061,High Producing Exotic Grassland,47.2204,46.9025,47.2204,R-03-low-overlap,3181.5,0.6738,0.0,0.0,0.6738
-lcdb1000403942,High Producing Exotic Grassland,9.6237,9.6237,2354.0062,R-04-low-overlap,0.0,0.0,643.17,0.6683,0.6683
-lcdb1000058340,Low Producing Grassland,507.2029,504.0846,3536.0559,R-03-clip-required,33622.53,0.6629,0.0,0.0,0.6629
-lcdb1000057731,Low Producing Grassland,27.2227,27.1731,1690.6186,R-03-low-overlap,1802.35,0.6621,0.0,0.0,0.6621
-lcdb1000400000,High Producing Exotic Grassland,4270.3732,4241.4618,178357.0452,R-03-clip-required|R-04-clip-required,27997.72,0.0656,280938.16,0.6579,0.6579
-lcdb1000035378-part-40,High Producing Exotic Grassland,7961.5374,7915.6466,45506.0974,R-03-clip-required|R-04-clip-required,521522.61,0.6551,41269.2,0.0518,0.6551
-lcdb1000073646,Gorse and/or Broom,19.8273,19.7372,21.3278,R-03-low-overlap,1294.63,0.653,0.0,0.0,0.653
-lcdb2000508808,Low Producing Grassland,3.0632,3.0632,3.0632,R-03-low-overlap,197.28,0.644,0.0,0.0,0.644
-lcdb1000036705,High Producing Exotic Grassland,3.1054,3.1054,3.1054,R-04-low-overlap,0.0,0.0,199.47,0.6423,0.6423
-lcdb1000035434,High Producing Exotic Grassland,95.451,94.8845,95.451,R-03-low-overlap,6075.28,0.6365,0.0,0.0,0.6365
-lcdb1000072135,Gorse and/or Broom,33.4905,33.2922,1202.8795,R-04-low-overlap,0.0,0.0,2075.38,0.6197,0.6197
-lcdb1000035680-part-105,High Producing Exotic Grassland,183.9162,182.8749,178357.0452,R-03-clip-required,11366.81,0.618,0.0,0.0,0.618
-lcdb1000700794,High Producing Exotic Grassland,4.4087,4.4087,45506.0974,R-03-low-overlap,271.75,0.6164,0.0,0.0,0.6164
-lcdb1000035865,High Producing Exotic Grassland,11154.9646,11083.2497,11853.5785,R-03-clip-required|R-04-clip-required,679040.62,0.6087,111615.53,0.1001,0.6087
-lcdb1000035378-part-20,High Producing Exotic Grassland,14771.3378,14685.9687,45506.0974,R-03-clip-required|R-04-clip-required,894927.14,0.6059,48186.9,0.0326,0.6059
-lcdb1000035378-part-23,High Producing Exotic Grassland,0.9116,0.9116,45506.0974,R-01-contiguous|R-03-low-overlap,54.78,0.601,0.0,0.0,0.601
-lcdb1000034792,High Producing Exotic Grassland,286.3356,283.5588,178357.0452,R-03-clip-required|R-04-clip-required,16470.92,0.5752,13275.87,0.4636,0.5752
+lcdb1000075052,High Producing Exotic Grassland,21.3397,21.2537,21.3397,R-03-low-overlap,1480.86,0.6939,0.0,0.0,0.6939
+lcdb1000453400,High Producing Exotic Grassland,3.0978,3.0978,3.0978,R-03-low-overlap,213.32,0.6886,0.0,0.0,0.6886
+lcdb1000035996,High Producing Exotic Grassland,41.3926,41.1168,41.3926,R-03-low-overlap,2812.84,0.6796,0.0,0.0,0.6796
+lcdb1000414953,High Producing Exotic Grassland,1.4745,1.4745,1.4745,R-03-low-overlap,99.14,0.6724,0.0,0.0,0.6724
+lcdb1000035084,High Producing Exotic Grassland,1.1942,1.1942,1.1942,R-03-low-overlap,80.18,0.6714,0.0,0.0,0.6714
+lcdb1000072260,Gorse and/or Broom,12.6717,12.6316,12.6717,R-03-low-overlap,845.18,0.667,0.0,0.0,0.667
+lcdb1000402655,High Producing Exotic Grassland,8.6721,8.6721,8.6721,R-03-low-overlap,575.28,0.6634,0.0,0.0,0.6634
+lcdb1000057731,Low Producing Grassland,27.2227,27.1731,106.6738,R-03-low-overlap,1802.35,0.6621,0.0,0.0,0.6621
+lcdb1000035138,High Producing Exotic Grassland,4.9924,4.9924,4.9924,R-03-low-overlap,328.43,0.6579,0.0,0.0,0.6579
+lcdb1000035306,High Producing Exotic Grassland,2.9321,2.9321,2.9321,R-03-low-overlap,192.02,0.6549,0.0,0.0,0.6549
+lcdb2000514659,Low Producing Grassland,1.2227,1.2227,1.2227,R-03-low-overlap,79.32,0.6487,0.0,0.0,0.6487
+lcdb1000036412,High Producing Exotic Grassland,66.1064,65.8412,66.1064,R-03-low-overlap,4151.61,0.628,0.0,0.0,0.628
+lcdb2000512368,Low Producing Grassland,1.8561,1.8561,1.8561,R-03-low-overlap,116.36,0.6269,0.0,0.0,0.6269
+lcdb2000502031,High Producing Exotic Grassland,20.6299,20.6299,20.6299,R-03-low-overlap,1276.99,0.619,0.0,0.0,0.619
+lcdb1000700794,High Producing Exotic Grassland,4.4087,4.4087,4.4087,R-03-low-overlap,271.75,0.6164,0.0,0.0,0.6164
+lcdb1000611712,Low Producing Grassland,2.8416,2.8416,2.8416,R-03-low-overlap,174.92,0.6155,0.0,0.0,0.6155
+lcdb1000036933,Low Producing Grassland,45.655,45.5157,45.655,R-03-low-overlap,2745.93,0.6015,0.0,0.0,0.6015
+lcdb1000040476,High Producing Exotic Grassland,1.0539,1.0539,1.0539,R-03-low-overlap,62.8,0.5959,0.0,0.0,0.5959
+lcdb1000036118,High Producing Exotic Grassland,30.1936,30.113,30.1936,R-03-low-overlap,1781.81,0.5901,0.0,0.0,0.5901
+lcdb1000400667,High Producing Exotic Grassland,76.9711,76.6774,160.8388,R-03-low-overlap,4519.9,0.5872,0.0,0.0,0.5872
+lcdb1000058132,Low Producing Grassland,22.1786,22.1036,22.1786,R-03-low-overlap,1289.01,0.5812,0.0,0.0,0.5812
 lcdb1000034129,High Producing Exotic Grassland,8.6141,8.6141,8.6141,R-04-low-overlap,0.0,0.0,494.61,0.5742,0.5742
-lcdb1000035680-part-122,High Producing Exotic Grassland,0.155,0.155,178357.0452,R-01-contiguous|R-02-contiguous|R-04-low-overlap,0.0,0.0,8.85,0.5708,0.5708
+lcdb1000611243,High Producing Exotic Grassland,1.8728,1.8728,1.8728,R-03-low-overlap,107.28,0.5728,0.0,0.0,0.5728
+lcdb1000057257,Low Producing Grassland,6.8864,6.8864,24.0167,R-03-low-overlap,393.79,0.5718,0.0,0.0,0.5718
 lcdb1000036408,High Producing Exotic Grassland,4.2692,4.2692,4.2692,R-03-low-overlap,241.41,0.5655,0.0,0.0,0.5655
-lcdb1000400847,High Producing Exotic Grassland,60.9996,60.838,3716.0128,R-03-low-overlap,3441.4,0.5642,0.0,0.0,0.5642
-lcdb1000058009,Low Producing Grassland,3.5814,3.5814,3.5814,R-03-low-overlap,201.96,0.5639,0.0,0.0,0.5639
-lcdb2000500263,High Producing Exotic Grassland,152.4922,151.8791,185.5541,R-03-low-overlap,7979.52,0.5233,0.0,0.0,0.5233
-lcdb1000034308,High Producing Exotic Grassland,120.6178,120.1055,120.6178,R-03-low-overlap,6301.75,0.5225,0.0,0.0,0.5225
-lcdb1000057593,Low Producing Grassland,13.6817,13.6165,14.697,R-03-low-overlap,694.45,0.5076,0.0,0.0,0.5076
-lcdb1000036131,Low Producing Grassland,2063.8358,2053.4403,2142.0128,R-04-clip-required,0.0,0.0,104644.88,0.507,0.507
-lcdb1000412067,High Producing Exotic Grassland,2.0263,2.0263,90.4115,R-03-low-overlap,102.7,0.5068,0.0,0.0,0.5068
-lcdb1000700726,High Producing Exotic Grassland,12.0531,12.0531,178357.0452,R-03-low-overlap,602.14,0.4996,0.0,0.0,0.4996
-lcdb1000034785,High Producing Exotic Grassland,1252.7036,1242.4784,1836.7491,R-03-clip-required|R-04-clip-required,62212.24,0.4966,51135.6,0.4082,0.4966
-lcdb1000611286,High Producing Exotic Grassland,6.0408,6.0408,6.0408,R-03-low-overlap,297.66,0.4927,0.0,0.0,0.4927
-lcdb1000058380,Low Producing Grassland,344.8019,343.3236,345.0309,R-03-clip-required,16651.09,0.4829,0.0,0.0,0.4829
-lcdb1000035680-part-61,High Producing Exotic Grassland,35180.9684,34978.9731,178357.0452,R-03-clip-required|R-04-clip-required,457850.8,0.1301,1688006.63,0.4798,0.4798
-lcdb1000453054,High Producing Exotic Grassland,3.5696,3.5696,3.5696,R-03-low-overlap,169.64,0.4752,0.0,0.0,0.4752
-lcdb1000700752,High Producing Exotic Grassland,23.8654,23.8654,178357.0452,R-03-low-overlap,1133.61,0.475,0.0,0.0,0.475
-lcdb1000036956,High Producing Exotic Grassland,1138.811,1134.2732,3536.0559,R-03-clip-required,54080.09,0.4749,0.0,0.0,0.4749
-lcdb1000036493,High Producing Exotic Grassland,88.3852,88.1099,90.4115,R-03-low-overlap,4081.66,0.4618,0.0,0.0,0.4618
-lcdb1000035378-part-10,High Producing Exotic Grassland,1828.6849,1821.076,45506.0974,R-03-clip-required,82649.28,0.452,0.0,0.0,0.452
-lcdb1000036458,High Producing Exotic Grassland,991.7739,988.3167,1665.451,R-03-clip-required,44278.41,0.4465,0.0,0.0,0.4465
-lcdb1000071993,Gorse and/or Broom,5.8729,5.8729,8.3091,R-03-low-overlap,254.69,0.4337,0.0,0.0,0.4337
-lcdb1000402618,Low Producing Grassland,17.0085,17.0085,31.4052,R-03-low-overlap,713.04,0.4192,0.0,0.0,0.4192
-lcdb1000058046-part-1,Low Producing Grassland,6.5489,6.5489,174.6622,R-03-low-overlap,272.73,0.4165,0.0,0.0,0.4165
-lcdb1000035680-part-56,High Producing Exotic Grassland,23754.8881,23607.1015,178357.0452,R-03-clip-required|R-04-clip-required,973131.3,0.4097,684500.83,0.2882,0.4097
-lcdb1000036218,High Producing Exotic Grassland,46.357,46.357,46.357,R-03-low-overlap,1881.33,0.4058,0.0,0.0,0.4058
-lcdb1000034656,High Producing Exotic Grassland,3318.8997,3306.9919,178357.0452,R-03-clip-required,132380.51,0.3989,0.0,0.0,0.3989
-lcdb1000058177,Low Producing Grassland,66.6206,66.5748,190.0475,R-03-low-overlap,2625.23,0.3941,0.0,0.0,0.3941
-lcdb1000036464,High Producing Exotic Grassland,3064.1177,3053.4689,3716.0128,R-03-clip-required|R-04-low-overlap,117762.72,0.3843,8128.88,0.0265,0.3843
-lcdb1000404841,High Producing Exotic Grassland,7.1599,7.1599,23.3221,R-03-low-overlap,269.64,0.3766,0.0,0.0,0.3766
-lcdb1000072524,Gorse and/or Broom,18.4346,18.3818,523.2491,R-03-low-overlap,687.58,0.373,0.0,0.0,0.373
-lcdb1000035680-part-103,High Producing Exotic Grassland,29112.2957,29005.7715,178357.0452,R-03-clip-required|R-04-clip-required,1030057.25,0.3538,201697.95,0.0693,0.3538
+lcdb1000700860,High Producing Exotic Grassland,45.7411,45.7411,52.0975,R-03-low-overlap,2539.13,0.5551,0.0,0.0,0.5551
+lcdb1000611249,High Producing Exotic Grassland,29.2019,29.2019,33.5087,R-03-low-overlap,1615.97,0.5534,0.0,0.0,0.5534
+lcdb1000406097,High Producing Exotic Grassland,5.7106,5.7106,1615.86,R-03-low-overlap|R-03-deforested-1990-2007,313.48,0.5489,0.0,0.0,0.5489
+lcdb1000035378-part-7,High Producing Exotic Grassland,800.3854,796.3039,839.7229,R-03-clip-required|R-03-deforested-1990-2007,43915.41,0.5487,0.0,0.0,0.5487
+lcdb1000416533,High Producing Exotic Grassland,1.1286,1.1286,863.7194,R-03-low-overlap,61.74,0.5471,0.0,0.0,0.5471
+lcdb1000035680-part-3,High Producing Exotic Grassland,29112.2957,28958.8283,91893.8649,R-03-clip-required|R-03-deforested-1990-2007|R-04-clip-required,1586384.66,0.5449,201697.95,0.0693,0.5449
+lcdb1000036737,High Producing Exotic Grassland,6.4264,6.4264,6.4264,R-03-low-overlap,346.37,0.539,0.0,0.0,0.539
+lcdb1000067472,Low Producing Grassland,41.7516,41.636,262.9098,R-03-low-overlap|R-03-deforested-1990-2007,2213.03,0.53,0.0,0.0,0.53
+lcdb2000513223,Low Producing Grassland,1.5174,1.5174,1.5174,R-03-low-overlap,80.43,0.53,0.0,0.0,0.53
+lcdb1000416778,High Producing Exotic Grassland,1.0436,1.0436,1.0436,R-01-near-threshold|R-03-low-overlap,55.23,0.5293,0.0,0.0,0.5293
+lcdb1000403962,High Producing Exotic Grassland,9.3733,9.3733,9.3733,R-03-low-overlap,492.9,0.5259,0.0,0.0,0.5259
+lcdb1000035527,High Producing Exotic Grassland,2.7402,2.7402,2.7402,R-03-low-overlap,142.29,0.5193,0.0,0.0,0.5193
+lcdb1000138516,High Producing Exotic Grassland,7.0427,7.0427,7.0427,R-03-low-overlap,353.33,0.5017,0.0,0.0,0.5017
+lcdb1000700726,High Producing Exotic Grassland,12.0531,12.0531,12.0531,R-03-low-overlap,602.14,0.4996,0.0,0.0,0.4996
+lcdb1000700879,High Producing Exotic Grassland,31.1052,31.1052,33.3239,R-03-low-overlap,1540.93,0.4954,0.0,0.0,0.4954
+lcdb1000072134,Gorse and/or Broom,16.8571,16.7975,20.963,R-03-low-overlap,827.02,0.4906,0.12,0.0001,0.4906
+lcdb1000611489,High Producing Exotic Grassland,5.225,5.225,1615.86,R-03-low-overlap,252.16,0.4826,0.0,0.0,0.4826
+lcdb1000058200,Low Producing Grassland,2.7582,2.7582,2.7582,R-03-low-overlap,131.67,0.4774,0.0,0.0,0.4774
+lcdb1000700752,High Producing Exotic Grassland,23.8654,23.8654,91893.8649,R-03-low-overlap,1133.61,0.475,0.0,0.0,0.475
+lcdb1000057687,Low Producing Grassland,54.1061,53.9524,61.3388,R-03-low-overlap,2553.78,0.472,0.0,0.0,0.472
+lcdb1000057650,Low Producing Grassland,34.4655,34.3389,34.4655,R-03-low-overlap,1619.14,0.4698,0.0,0.0,0.4698
+lcdb1000046478,Low Producing Grassland,8.553,8.5129,8.553,R-03-low-overlap,401.36,0.4693,0.0,0.0,0.4693
+lcdb1000035165,High Producing Exotic Grassland,1.0139,1.0139,1.0139,R-01-near-threshold|R-03-low-overlap,47.48,0.4683,0.0,0.0,0.4683
+lcdb1000411568,Gorse and/or Broom,2.2477,2.2477,9.811,R-03-low-overlap,104.02,0.4628,0.0,0.0,0.4628
+lcdb1000416361,High Producing Exotic Grassland,0.9663,0.9663,47.3824,R-01-contiguous|R-03-low-overlap,44.64,0.462,0.0,0.0,0.462
+lcdb1000407100,Low Producing Grassland,4.6154,4.6154,4.6154,R-03-low-overlap,213.12,0.4618,0.0,0.0,0.4618
+lcdb1000611515,High Producing Exotic Grassland,14.5945,14.5287,91893.8649,R-03-low-overlap,658.31,0.4511,0.0,0.0,0.4511
+lcdb1000406406,High Producing Exotic Grassland,2.9826,2.9826,6.9801,R-03-low-overlap,133.81,0.4486,0.0,0.0,0.4486
+lcdb1000035626,High Producing Exotic Grassland,5.572,5.572,5.572,R-03-low-overlap,248.69,0.4463,0.0,0.0,0.4463
+lcdb1000034826,High Producing Exotic Grassland,42.8676,42.7233,42.8676,R-03-low-overlap,1891.98,0.4414,0.0,0.0,0.4414
+lcdb1000035070,High Producing Exotic Grassland,7.1407,7.1407,7.1407,R-03-low-overlap,312.21,0.4372,0.0,0.0,0.4372
+lcdb1000035196,High Producing Exotic Grassland,3.7084,3.7084,3.7084,R-03-low-overlap,161.69,0.436,0.0,0.0,0.436
+lcdb1000454036,High Producing Exotic Grassland,2.753,2.753,2.753,R-03-low-overlap,116.83,0.4244,0.0,0.0,0.4244
+lcdb1000411921,High Producing Exotic Grassland,2.2456,2.2456,2.2456,R-03-low-overlap,92.42,0.4116,0.0,0.0,0.4116
+lcdb1000411069,High Producing Exotic Grassland,2.6069,2.6069,2.6069,R-03-low-overlap,107.2,0.4112,0.0,0.0,0.4112
+lcdb1000074707,High Producing Exotic Grassland,6.1187,6.1187,11.3087,R-03-low-overlap,251.08,0.4103,0.0,0.0,0.4103
+lcdb1000057355,Low Producing Grassland,4.7676,4.7676,262.9098,R-03-low-overlap,193.4,0.4056,0.0,0.0,0.4056
+lcdb2000501524,Low Producing Grassland,27.3696,27.3283,40.146,R-03-low-overlap,1077.32,0.3936,0.0,0.0,0.3936
+lcdb1000067795,High Producing Exotic Grassland,9.8448,9.8448,91893.8649,R-03-low-overlap|R-03-deforested-1990-2007,385.95,0.392,0.0,0.0,0.392
+lcdb1000450198,High Producing Exotic Grassland,49.6549,49.4957,59.3422,R-03-low-overlap,1933.75,0.3894,0.0,0.0,0.3894
+lcdb2000509361,Low Producing Grassland,2.7557,2.7557,6.8941,R-03-low-overlap,103.89,0.377,0.0,0.0,0.377
+lcdb1000404841,High Producing Exotic Grassland,7.1599,7.1599,7.1599,R-03-low-overlap|R-03-deforested-1990-2007,269.64,0.3766,0.0,0.0,0.3766
+lcdb1000611268,High Producing Exotic Grassland,7.1909,7.1909,7.1909,R-03-low-overlap,269.95,0.3754,0.0,0.0,0.3754
+lcdb1000450055,Low Producing Grassland,97.0495,96.8906,97.0495,R-03-low-overlap,3628.02,0.3738,0.0,0.0,0.3738
+lcdb1000057876,Low Producing Grassland,41.3682,41.2612,41.3682,R-03-low-overlap,1492.37,0.3608,0.0,0.0,0.3608
+lcdb2000511775,Gorse and/or Broom,1.9996,1.9996,6.9801,R-03-low-overlap,71.9,0.3596,0.0,0.0,0.3596
+lcdb2000515043,Low Producing Grassland,1.1461,1.1461,8.4793,R-03-low-overlap,41.21,0.3595,0.0,0.0,0.3595
+lcdb1000035977,High Producing Exotic Grassland,5.3731,5.3731,5.3731,R-03-low-overlap,192.53,0.3583,0.0,0.0,0.3583
+lcdb1000034928,High Producing Exotic Grassland,14.1615,14.1615,19.339,R-03-low-overlap,504.44,0.3562,0.0,0.0,0.3562
+lcdb2000502038,High Producing Exotic Grassland,19.7113,19.7113,19.7113,R-03-low-overlap,653.71,0.3316,0.0,0.0,0.3316
+lcdb1000041190,Low Producing Grassland,484.6263,483.4678,484.6263,R-03-clip-required,15836.53,0.3268,0.0,0.0,0.3268
 lcdb1000071799,Gorse and/or Broom,5.4981,5.4981,6.7178,R-03-low-overlap,176.83,0.3216,0.0,0.0,0.3216
-lcdb1000700835,High Producing Exotic Grassland,9.3329,9.3329,2156.685,R-03-low-overlap,297.8,0.3191,0.0,0.0,0.3191
-lcdb1000700730,High Producing Exotic Grassland,435.2638,433.9441,178357.0452,R-03-low-overlap|R-04-clip-required,809.94,0.0186,13412.62,0.3081,0.3081
-lcdb1000058393,Low Producing Grassland,113.6469,113.6469,113.6469,R-03-low-overlap,3372.57,0.2968,0.0,0.0,0.2968
+lcdb1000700835,High Producing Exotic Grassland,9.3329,9.3329,9.3329,R-03-low-overlap,297.8,0.3191,0.0,0.0,0.3191
+lcdb1000404838,Low Producing Grassland,7.4675,7.4675,7.4675,R-03-low-overlap,237.93,0.3186,0.0,0.0,0.3186
+lcdb2000509321,Low Producing Grassland,2.9685,2.9685,2.9685,R-03-low-overlap,94.55,0.3185,0.0,0.0,0.3185
+lcdb1000035647,High Producing Exotic Grassland,7.5844,7.5844,7.5844,R-03-low-overlap,234.27,0.3089,0.0,0.0,0.3089
+lcdb1000700730,High Producing Exotic Grassland,435.2638,433.9441,469.3011,R-03-low-overlap|R-04-clip-required,809.94,0.0186,13412.62,0.3081,0.3081
+lcdb1000036023,Low Producing Grassland,8.1613,8.1613,8.1613,R-03-low-overlap,249.51,0.3057,0.0,0.0,0.3057
+lcdb1000035218,High Producing Exotic Grassland,1.4095,1.4095,1.4095,R-03-low-overlap,42.92,0.3045,0.0,0.0,0.3045
+lcdb2000512122,Low Producing Grassland,1.8755,1.8755,1.8755,R-03-low-overlap,56.73,0.3025,0.0,0.0,0.3025
+lcdb1000188833,High Producing Exotic Grassland,74.7034,74.5791,106.6738,R-03-low-overlap,2259.01,0.3024,0.0,0.0,0.3024
+lcdb1000406393,High Producing Exotic Grassland,5.3412,5.3412,5.3412,R-03-low-overlap,160.92,0.3013,0.0,0.0,0.3013
+lcdb1000412753,High Producing Exotic Grassland,1.8974,1.8974,1.8974,R-03-low-overlap,56.5,0.2978,0.0,0.0,0.2978
+lcdb2000511111,Low Producing Grassland,2.2249,2.2249,2.2249,R-03-low-overlap,64.42,0.2896,0.0,0.0,0.2896
 lcdb1000035483,High Producing Exotic Grassland,1.5791,1.5791,1.5791,R-03-low-overlap,44.48,0.2817,0.0,0.0,0.2817
-lcdb1000057701,Low Producing Grassland,6.0388,6.0388,1690.6186,R-03-low-overlap,169.51,0.2807,0.0,0.0,0.2807
+lcdb1000401206,High Producing Exotic Grassland,40.2901,40.2264,62.9562,R-03-low-overlap,1133.76,0.2814,0.0,0.0,0.2814
+lcdb1000057701,Low Producing Grassland,6.0388,6.0388,6.0388,R-03-low-overlap,169.51,0.2807,0.0,0.0,0.2807
+lcdb1000618462,High Producing Exotic Grassland,63.7198,63.7198,63.7198,R-03-low-overlap|R-04-low-overlap,1787.87,0.2806,1.06,0.0002,0.2806
+lcdb2000513347,Low Producing Grassland,1.4604,1.4604,7.1138,R-03-low-overlap|R-03-deforested-1990-2007,40.91,0.2801,0.0,0.0,0.2801
 lcdb1000060469,Low Producing Grassland,7.8183,7.8183,7.8183,R-03-low-overlap,213.55,0.2731,0.0,0.0,0.2731
-lcdb1000058362,Low Producing Grassland,401.2465,400.2316,401.2465,R-03-clip-required,10898.97,0.2716,0.0,0.0,0.2716
-lcdb1000036246,High Producing Exotic Grassland,1816.9614,1813.2231,2156.685,R-03-clip-required,46831.78,0.2577,0.0,0.0,0.2577
-lcdb1000035680-part-46,High Producing Exotic Grassland,16940.901,16896.0247,178357.0452,R-03-clip-required|R-04-clip-required,435406.39,0.257,65870.44,0.0389,0.257
-lcdb1000056848-part-2,Low Producing Grassland,149.8401,149.6508,158.0113,R-03-low-overlap,3834.59,0.2559,0.0,0.0,0.2559
-lcdb1000700650,High Producing Exotic Grassland,3.1408,3.1408,45506.0974,R-03-low-overlap,79.89,0.2544,0.0,0.0,0.2544
-lcdb2000506438,Low Producing Grassland,4.8842,4.8842,931.6255,R-03-low-overlap,121.28,0.2483,0.0,0.0,0.2483
-lcdb1000036970,High Producing Exotic Grassland,628.5629,627.0228,3536.0559,R-03-clip-required,15400.87,0.245,0.0,0.0,0.245
-lcdb1000035762,High Producing Exotic Grassland,24.5739,24.5218,24.5739,R-03-low-overlap,595.48,0.2423,0.0,0.0,0.2423
-lcdb1000035794,High Producing Exotic Grassland,1375.8458,1372.3449,1396.3778,R-03-clip-required|R-04-clip-required,33159.38,0.241,14688.4,0.1068,0.241
-lcdb1000034878,High Producing Exotic Grassland,40.7812,40.7812,178357.0452,R-03-low-overlap,945.06,0.2317,0.0,0.0,0.2317
+lcdb1000035313,High Producing Exotic Grassland,9.1109,9.1109,9.1109,R-03-low-overlap,247.26,0.2714,0.0,0.0,0.2714
+lcdb2000514453,Low Producing Grassland,1.252,1.252,1.252,R-03-low-overlap,33.97,0.2713,0.0,0.0,0.2713
+lcdb1000089098,Low Producing Grassland,62.5185,62.4108,62.5185,R-03-low-overlap,1693.95,0.271,0.0,0.0,0.271
+lcdb1000036835,Low Producing Grassland,90.7497,90.6366,90.7497,R-03-low-overlap,2423.57,0.2671,0.0,0.0,0.2671
+lcdb1000411068,High Producing Exotic Grassland,2.3324,2.3324,2.3324,R-03-low-overlap,61.35,0.2631,0.0,0.0,0.2631
+lcdb1000403758,High Producing Exotic Grassland,10.0018,10.0018,10.0018,R-03-low-overlap,262.87,0.2628,0.0,0.0,0.2628
+lcdb1000037200,High Producing Exotic Grassland,78.7903,78.7126,78.7903,R-03-low-overlap,2042.41,0.2592,0.0,0.0,0.2592
+lcdb1000074681,High Producing Exotic Grassland,1.142,1.142,1.877,R-03-low-overlap,29.32,0.2568,0.0,0.0,0.2568
+lcdb1000700650,High Producing Exotic Grassland,3.1408,3.1408,19.339,R-03-low-overlap,79.89,0.2544,0.0,0.0,0.2544
+lcdb1000400783,High Producing Exotic Grassland,32.8203,32.7725,40.769,R-03-low-overlap,829.72,0.2528,0.0,0.0,0.2528
+lcdb1000036150,High Producing Exotic Grassland,13.2678,13.2678,25.3515,R-03-low-overlap,333.01,0.251,0.0,0.0,0.251
+lcdb1000415227,Low Producing Grassland,1.3174,1.3174,1.3174,R-03-low-overlap,33.0,0.2505,0.0,0.0,0.2505
+lcdb2000507258,Low Producing Grassland,3.9186,3.9186,3.9186,R-03-low-overlap,97.82,0.2496,0.0,0.0,0.2496
+lcdb1000072374,Gorse and/or Broom,9.9439,9.9439,20.1379,R-03-low-overlap,247.34,0.2487,0.0,0.0,0.2487
+lcdb2000506438,Low Producing Grassland,4.8842,4.8842,863.7194,R-03-low-overlap,121.28,0.2483,0.0,0.0,0.2483
+lcdb1000067675,High Producing Exotic Grassland,21.8657,21.8657,91893.8649,R-03-low-overlap,535.25,0.2448,0.0,0.0,0.2448
+lcdb2000506939,Low Producing Grassland,4.3768,4.3768,4.3768,R-03-low-overlap,104.32,0.2384,0.0,0.0,0.2384
+lcdb1000034878,High Producing Exotic Grassland,40.7812,40.7812,91893.8649,R-03-low-overlap,945.06,0.2317,0.0,0.0,0.2317
 lcdb1000450930,Low Producing Grassland,12.1972,12.1972,12.1972,R-03-low-overlap,279.36,0.229,0.0,0.0,0.229
-lcdb2000501873,Low Producing Grassland,22.1745,22.1745,655.178,R-04-low-overlap,0.0,0.0,489.03,0.2205,0.2205
-lcdb1000035980,High Producing Exotic Grassland,563.5294,562.5164,655.178,R-03-clip-required,12038.07,0.2136,0.0,0.0,0.2136
-lcdb1000037124,High Producing Exotic Grassland,37.6166,37.5374,37.6166,R-03-low-overlap,791.6,0.2104,0.0,0.0,0.2104
+lcdb2000501873,Low Producing Grassland,22.1745,22.1745,22.1745,R-03-low-overlap|R-04-low-overlap,27.61,0.0125,489.03,0.2205,0.2205
+lcdb1000060008,Low Producing Grassland,8.0685,8.0685,8.0685,R-03-low-overlap,177.59,0.2201,0.0,0.0,0.2201
+lcdb1000187734,High Producing Exotic Grassland,14.4827,14.4827,91893.8649,R-03-low-overlap|R-03-deforested-1990-2007,318.74,0.2201,0.0,0.0,0.2201
+lcdb1000402004,Low Producing Grassland,22.5471,22.4992,31.0725,R-03-low-overlap,482.72,0.2141,0.0,0.0,0.2141
 lcdb1000405416,Low Producing Grassland,6.247,6.247,6.247,R-03-low-overlap,129.04,0.2066,0.0,0.0,0.2066
-lcdb1000057728,Low Producing Grassland,21.7499,21.7499,1690.6186,R-03-low-overlap,443.85,0.2041,0.0,0.0,0.2041
-lcdb1000036212,High Producing Exotic Grassland,819.2401,817.2139,931.6255,R-03-low-overlap|R-04-clip-required,5769.58,0.0704,16368.35,0.1998,0.1998
-lcdb1000040740,Low Producing Grassland,130.0399,129.7955,170.5896,R-03-low-overlap,2568.03,0.1975,0.0,0.0,0.1975
-lcdb1000400740,High Producing Exotic Grassland,71.6365,71.5618,787.7403,R-04-low-overlap,0.0,0.0,1308.61,0.1827,0.1827
-lcdb1000058341,Low Producing Grassland,238.0119,237.6908,3536.0559,R-03-low-overlap,4138.7,0.1739,0.0,0.0,0.1739
-lcdb1000057848,Low Producing Grassland,3.0952,3.0952,3.0952,R-03-low-overlap,53.31,0.1722,0.0,0.0,0.1722
-lcdb1000036317,High Producing Exotic Grassland,688.1808,687.7992,693.6147,R-03-low-overlap,11673.78,0.1696,0.7,0.0,0.1696
-lcdb1000036597,High Producing Exotic Grassland,1188.8936,1186.8024,2354.0062,R-03-clip-required|R-04-low-overlap,19948.69,0.1678,963.73,0.0081,0.1678
-lcdb1000057806,Low Producing Grassland,9.1344,9.1344,9.1344,R-03-low-overlap,146.87,0.1608,0.0,0.0,0.1608
-lcdb1000035680-part-36,High Producing Exotic Grassland,2780.4588,2773.611,178357.0452,R-03-clip-required|R-04-clip-required,26793.75,0.0964,43833.74,0.1576,0.1576
-lcdb1000036892,High Producing Exotic Grassland,483.6193,483.0346,484.1619,R-03-low-overlap,7028.9,0.1453,0.0,0.0,0.1453
-lcdb2000506059,Low Producing Grassland,5.4458,5.4458,5.4458,R-03-low-overlap,77.19,0.1417,0.0,0.0,0.1417
-lcdb1000036453,High Producing Exotic Grassland,217.9093,217.609,340.3508,R-04-low-overlap,0.0,0.0,3023.63,0.1388,0.1388
-lcdb1000035378-part-28,High Producing Exotic Grassland,800.3854,799.423,45506.0974,R-03-low-overlap,10980.19,0.1372,0.0,0.0,0.1372
-lcdb1000036897,High Producing Exotic Grassland,449.0655,448.6686,523.2491,R-03-low-overlap,6124.53,0.1364,0.0,0.0,0.1364
-lcdb1000411628,Low Producing Grassland,2.2134,2.2134,45506.0974,R-03-low-overlap,30.17,0.1363,0.0,0.0,0.1363
-lcdb1000059952,Low Producing Grassland,282.8083,282.5462,8638.2916,R-03-low-overlap,3746.12,0.1325,0.0,0.0,0.1325
-lcdb1000405246,High Producing Exotic Grassland,6.6118,6.6118,594.2185,R-03-low-overlap,87.6,0.1325,0.0,0.0,0.1325
-lcdb1000035680-part-42,High Producing Exotic Grassland,643.7307,642.3072,787.7403,R-03-low-overlap|R-04-low-overlap,6603.02,0.1026,8253.55,0.1282,0.1282
-lcdb2000500026,High Producing Exotic Grassland,985.2038,983.2038,1010.2074,R-03-low-overlap|R-04-clip-required,12428.01,0.1261,11316.98,0.1149,0.1261
-lcdb1000408569,Low Producing Grassland,3.5693,3.5693,45506.0974,R-03-low-overlap,44.11,0.1236,0.0,0.0,0.1236
+lcdb1000057728,Low Producing Grassland,21.7499,21.7499,21.7499,R-03-low-overlap,443.85,0.2041,0.0,0.0,0.2041
+lcdb1000700865,High Producing Exotic Grassland,39.7428,39.7428,50.4014,R-03-low-overlap,806.41,0.2029,0.0,0.0,0.2029
+lcdb1000411402,Low Producing Grassland,2.2215,2.2215,2.2215,R-03-low-overlap,44.33,0.1995,0.0,0.0,0.1995
+lcdb1000611242,High Producing Exotic Grassland,6.6189,6.6189,6.6189,R-03-low-overlap,131.56,0.1988,0.0,0.0,0.1988
+lcdb1000074793,Low Producing Grassland,4.5366,4.5366,1615.86,R-03-low-overlap|R-03-deforested-1990-2007,88.76,0.1957,0.0,0.0,0.1957
+lcdb1000406862,High Producing Exotic Grassland,4.8359,4.8359,4.8359,R-03-low-overlap,89.31,0.1847,0.0,0.0,0.1847
+lcdb1000412015,High Producing Exotic Grassland,2.0833,2.0833,2.0833,R-03-low-overlap,38.03,0.1826,0.0,0.0,0.1826
+lcdb1000057624,Low Producing Grassland,21.6902,21.6902,21.6902,R-03-low-overlap,385.14,0.1776,0.0,0.0,0.1776
+lcdb1000035680-part-17,High Producing Exotic Grassland,35.6785,35.6785,91893.8649,R-03-low-overlap|R-03-deforested-1990-2007,622.09,0.1744,0.0,0.0,0.1744
+lcdb1000035501,High Producing Exotic Grassland,6.4271,6.4271,6.4271,R-03-low-overlap,110.42,0.1718,0.0,0.0,0.1718
+lcdb2000502943,Low Producing Grassland,12.7764,12.7764,40.146,R-03-low-overlap,217.06,0.1699,0.0,0.0,0.1699
+lcdb1000034838,High Producing Exotic Grassland,4.3253,4.3253,4.3253,R-03-low-overlap|R-03-deforested-1990-2007,72.58,0.1678,0.0,0.0,0.1678
+lcdb1000417310,High Producing Exotic Grassland,1.1509,1.1509,1.1509,R-03-low-overlap,18.75,0.1629,0.0,0.0,0.1629
+lcdb1000036330,High Producing Exotic Grassland,67.1343,67.1343,68.1805,R-03-low-overlap,1078.89,0.1607,0.0,0.0,0.1607
+lcdb1000411253,High Producing Exotic Grassland,2.4399,2.4399,1615.86,R-03-low-overlap|R-03-deforested-1990-2007,37.07,0.1519,0.0,0.0,0.1519
+lcdb2000514833,High Producing Exotic Grassland,1.0744,1.0744,3.1328,R-03-low-overlap,15.7,0.1461,0.0,0.0,0.1461
+lcdb1000057841,Low Producing Grassland,3.4533,3.4533,3.4533,R-03-low-overlap,48.98,0.1418,0.0,0.0,0.1418
+lcdb2000506251,High Producing Exotic Grassland,5.1183,5.1183,117.9164,R-03-low-overlap,70.28,0.1373,0.0,0.0,0.1373
+lcdb1000059883,Low Producing Grassland,22.8753,22.8753,91893.8649,R-03-low-overlap|R-03-deforested-1990-2007,310.95,0.1359,0.0,0.0,0.1359
+lcdb1000409894,Low Producing Grassland,2.3135,2.3135,2.3135,R-03-low-overlap,31.42,0.1358,0.0,0.0,0.1358
+lcdb1000035378-part-6,High Producing Exotic Grassland,1699.4953,1697.4416,1699.7525,R-03-clip-required,22670.44,0.1334,0.0,0.0,0.1334
+lcdb1000046576,Gorse and/or Broom,4.1353,4.1353,4.1353,R-03-low-overlap,55.16,0.1334,0.0,0.0,0.1334
+lcdb1000413656,High Producing Exotic Grassland,1.7335,1.7335,62.9562,R-03-low-overlap,22.67,0.1308,0.0,0.0,0.1308
+lcdb1000700885,High Producing Exotic Grassland,35.7602,35.7602,35.7602,R-03-low-overlap,459.18,0.1284,0.0,0.0,0.1284
+lcdb1000408793,High Producing Exotic Grassland,2.9646,2.9646,2.9646,R-03-low-overlap|R-03-deforested-1990-2007,37.63,0.1269,0.0,0.0,0.1269
+lcdb1000406586,Low Producing Grassland,4.9311,4.9311,4.9311,R-03-low-overlap,61.68,0.1251,0.0,0.0,0.1251
+lcdb1000408569,Low Producing Grassland,3.5693,3.5693,3.5693,R-03-low-overlap|R-03-deforested-1990-2007,44.11,0.1236,0.0,0.0,0.1236
 lcdb1000040616,High Producing Exotic Grassland,2.4872,2.4872,2.4872,R-03-low-overlap,30.72,0.1235,0.0,0.0,0.1235
-lcdb1000036527,High Producing Exotic Grassland,595.9133,595.3548,2354.0062,R-04-low-overlap,0.0,0.0,7326.54,0.1229,0.1229
-lcdb1000035680-part-55,High Producing Exotic Grassland,13.3811,13.3811,178357.0452,R-04-low-overlap,0.0,0.0,160.88,0.1202,0.1202
-lcdb1000037203-part-2,High Producing Exotic Grassland,691.0539,690.3475,809.8592,R-03-low-overlap,7947.87,0.115,0.0,0.0,0.115
-lcdb1000036420,High Producing Exotic Grassland,1718.0,1716.4653,1896.9788,R-03-clip-required,19049.62,0.1109,0.0,0.0,0.1109
-lcdb1000034826,High Producing Exotic Grassland,42.8676,42.8676,42.8676,R-03-low-overlap,448.27,0.1046,0.0,0.0,0.1046
-lcdb1000700756,High Producing Exotic Grassland,49.283,49.283,178357.0452,R-03-low-overlap,512.61,0.104,0.0,0.0,0.104
-lcdb1000036856,Low Producing Grassland,26.4468,26.4468,523.2491,R-03-low-overlap,265.75,0.1005,0.0,0.0,0.1005
-lcdb1000036963,High Producing Exotic Grassland,489.5723,489.1139,956.8198,R-03-low-overlap,4583.94,0.0936,0.0,0.0,0.0936
-lcdb1000035378-part-14,High Producing Exotic Grassland,1699.4953,1698.0477,45506.0974,R-03-clip-required,15628.09,0.092,0.0,0.0,0.092
-lcdb1000036551,High Producing Exotic Grassland,2.8791,2.8791,2.8791,R-03-low-overlap,26.41,0.0917,0.0,0.0,0.0917
+lcdb1000404066,Low Producing Grassland,9.3244,9.3244,9.3244,R-03-low-overlap,114.64,0.1229,0.0,0.0,0.1229
+lcdb1000409296,High Producing Exotic Grassland,3.1468,3.1468,3.1468,R-03-low-overlap,38.69,0.1229,0.0,0.0,0.1229
+lcdb1000400688,High Producing Exotic Grassland,73.8936,73.8936,394.2955,R-03-low-overlap,904.53,0.1224,0.0,0.0,0.1224
+lcdb1000035680-part-25,High Producing Exotic Grassland,13.3811,13.3811,91893.8649,R-04-low-overlap,0.0,0.0,160.88,0.1202,0.1202
+lcdb2000500413,High Producing Exotic Grassland,102.0024,102.0024,102.0024,R-03-low-overlap,1193.77,0.117,0.0,0.0,0.117
+lcdb1000056955,Low Producing Grassland,2.9969,2.9969,2.9969,R-03-low-overlap,35.04,0.1169,0.0,0.0,0.1169
+lcdb1000226282,High Producing Exotic Grassland,9.1815,9.1815,91893.8649,R-03-low-overlap|R-03-deforested-1990-2007,96.4,0.105,0.0,0.0,0.105
+lcdb1000700756,High Producing Exotic Grassland,49.283,49.283,91893.8649,R-03-low-overlap,512.61,0.104,0.0,0.0,0.104
+lcdb1000700738,High Producing Exotic Grassland,33.9822,33.9822,37.1891,R-03-low-overlap,340.01,0.1001,0.0,0.0,0.1001
+lcdb1000058291,Low Producing Grassland,1.253,1.253,1.253,R-03-low-overlap,12.43,0.0992,0.0,0.0,0.0992
+lcdb1000102682,Low Producing Grassland,7.7729,7.7729,7.7729,R-03-low-overlap,75.11,0.0966,0.0,0.0,0.0966
 lcdb1000414195,High Producing Exotic Grassland,1.6688,1.6688,1.6688,R-03-low-overlap,15.19,0.091,0.0,0.0,0.091
-lcdb1000036216,High Producing Exotic Grassland,1224.4585,1223.6863,8638.2916,R-03-low-overlap,11110.02,0.0907,0.0,0.0,0.0907
-lcdb1000037136,High Producing Exotic Grassland,63.1883,63.1883,63.1883,R-03-low-overlap,567.75,0.0898,0.0,0.0,0.0898
-lcdb1000402549,High Producing Exotic Grassland,16.4817,16.4817,16.4817,R-03-low-overlap,141.75,0.086,0.0,0.0,0.086
-lcdb1000090588,High Producing Exotic Grassland,579.8429,579.4484,1665.451,R-03-low-overlap|R-04-low-overlap,4758.35,0.0821,40.78,0.0007,0.0821
-lcdb1000401516,Mixed Exotic Shrubland,31.9018,31.9018,33.2218,R-03-low-overlap,252.49,0.0791,0.0,0.0,0.0791
-lcdb1000072332,Gorse and/or Broom,6.8795,6.8795,6.8795,R-04-low-overlap,0.0,0.0,49.3,0.0717,0.0717
+lcdb1000453025,High Producing Exotic Grassland,3.3702,3.3702,3.3702,R-03-low-overlap,30.09,0.0893,0.0,0.0,0.0893
+lcdb1000188551,High Producing Exotic Grassland,24.0119,24.0119,24.0119,R-03-low-overlap|R-03-deforested-1990-2007,200.15,0.0834,0.0,0.0,0.0834
+lcdb1000067468,Low Producing Grassland,24.9517,24.9517,262.9098,R-03-low-overlap|R-03-deforested-1990-2007,207.16,0.083,0.0,0.0,0.083
+lcdb1000611746,Low Producing Grassland,41.0508,41.0508,2011.0088,R-03-low-overlap,337.19,0.0821,0.0,0.0,0.0821
+lcdb1000413878,Gorse and/or Broom,1.5923,1.5923,1.5923,R-03-low-overlap,12.67,0.0795,0.0,0.0,0.0795
+lcdb2000512869,Low Producing Grassland,1.6612,1.6612,1.6612,R-03-low-overlap,13.21,0.0795,0.0,0.0,0.0795
+lcdb1000057719,Low Producing Grassland,14.9113,14.9113,17.7016,R-03-low-overlap,116.71,0.0783,0.0,0.0,0.0783
+lcdb1000611524-part-1,High Producing Exotic Grassland,14.4976,14.4976,24.0167,R-03-low-overlap,112.64,0.0777,0.0,0.0,0.0777
+lcdb2000503840,Low Producing Grassland,9.1759,9.1759,9.1759,R-03-low-overlap,69.31,0.0755,0.0,0.0,0.0755
+lcdb2000514997,High Producing Exotic Grassland,1.0992,1.0992,1.0992,R-03-low-overlap,8.05,0.0732,0.0,0.0,0.0732
+lcdb1000073664,Gorse and/or Broom,18.9866,18.9866,18.9866,R-03-low-overlap,136.96,0.0721,0.0,0.0,0.0721
+lcdb1000700863,High Producing Exotic Grassland,137.5715,137.5715,156.2814,R-03-low-overlap,966.01,0.0702,0.0,0.0,0.0702
 lcdb1000414015,High Producing Exotic Grassland,1.6493,1.6493,1.6493,R-03-low-overlap,11.52,0.0698,0.0,0.0,0.0698
-lcdb1000037011,High Producing Exotic Grassland,463.3692,463.1844,506.8066,R-03-low-overlap,2943.6,0.0635,0.0,0.0,0.0635
-lcdb2000513698,High Producing Exotic Grassland,1.4968,1.4968,2156.685,R-03-low-overlap,8.87,0.0593,0.0,0.0,0.0593
-lcdb1000072291,Gorse and/or Broom,11.8366,11.8366,21.0977,R-04-low-overlap,0.0,0.0,70.04,0.0592,0.0592
-lcdb1000016219,Mixed Exotic Shrubland,188.5528,188.447,3536.0559,R-03-low-overlap,1096.01,0.0581,0.0,0.0,0.0581
-lcdb2000500325,Low Producing Grassland,128.0836,128.0836,3536.0559,R-03-low-overlap,742.48,0.058,0.0,0.0,0.058
-lcdb1000406722,High Producing Exotic Grassland,4.8487,4.8487,23.3221,R-03-low-overlap,27.7,0.0571,0.0,0.0,0.0571
-lcdb1000401293,High Producing Exotic Grassland,36.9057,36.9057,36.9057,R-03-low-overlap,206.69,0.056,0.0,0.0,0.056
-lcdb1000035559-part-2,High Producing Exotic Grassland,3394.189,3391.4502,3758.752,R-03-clip-required|R-04-clip-required,14225.78,0.0419,17668.83,0.0521,0.0521
-lcdb1000036831,High Producing Exotic Grassland,569.264,569.264,615.5859,R-03-low-overlap|R-04-low-overlap,2860.53,0.0502,207.57,0.0036,0.0502
-lcdb1000072354,Gorse and/or Broom,37.5232,37.5232,502.0974,R-03-low-overlap,155.86,0.0415,0.0,0.0,0.0415
+lcdb1000611296,High Producing Exotic Grassland,4.4699,4.4699,42.3229,R-03-low-overlap,29.93,0.067,0.0,0.0,0.067
+lcdb1000057623,Low Producing Grassland,1.1974,1.1974,1.1974,R-03-low-overlap,7.76,0.0648,0.0,0.0,0.0648
+lcdb1000611236,High Producing Exotic Grassland,14.9267,14.9267,14.9267,R-03-low-overlap,95.03,0.0637,0.0,0.0,0.0637
+lcdb1000034728-part-1,High Producing Exotic Grassland,111.0508,111.0006,733.6444,R-03-low-overlap,705.51,0.0635,0.0,0.0,0.0635
+lcdb1000405021,Low Producing Grassland,7.0437,7.0437,22.5043,R-03-low-overlap|R-03-deforested-1990-2007,43.68,0.062,0.0,0.0,0.062
+lcdb2000513698,High Producing Exotic Grassland,1.4968,1.4968,6.2678,R-03-low-overlap,8.87,0.0593,0.0,0.0,0.0593
+lcdb1000035630,High Producing Exotic Grassland,6.4659,6.4659,6.4659,R-03-low-overlap,37.68,0.0583,0.0,0.0,0.0583
+lcdb1000090167,Gorse and/or Broom,8.9858,8.9858,25.3515,R-03-low-overlap,48.42,0.0539,0.0,0.0,0.0539
+lcdb1000036911,High Producing Exotic Grassland,7.7002,7.7002,7.7002,R-03-low-overlap,39.87,0.0518,0.0,0.0,0.0518
+lcdb1000057925,Low Producing Grassland,172.4595,172.3716,175.3309,R-03-low-overlap,886.75,0.0514,0.0,0.0,0.0514
+lcdb1000404813,Low Producing Grassland,7.3201,7.3201,7.3201,R-03-low-overlap,35.14,0.048,0.0,0.0,0.048
+lcdb1000416184,High Producing Exotic Grassland,1.0649,1.0649,61.3388,R-02-contiguous|R-03-low-overlap,4.96,0.0466,0.0,0.0,0.0466
+lcdb1000057743,Low Producing Grassland,1.2195,1.2195,1.2195,R-03-low-overlap,5.32,0.0436,0.0,0.0,0.0436
+lcdb1000035838,Low Producing Grassland,6.7128,6.7128,6.7128,R-03-low-overlap,28.2,0.042,0.0,0.0,0.042
+lcdb1000406874,High Producing Exotic Grassland,4.2034,4.2034,4.2034,R-03-low-overlap,17.0,0.0405,0.0,0.0,0.0405
 lcdb1000071709,Gorse and/or Broom,4.9864,4.9864,4.9864,R-03-low-overlap,17.77,0.0356,0.0,0.0,0.0356
-lcdb1000412151,Low Producing Grassland,2.2194,2.2194,1010.2074,R-03-low-overlap,7.73,0.0348,0.0,0.0,0.0348
-lcdb1000185466,High Producing Exotic Grassland,6.3082,6.3082,178357.0452,R-03-low-overlap,21.13,0.0335,0.0,0.0,0.0335
-lcdb1000036911,High Producing Exotic Grassland,7.7002,7.7002,7.7002,R-03-low-overlap,24.48,0.0318,0.0,0.0,0.0318
-lcdb1000036252,High Producing Exotic Grassland,160.8386,160.8386,160.8386,R-03-low-overlap,461.8,0.0287,0.0,0.0,0.0287
-lcdb1000401250,High Producing Exotic Grassland,39.0753,39.0753,45506.0974,R-03-low-overlap,106.16,0.0272,0.0,0.0,0.0272
-lcdb1000035677,High Producing Exotic Grassland,312.6848,312.6848,316.3633,R-03-low-overlap,765.16,0.0245,0.0,0.0,0.0245
-lcdb1000035680-part-88,High Producing Exotic Grassland,1314.9378,1314.6644,1886.7068,R-04-low-overlap,0.14,0.0,2784.08,0.0212,0.0212
-lcdb1000036503,High Producing Exotic Grassland,402.0433,401.9714,434.5944,R-03-low-overlap,719.72,0.0179,0.0,0.0,0.0179
-lcdb1000036632,High Producing Exotic Grassland,291.338,291.338,502.0974,R-03-low-overlap,445.31,0.0153,0.0,0.0,0.0153
-lcdb1000406136,High Producing Exotic Grassland,5.5732,5.5732,248.4248,R-03-low-overlap,8.04,0.0144,0.0,0.0,0.0144
-lcdb1000036868,High Producing Exotic Grassland,382.1672,382.1672,956.8198,R-04-low-overlap,0.0,0.0,530.36,0.0139,0.0139
-lcdb1000085600,Low Producing Grassland,13.2379,13.2379,178357.0452,R-03-low-overlap,15.04,0.0114,0.0,0.0,0.0114
-lcdb1000036748,High Producing Exotic Grassland,92.441,92.441,92.441,R-03-low-overlap,89.75,0.0097,0.0,0.0,0.0097
-lcdb1000035388,High Producing Exotic Grassland,2.6062,2.6062,2.6062,R-03-low-overlap,1.64,0.0063,0.0,0.0,0.0063
-lcdb1000404310,Low Producing Grassland,8.1961,8.1961,23.3221,R-03-low-overlap,1.78,0.0022,0.0,0.0,0.0022
-lcdb2000501283,High Producing Exotic Grassland,31.8102,31.8102,31.8102,R-04-low-overlap,0.0,0.0,1.02,0.0003,0.0003
-lcdb1000618462,High Producing Exotic Grassland,63.7198,63.7198,63.7198,R-04-low-overlap,0.0,0.0,1.06,0.0002,0.0002
-lcdb1000012116,Low Producing Grassland,1.021,1.021,1.021,R-01-near-threshold,0.0,0.0,0.0,0.0,0.0
-lcdb1000034568,High Producing Exotic Grassland,0.5559,0.5559,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000034577,High Producing Exotic Grassland,0.5757,0.5757,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000034579,High Producing Exotic Grassland,0.5082,0.5082,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000034601,High Producing Exotic Grassland,0.4867,0.4867,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000034606,High Producing Exotic Grassland,0.419,0.419,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000034613,High Producing Exotic Grassland,0.4785,0.4785,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000034736,High Producing Exotic Grassland,0.3942,0.3942,1836.7491,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000400011,High Producing Exotic Grassland,1400.731,1400.4338,91893.8649,R-03-low-overlap|R-03-deforested-1990-2007,4885.97,0.0349,0.0,0.0,0.0349
+lcdb1000034782,High Producing Exotic Grassland,3.3231,3.3231,3.3231,R-03-low-overlap,11.41,0.0343,0.0,0.0,0.0343
+lcdb1000415735,High Producing Exotic Grassland,1.2834,1.2834,1.2834,R-03-low-overlap,4.39,0.0342,0.0,0.0,0.0342
+lcdb1000401888,Low Producing Grassland,24.6357,24.6357,27.6452,R-03-low-overlap,83.09,0.0337,0.0,0.0,0.0337
+lcdb1000185466,High Producing Exotic Grassland,6.3082,6.3082,6.3082,R-03-low-overlap,21.13,0.0335,0.0,0.0,0.0335
+lcdb1000401250,High Producing Exotic Grassland,39.0753,39.0753,45.4999,R-03-low-overlap,106.16,0.0272,0.0,0.0,0.0272
+lcdb1000413365,High Producing Exotic Grassland,1.541,1.541,1.541,R-03-low-overlap,3.92,0.0254,0.0,0.0,0.0254
+lcdb1000407992,High Producing Exotic Grassland,3.837,3.837,3.837,R-03-low-overlap,9.67,0.0252,0.0,0.0,0.0252
+lcdb1000037060,Low Producing Grassland,18.3765,18.3765,18.3765,R-03-low-overlap,45.84,0.0249,0.0,0.0,0.0249
+lcdb1000417014,High Producing Exotic Grassland,1.1267,1.1267,1.1267,R-03-low-overlap,2.69,0.0239,0.0,0.0,0.0239
+lcdb1000036431,High Producing Exotic Grassland,2.1964,2.1964,2.1964,R-03-low-overlap,4.64,0.0211,0.0,0.0,0.0211
+lcdb1000611440,High Producing Exotic Grassland,4.0332,4.0332,4.0332,R-03-low-overlap,6.86,0.017,0.0,0.0,0.017
+lcdb2000500757,High Producing Exotic Grassland,57.0372,57.0372,117.9164,R-03-low-overlap,97.19,0.017,0.0,0.0,0.017
+lcdb1000700927,High Producing Exotic Grassland,11.2694,11.2694,60.4517,R-03-low-overlap,19.04,0.0169,0.0,0.0,0.0169
+lcdb1000401071,Gorse and/or Broom,46.6326,46.6326,160.8388,R-03-low-overlap,74.18,0.0159,0.0,0.0,0.0159
+lcdb1000058078,Low Producing Grassland,2.4713,2.4713,2.4713,R-03-low-overlap,3.72,0.0151,0.0,0.0,0.0151
+lcdb1000410929,High Producing Exotic Grassland,2.3771,2.3771,2.3771,R-03-low-overlap,3.46,0.0146,0.0,0.0,0.0146
+lcdb1000406136,High Producing Exotic Grassland,5.5732,5.5732,160.8388,R-03-low-overlap,8.04,0.0144,0.0,0.0,0.0144
+lcdb1000403184,High Producing Exotic Grassland,12.7956,12.7956,14.5569,R-03-low-overlap,16.27,0.0127,0.0,0.0,0.0127
+lcdb2000509623,Low Producing Grassland,2.7844,2.7844,2.7844,R-03-low-overlap,3.19,0.0115,0.0,0.0,0.0115
+lcdb1000402035,High Producing Exotic Grassland,21.0059,21.0059,21.0059,R-03-low-overlap,17.81,0.0085,0.0,0.0,0.0085
+lcdb2000512024,Low Producing Grassland,1.7596,1.7596,1.7596,R-03-low-overlap,1.29,0.0073,0.0,0.0,0.0073
+lcdb1000404641,High Producing Exotic Grassland,7.8267,7.8267,7.8267,R-03-low-overlap,5.6,0.0072,0.0,0.0,0.0072
+lcdb1000407030,Low Producing Grassland,4.5801,4.5801,4.5801,R-03-low-overlap,3.06,0.0067,0.0,0.0,0.0067
+lcdb2000505237,Low Producing Grassland,6.8599,6.8599,6.8599,R-03-low-overlap,4.37,0.0064,0.0,0.0,0.0064
+lcdb1000035888,High Producing Exotic Grassland,6.0786,6.0786,6.0786,R-03-low-overlap,2.35,0.0039,0.0,0.0,0.0039
+lcdb1000415120,Low Producing Grassland,1.2569,1.2569,1.2569,R-03-deforested-1990-2007,0.34,0.0027,0.0,0.0,0.0027
+lcdb1000035680-part-117,High Producing Exotic Grassland,0.0017,0.0017,91893.8649,R-01-contiguous|R-02-contiguous,0.0,0.0017,0.0,0.0,0.0017
+lcdb1000034568,High Producing Exotic Grassland,0.5559,0.5559,108.9892,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000034577,High Producing Exotic Grassland,0.5757,0.5757,91893.8649,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000034579,High Producing Exotic Grassland,0.5082,0.5082,91893.8649,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000034606,High Producing Exotic Grassland,0.419,0.419,91893.8649,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000034613,High Producing Exotic Grassland,0.4785,0.4785,91893.8649,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000034736,High Producing Exotic Grassland,0.3942,0.3942,24.0167,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
 lcdb1000034824,High Producing Exotic Grassland,1.0416,1.0416,1.0416,R-01-near-threshold,0.0,0.0,0.0,0.0,0.0
-lcdb1000034899,High Producing Exotic Grassland,0.4362,0.4362,45506.0974,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000034900,High Producing Exotic Grassland,0.7868,0.7868,45506.0974,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000034901,High Producing Exotic Grassland,0.4231,0.4231,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000034975,High Producing Exotic Grassland,0.735,0.735,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035026,High Producing Exotic Grassland,0.9907,0.9907,45506.0974,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035125,High Producing Exotic Grassland,0.8656,0.8656,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035129,High Producing Exotic Grassland,0.4413,0.4413,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035165,High Producing Exotic Grassland,1.0139,1.0139,1.0139,R-01-near-threshold,0.0,0.0,0.0,0.0,0.0
-lcdb1000035170,High Producing Exotic Grassland,0.5177,0.5177,6.6059,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035214,High Producing Exotic Grassland,0.7022,0.7022,2.6435,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035271,High Producing Exotic Grassland,0.501,0.501,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035378-part-22,High Producing Exotic Grassland,0.0006,0.0006,45506.0974,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035378-part-25,High Producing Exotic Grassland,0.0021,0.0021,45506.0974,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035378-part-26,High Producing Exotic Grassland,0.1181,0.1181,45506.0974,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035378-part-27,High Producing Exotic Grassland,0.0103,0.0103,45506.0974,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035378-part-31,High Producing Exotic Grassland,0.3727,0.3727,45506.0974,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035378-part-32,High Producing Exotic Grassland,0.6878,0.6878,45506.0974,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035378-part-33,High Producing Exotic Grassland,0.2883,0.2883,45506.0974,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035378-part-35,High Producing Exotic Grassland,0.0002,0.0002,45506.0974,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035378-part-36,High Producing Exotic Grassland,0.041,0.041,45506.0974,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035378-part-38,High Producing Exotic Grassland,0.0752,0.0752,45506.0974,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035378-part-39,High Producing Exotic Grassland,0.6632,0.6632,45506.0974,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035378-part-42,High Producing Exotic Grassland,0.2573,0.2573,45506.0974,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035378-part-43,High Producing Exotic Grassland,0.7106,0.7106,45506.0974,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035378-part-45,High Producing Exotic Grassland,0.0023,0.0023,45506.0974,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035378-part-47,High Producing Exotic Grassland,0.2104,0.2104,45506.0974,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035378-part-5,High Producing Exotic Grassland,0.0126,0.0126,45506.0974,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035378-part-6,High Producing Exotic Grassland,0.5053,0.5053,45506.0974,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035432,High Producing Exotic Grassland,1.0184,1.0184,1.0184,R-01-near-threshold,0.0,0.0,0.0,0.0,0.0
+lcdb1000034830,High Producing Exotic Grassland,1.7274,1.7274,1.7274,R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
+lcdb1000034833,High Producing Exotic Grassland,5.4939,5.4939,5.4939,R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
+lcdb1000034836,High Producing Exotic Grassland,3.8596,3.8596,3.8596,R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
+lcdb1000035129,High Producing Exotic Grassland,0.4413,0.4413,9.4552,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000035378-part-21,High Producing Exotic Grassland,0.6632,0.6632,2.9065,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000035378-part-22,High Producing Exotic Grassland,0.5053,0.5053,31.0725,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000035378-part-26,High Producing Exotic Grassland,0.2883,0.2883,2.2534,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000035378-part-27,High Producing Exotic Grassland,0.2573,0.2573,1699.7525,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000035378-part-40,High Producing Exotic Grassland,0.0126,0.0126,486.3584,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000035378-part-47,High Producing Exotic Grassland,0.0002,0.0002,486.3584,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
 lcdb1000035439,High Producing Exotic Grassland,1.0195,1.0195,1.0195,R-01-near-threshold,0.0,0.0,0.0,0.0,0.0
-lcdb1000035446,High Producing Exotic Grassland,0.7687,0.7687,3758.752,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035559-part-1,High Producing Exotic Grassland,0.0004,0.0004,3758.752,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-1,High Producing Exotic Grassland,0.5981,0.5981,1886.7068,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-101,High Producing Exotic Grassland,0.0889,0.0889,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-102,High Producing Exotic Grassland,0.711,0.711,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-107,High Producing Exotic Grassland,0.0288,0.0288,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-108,High Producing Exotic Grassland,0.0069,0.0069,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-109,High Producing Exotic Grassland,0.1206,0.1206,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-110,High Producing Exotic Grassland,0.3054,0.3054,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-111,High Producing Exotic Grassland,0.4454,0.4454,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-112,High Producing Exotic Grassland,0.701,0.701,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-113,High Producing Exotic Grassland,0.0068,0.0068,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-114,High Producing Exotic Grassland,0.0003,0.0003,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-115,High Producing Exotic Grassland,0.0385,0.0385,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-116,High Producing Exotic Grassland,0.0302,0.0302,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-117,High Producing Exotic Grassland,0.103,0.103,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-121,High Producing Exotic Grassland,0.0163,0.0163,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-124,High Producing Exotic Grassland,0.0097,0.0097,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-125,High Producing Exotic Grassland,0.3209,0.3209,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-15,High Producing Exotic Grassland,0.0513,0.0513,787.7403,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-2,High Producing Exotic Grassland,1.0449,1.0449,1886.7068,R-01-near-threshold,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-22,High Producing Exotic Grassland,0.0297,0.0297,58.3278,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-23,High Producing Exotic Grassland,0.1992,0.1992,58.3278,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-3,High Producing Exotic Grassland,0.0014,0.0014,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-32,High Producing Exotic Grassland,0.1048,0.1048,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-35,High Producing Exotic Grassland,0.0492,0.0492,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-4,High Producing Exotic Grassland,0.057,0.057,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-41,High Producing Exotic Grassland,0.0034,0.0034,1886.7068,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-47,High Producing Exotic Grassland,0.0025,0.0025,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-48,High Producing Exotic Grassland,0.0787,0.0787,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-49,High Producing Exotic Grassland,0.1304,0.1304,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-5,High Producing Exotic Grassland,0.294,0.294,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-52,High Producing Exotic Grassland,0.1271,0.1271,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-58,High Producing Exotic Grassland,0.0092,0.0092,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-59,High Producing Exotic Grassland,0.0281,0.0281,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-6,High Producing Exotic Grassland,0.296,0.296,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-62,High Producing Exotic Grassland,0.6661,0.6661,787.7403,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-63,High Producing Exotic Grassland,0.001,0.001,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-64,High Producing Exotic Grassland,0.0821,0.0821,787.7403,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-68,High Producing Exotic Grassland,0.0214,0.0214,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-69,High Producing Exotic Grassland,0.0016,0.0016,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-71,High Producing Exotic Grassland,0.0043,0.0043,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-72,High Producing Exotic Grassland,0.0017,0.0017,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-75,High Producing Exotic Grassland,0.0005,0.0005,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-76,High Producing Exotic Grassland,0.0182,0.0182,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-78,High Producing Exotic Grassland,0.8467,0.8467,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-8,High Producing Exotic Grassland,0.0011,0.0011,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-80,High Producing Exotic Grassland,0.7411,0.7411,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-81,High Producing Exotic Grassland,0.9476,0.9476,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-83,High Producing Exotic Grassland,0.08,0.08,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-84,High Producing Exotic Grassland,0.2882,0.2882,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-85,High Producing Exotic Grassland,0.0152,0.0152,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-86,High Producing Exotic Grassland,0.1064,0.1064,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-87,High Producing Exotic Grassland,0.4957,0.4957,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-89,High Producing Exotic Grassland,0.1464,0.1464,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-9,High Producing Exotic Grassland,0.2173,0.2173,787.7403,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-91,High Producing Exotic Grassland,0.1194,0.1194,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-95,High Producing Exotic Grassland,0.0735,0.0735,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000035680-part-97,High Producing Exotic Grassland,0.4311,0.4311,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000036018,High Producing Exotic Grassland,1.0442,1.0442,1.0442,R-01-near-threshold,0.0,0.0,0.0,0.0,0.0
-lcdb1000036070,High Producing Exotic Grassland,1.037,1.037,1.037,R-01-near-threshold,0.0,0.0,0.0,0.0,0.0
-lcdb1000036245,High Producing Exotic Grassland,0.9958,0.9958,3716.0128,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000036279,High Producing Exotic Grassland,0.7214,0.7214,3716.0128,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000036407,High Producing Exotic Grassland,0.7323,0.7323,5.565,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000036800,High Producing Exotic Grassland,0.1797,0.1797,594.2185,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000036824,High Producing Exotic Grassland,0.9634,0.9634,14.1784,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000036923,High Producing Exotic Grassland,0.7628,0.7628,3536.0559,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000037203-part-1,High Producing Exotic Grassland,0.0345,0.0345,809.8592,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000040482,High Producing Exotic Grassland,0.7809,0.7809,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000035680-part-101,High Producing Exotic Grassland,0.0214,0.0214,91893.8649,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000035680-part-103,High Producing Exotic Grassland,0.0182,0.0182,91893.8649,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000035680-part-105,High Producing Exotic Grassland,0.0163,0.0163,91893.8649,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000035680-part-106,High Producing Exotic Grassland,0.0152,0.0152,91893.8649,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000035680-part-107,High Producing Exotic Grassland,0.0097,0.0097,91893.8649,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000035680-part-108,High Producing Exotic Grassland,0.0092,0.0092,91893.8649,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000035680-part-112,High Producing Exotic Grassland,0.0068,0.0068,91893.8649,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000035680-part-114,High Producing Exotic Grassland,0.0043,0.0043,91893.8649,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000035680-part-115,High Producing Exotic Grassland,0.0034,0.0034,262.9098,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000035680-part-116,High Producing Exotic Grassland,0.0025,0.0025,91893.8649,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000035680-part-118,High Producing Exotic Grassland,0.0016,0.0016,91893.8649,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000035680-part-124,High Producing Exotic Grassland,0.0005,0.0005,91893.8649,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000035680-part-125,High Producing Exotic Grassland,0.0003,0.0003,91893.8649,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000035680-part-40,High Producing Exotic Grassland,2.142,2.142,91893.8649,R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
+lcdb1000035680-part-46,High Producing Exotic Grassland,0.9476,0.9476,1.2358,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000035680-part-48,High Producing Exotic Grassland,0.8467,0.8467,91893.8649,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000035680-part-49,High Producing Exotic Grassland,0.7411,0.7411,91893.8649,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000035680-part-50,High Producing Exotic Grassland,0.711,0.711,91893.8649,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000035680-part-51,High Producing Exotic Grassland,0.701,0.701,91893.8649,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000035680-part-54,High Producing Exotic Grassland,0.4957,0.4957,91893.8649,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000035680-part-55,High Producing Exotic Grassland,0.4454,0.4454,91893.8649,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000035680-part-56,High Producing Exotic Grassland,0.4311,0.4311,91893.8649,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000035680-part-58,High Producing Exotic Grassland,0.3209,0.3209,91893.8649,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000035680-part-61,High Producing Exotic Grassland,0.294,0.294,91893.8649,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000035680-part-62,High Producing Exotic Grassland,0.2882,0.2882,1.2358,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000035680-part-63,High Producing Exotic Grassland,0.2173,0.2173,649.7095,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000035680-part-70,High Producing Exotic Grassland,0.1464,0.1464,91893.8649,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000035680-part-72,High Producing Exotic Grassland,0.1304,0.1304,91893.8649,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000035680-part-73,High Producing Exotic Grassland,0.1271,0.1271,91893.8649,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000035680-part-78,High Producing Exotic Grassland,0.1064,0.1064,91893.8649,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000035680-part-79,High Producing Exotic Grassland,0.1048,0.1048,91893.8649,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000035680-part-80,High Producing Exotic Grassland,0.103,0.103,91893.8649,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000035680-part-81,High Producing Exotic Grassland,0.0889,0.0889,17.9548,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000035680-part-83,High Producing Exotic Grassland,0.08,0.08,91893.8649,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000035680-part-87,High Producing Exotic Grassland,0.057,0.057,91893.8649,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000035680-part-89,High Producing Exotic Grassland,0.0513,0.0513,649.7095,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000035680-part-90,High Producing Exotic Grassland,0.0492,0.0492,91893.8649,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000035680-part-92,High Producing Exotic Grassland,0.0385,0.0385,91893.8649,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000035680-part-94,High Producing Exotic Grassland,0.0302,0.0302,91893.8649,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000035680-part-97,High Producing Exotic Grassland,0.0281,0.0281,91893.8649,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000036279,High Producing Exotic Grassland,0.7214,0.7214,2.085,R-01-contiguous|R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
+lcdb1000036821,High Producing Exotic Grassland,1.2445,1.2445,1.2445,R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
+lcdb1000040482,High Producing Exotic Grassland,0.7809,0.7809,4.4001,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
 lcdb1000040486,High Producing Exotic Grassland,1.0213,1.0213,1.0213,R-01-near-threshold,0.0,0.0,0.0,0.0,0.0
-lcdb1000046531,Gorse and/or Broom,0.3729,0.3729,45506.0974,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000046532,Gorse and/or Broom,0.856,0.856,45506.0974,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000046533,Gorse and/or Broom,0.7794,0.7794,45506.0974,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000056848-part-1,Low Producing Grassland,0.0297,0.0297,158.0113,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000057588,Low Producing Grassland,1.0216,1.0216,1.0216,R-01-near-threshold,0.0,0.0,0.0,0.0,0.0
+lcdb1000046532,Gorse and/or Broom,0.856,0.856,4.2836,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000046533,Gorse and/or Broom,0.7794,0.7794,4.2836,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000046885,Low Producing Grassland,2.329,2.329,2.329,R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
 lcdb1000057807,Low Producing Grassland,1.0136,1.0136,1.0136,R-01-near-threshold,0.0,0.0,0.0,0.0,0.0
-lcdb1000058092,Low Producing Grassland,0.716,0.716,1010.2074,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000058361,Low Producing Grassland,0.229,0.229,345.0309,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000058179,Low Producing Grassland,1.4153,1.4153,1.4153,R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
 lcdb1000059954,Low Producing Grassland,0.8573,0.8573,3.2213,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000060463,Low Producing Grassland,0.9385,0.9385,45506.0974,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000060466,Low Producing Grassland,0.4246,0.4246,45506.0974,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000060467,Low Producing Grassland,0.6005,0.6005,45506.0974,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000061165-part-1,Low Producing Grassland,0.0014,0.0014,1.3695,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000063771,Low Producing Grassland,0.1719,0.1719,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000063776,Low Producing Grassland,0.6407,0.6407,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000063780,Low Producing Grassland,0.5288,0.5288,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000063936,High Producing Exotic Grassland,0.3257,0.3257,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000071104,Gorse and/or Broom,0.2623,0.2623,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000071115,Gorse and/or Broom,0.5997,0.5997,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000071524,Gorse and/or Broom,0.5926,0.5926,45506.0974,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000071543,Gorse and/or Broom,0.4018,0.4018,45506.0974,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000071545,Gorse and/or Broom,0.7817,0.7817,45506.0974,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000071547,Gorse and/or Broom,0.577,0.577,45506.0974,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000071549,Gorse and/or Broom,0.3589,0.3589,45506.0974,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000071610,Gorse and/or Broom,0.8418,0.8418,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000071611,Gorse and/or Broom,0.6999,0.6999,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000071644,Gorse and/or Broom,0.5974,0.5974,45506.0974,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000071707,Gorse and/or Broom,0.804,0.804,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000071752,Gorse and/or Broom,0.2876,0.2876,11853.5785,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000063771,Low Producing Grassland,0.1719,0.1719,91893.8649,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000063776,Low Producing Grassland,0.6407,0.6407,91893.8649,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000063780,Low Producing Grassland,0.5288,0.5288,91893.8649,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000063936,High Producing Exotic Grassland,0.3257,0.3257,91893.8649,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000067469,Low Producing Grassland,16.0062,16.0062,262.9098,R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
+lcdb1000071610,Gorse and/or Broom,0.8418,0.8418,91893.8649,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000071611,Gorse and/or Broom,0.6999,0.6999,91893.8649,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
 lcdb1000071954,Gorse and/or Broom,1.0391,1.0391,1.0391,R-01-near-threshold,0.0,0.0,0.0,0.0,0.0
 lcdb1000072013,Gorse and/or Broom,1.0414,1.0414,1.0414,R-01-near-threshold,0.0,0.0,0.0,0.0,0.0
-lcdb1000072233,Gorse and/or Broom,0.7393,0.7393,1896.9788,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
 lcdb1000072236,Gorse and/or Broom,1.0461,1.0461,68.1805,R-01-near-threshold,0.0,0.0,0.0,0.0,0.0
 lcdb1000072437,Gorse and/or Broom,1.024,1.024,1.024,R-01-near-threshold,0.0,0.0,0.0,0.0,0.0
-lcdb1000074696,High Producing Exotic Grassland,0.6114,0.6114,8638.2916,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000074714,High Producing Exotic Grassland,11.6187,11.6187,18.0388,R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
 lcdb1000074777,Low Producing Grassland,0.5527,0.5527,52.0091,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000075056,High Producing Exotic Grassland,0.8711,0.8711,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000075058,High Producing Exotic Grassland,0.8937,0.8937,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000075059,High Producing Exotic Grassland,0.509,0.509,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000075060,High Producing Exotic Grassland,0.2023,0.2023,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000087095,Low Producing Grassland,0.8487,0.8487,45506.0974,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000087408,High Producing Exotic Grassland,0.5312,0.5312,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000088330,Low Producing Grassland,0.7633,0.7633,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000090386,High Producing Exotic Grassland,0.6786,0.6786,105.3561,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000102635-part-1,High Producing Exotic Grassland,0.0005,0.0005,1836.7491,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000102635-part-2,High Producing Exotic Grassland,0.2109,0.2109,1836.7491,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000102647,High Producing Exotic Grassland,0.6922,0.6922,8638.2916,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000102648,High Producing Exotic Grassland,1.453,1.453,8638.2916,R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000129528,Mixed Exotic Shrubland,0.2096,0.2096,45506.0974,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000189093,Low Producing Grassland,0.8846,0.8846,3716.0128,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000208070,Low Producing Grassland,0.7353,0.7353,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000208526,High Producing Exotic Grassland,0.498,0.498,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000409943,High Producing Exotic Grassland,2.5291,2.5291,3.5759,R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000412606,Low Producing Grassland,1.0401,1.0401,178357.0452,R-01-near-threshold,0.0,0.0,0.0,0.0,0.0
-lcdb1000412799,Low Producing Grassland,1.8713,1.8713,178357.0452,R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000415525,Low Producing Grassland,1.3662,1.3662,8.5737,R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000075056,High Producing Exotic Grassland,0.8711,0.8711,11.3102,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000087408,High Producing Exotic Grassland,0.5312,0.5312,91893.8649,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000088330,Low Producing Grassland,0.7633,0.7633,3.356,R-01-contiguous|R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
+lcdb1000089005,High Producing Exotic Grassland,2.3806,2.3806,2.3806,R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
+lcdb1000090386,High Producing Exotic Grassland,0.6786,0.6786,102.0579,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000099992,Low Producing Grassland,1.0724,1.0724,1.0724,R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
+lcdb1000102819,High Producing Exotic Grassland,8.5329,8.5329,91893.8649,R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
+lcdb1000102827,High Producing Exotic Grassland,3.7067,3.7067,3.7067,R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
+lcdb1000116348,Low Producing Grassland,1.3299,1.3299,3.356,R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
+lcdb1000129528,Mixed Exotic Shrubland,0.2096,0.2096,75.0375,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000138505,High Producing Exotic Grassland,10.6646,10.6646,91893.8649,R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
+lcdb1000187692,High Producing Exotic Grassland,4.5548,4.5548,4.5548,R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
+lcdb1000187727,High Producing Exotic Grassland,2.0194,2.0194,91893.8649,R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
+lcdb1000188568,Low Producing Grassland,5.3048,5.3048,5.3048,R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
+lcdb1000188589,Low Producing Grassland,11.4111,11.4111,11.4111,R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
+lcdb1000188677,High Producing Exotic Grassland,9.5422,9.5422,91893.8649,R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
+lcdb1000188682,High Producing Exotic Grassland,3.1535,3.1535,91893.8649,R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
+lcdb1000188683,High Producing Exotic Grassland,10.9502,10.9502,91893.8649,R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
+lcdb1000207976,High Producing Exotic Grassland,2.1179,2.1179,91893.8649,R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
+lcdb1000208208,Low Producing Grassland,1.8507,1.8507,839.7229,R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
+lcdb1000208429,Mixed Exotic Shrubland,3.4431,3.4431,3.4431,R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
+lcdb1000208526,High Producing Exotic Grassland,0.498,0.498,91893.8649,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000209197,Low Producing Grassland,1.881,1.881,1.881,R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
+lcdb1000209226,High Producing Exotic Grassland,5.8205,5.8205,91893.8649,R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
+lcdb1000209550,High Producing Exotic Grassland,1.9254,1.9254,91893.8649,R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
+lcdb1000209580,High Producing Exotic Grassland,12.2532,12.2532,91893.8649,R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
+lcdb1000226293,High Producing Exotic Grassland,3.9455,3.9455,91893.8649,R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
+lcdb1000226415,High Producing Exotic Grassland,1.6508,1.6508,27.1925,R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
+lcdb1000226416,High Producing Exotic Grassland,1.3189,1.3189,27.1925,R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
+lcdb1000226490,Low Producing Grassland,1.4202,1.4202,1.4202,R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
+lcdb1000406412,Low Producing Grassland,5.263,5.263,262.9098,R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
+lcdb1000407090,Low Producing Grassland,4.1304,4.1304,4.1304,R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
+lcdb1000412606,Low Producing Grassland,1.0401,1.0401,91893.8649,R-01-near-threshold,0.0,0.0,0.0,0.0,0.0
+lcdb1000412799,Low Producing Grassland,1.8713,1.8713,10.9522,R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000413227,Low Producing Grassland,1.8377,1.8377,1615.86,R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
 lcdb1000416118,Mixed Exotic Shrubland,0.9922,0.9922,3.7829,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000416184,High Producing Exotic Grassland,1.0649,1.0649,3758.752,R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000416325,High Producing Exotic Grassland,1.1249,1.1249,248.4248,R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000416361,High Producing Exotic Grassland,0.9663,0.9663,1836.7491,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000416562,High Producing Exotic Grassland,1.1726,1.1726,8638.2916,R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000416612,High Producing Exotic Grassland,1.0207,1.0207,2.2588,R-01-near-threshold,0.0,0.0,0.0,0.0,0.0
-lcdb1000416778,High Producing Exotic Grassland,1.0436,1.0436,1.0436,R-01-near-threshold,0.0,0.0,0.0,0.0,0.0
-lcdb1000416839,Low Producing Grassland,1.0383,1.0383,8638.2916,R-01-near-threshold,0.0,0.0,0.0,0.0,0.0
-lcdb1000416939,Low Producing Grassland,0.9704,0.9704,787.7403,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000416981,High Producing Exotic Grassland,1.0152,1.0152,14.697,R-01-near-threshold,0.0,0.0,0.0,0.0,0.0
-lcdb1000417033,High Producing Exotic Grassland,1.022,1.022,1.022,R-01-near-threshold,0.0,0.0,0.0,0.0,0.0
-lcdb1000417038,High Producing Exotic Grassland,0.9748,0.9748,3758.752,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000417048,High Producing Exotic Grassland,0.9925,0.9925,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000416325,High Producing Exotic Grassland,1.1249,1.1249,160.8388,R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000416839,Low Producing Grassland,1.0383,1.0383,1.0383,R-01-near-threshold,0.0,0.0,0.0,0.0,0.0
+lcdb1000416981,High Producing Exotic Grassland,1.0152,1.0152,1.0152,R-01-near-threshold,0.0,0.0,0.0,0.0,0.0
+lcdb1000417038,High Producing Exotic Grassland,0.9748,0.9748,61.3388,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000417048,High Producing Exotic Grassland,0.9925,0.9925,91893.8649,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
 lcdb1000417082,High Producing Exotic Grassland,1.0351,1.0351,1.0351,R-01-near-threshold,0.0,0.0,0.0,0.0,0.0
 lcdb1000417357,High Producing Exotic Grassland,1.0469,1.0469,3.5759,R-01-near-threshold,0.0,0.0,0.0,0.0,0.0
-lcdb1000417424,High Producing Exotic Grassland,1.0022,1.0022,95.9025,R-01-near-threshold,0.0,0.0,0.0,0.0,0.0
-lcdb1000417456,Gorse and/or Broom,0.9987,0.9987,45506.0974,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000417461,Low Producing Grassland,0.9927,0.9927,45506.0974,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000417482,High Producing Exotic Grassland,0.9393,0.9393,1836.7491,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000417583,High Producing Exotic Grassland,1.0043,1.0043,1.0043,R-01-near-threshold,0.0,0.0,0.0,0.0,0.0
-lcdb1000417597,High Producing Exotic Grassland,0.8514,0.8514,248.4248,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000417747,High Producing Exotic Grassland,0.8808,0.8808,3758.752,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000417770,Gorse and/or Broom,1.0134,1.0134,248.4248,R-01-near-threshold,0.0,0.0,0.0,0.0,0.0
-lcdb1000417797,High Producing Exotic Grassland,0.8889,0.8889,7.4109,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000417424,High Producing Exotic Grassland,1.0022,1.0022,1.0022,R-01-near-threshold|R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
+lcdb1000417482,High Producing Exotic Grassland,0.9393,0.9393,47.3824,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000417597,High Producing Exotic Grassland,0.8514,0.8514,160.8388,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000417747,High Producing Exotic Grassland,0.8808,0.8808,32.2584,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
 lcdb1000417799,High Producing Exotic Grassland,1.0132,1.0132,1.0132,R-01-near-threshold,0.0,0.0,0.0,0.0,0.0
 lcdb1000417905,Mixed Exotic Shrubland,0.9525,0.9525,1.7374,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000417937,High Producing Exotic Grassland,0.8888,0.8888,8638.2916,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000417955,High Producing Exotic Grassland,1.0051,1.0051,29.5322,R-01-near-threshold,0.0,0.0,0.0,0.0,0.0
-lcdb1000418095,High Producing Exotic Grassland,0.7265,0.7265,787.7403,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000418287,High Producing Exotic Grassland,0.825,0.825,931.6255,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000418337,Low Producing Grassland,0.9757,0.9757,45506.0974,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000418569,Low Producing Grassland,0.843,0.843,594.2185,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000418573,Low Producing Grassland,0.762,0.762,45506.0974,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000418287,High Producing Exotic Grassland,0.825,0.825,863.7194,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
 lcdb1000418673,Mixed Exotic Shrubland,0.7849,0.7849,1.7374,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000418680,High Producing Exotic Grassland,0.7598,0.7598,3758.752,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000418687,Low Producing Grassland,0.7711,0.7711,45506.0974,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000418714,Low Producing Grassland,0.7605,0.7605,8.7517,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000418727,High Producing Exotic Grassland,0.8977,0.8977,17.7016,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000418754,Low Producing Grassland,0.8306,0.8306,2.8328,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000418779,High Producing Exotic Grassland,0.7597,0.7597,3758.752,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000418892,High Producing Exotic Grassland,0.8346,0.8346,3716.0128,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000418904,Low Producing Grassland,0.7818,0.7818,8.7517,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000418958,Low Producing Grassland,0.7162,0.7162,31.4052,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000418970,Low Producing Grassland,0.6614,0.6614,3536.0559,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000418982,Gorse and/or Broom,0.7129,0.7129,83.3971,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000419037,High Producing Exotic Grassland,0.6891,0.6891,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000419088,High Producing Exotic Grassland,0.7579,0.7579,787.7403,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000419134,Low Producing Grassland,0.6952,0.6952,45506.0974,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000419037,High Producing Exotic Grassland,0.6891,0.6891,91893.8649,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000419134,Low Producing Grassland,0.6952,0.6952,2011.0088,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
 lcdb1000419304,Low Producing Grassland,0.8747,0.8747,10.6949,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000419308,High Producing Exotic Grassland,0.7428,0.7428,18.0856,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000419416,Low Producing Grassland,0.4791,0.4791,3758.752,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000419429,High Producing Exotic Grassland,0.6427,0.6427,45506.0974,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000419487,Gorse and/or Broom,0.6952,0.6952,248.4248,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000419542,High Producing Exotic Grassland,0.5609,0.5609,931.6255,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000419643,High Producing Exotic Grassland,0.6172,0.6172,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000419702,High Producing Exotic Grassland,0.6696,0.6696,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000419748,Low Producing Grassland,0.6435,0.6435,8.7517,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000419763,High Producing Exotic Grassland,0.6084,0.6084,3716.0128,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000419946,Low Producing Grassland,0.4896,0.4896,8638.2916,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000420029,Low Producing Grassland,0.5273,0.5273,406.4898,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000420130,Low Producing Grassland,0.62,0.62,185.5541,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000420445,High Producing Exotic Grassland,0.6704,0.6704,3758.752,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000420541,Low Producing Grassland,0.4819,0.4819,45506.0974,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000420610,Low Producing Grassland,0.5888,0.5888,8.1582,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000420686,High Producing Exotic Grassland,0.6438,0.6438,931.6255,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000420697,Low Producing Grassland,0.564,0.564,2.0576,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000420919,Low Producing Grassland,0.3983,0.3983,8638.2916,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000421064,Low Producing Grassland,0.5171,0.5171,8638.2916,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000421124,High Producing Exotic Grassland,0.483,0.483,506.8066,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000421402,High Producing Exotic Grassland,0.4608,0.4608,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000421589,Low Producing Grassland,0.5123,0.5123,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000419487,Gorse and/or Broom,0.6952,0.6952,160.8388,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000419542,High Producing Exotic Grassland,0.5609,0.5609,863.7194,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000419643,High Producing Exotic Grassland,0.6172,0.6172,108.9892,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000419702,High Producing Exotic Grassland,0.6696,0.6696,13.4608,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000420029,Low Producing Grassland,0.5273,0.5273,394.2955,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000420130,Low Producing Grassland,0.62,0.62,163.4623,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000421124,High Producing Exotic Grassland,0.483,0.483,33.3239,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000421402,High Producing Exotic Grassland,0.4608,0.4608,91893.8649,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
 lcdb1000421765,High Producing Exotic Grassland,0.5088,0.5088,5.4162,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000422006,Low Producing Grassland,0.3446,0.3446,8.1582,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000422100,High Producing Exotic Grassland,0.3802,0.3802,503.1487,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000422459,Low Producing Grassland,0.3239,0.3239,8.7517,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000422687,Low Producing Grassland,0.2688,0.2688,1010.2074,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000422722,Low Producing Grassland,0.2652,0.2652,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000423094,Low Producing Grassland,0.217,0.217,8.7517,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000422722,Low Producing Grassland,0.2652,0.2652,91893.8649,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
 lcdb1000423458,Low Producing Grassland,0.2232,0.2232,10.6949,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000423995,Low Producing Grassland,0.1213,0.1213,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000461104,Low Producing Grassland,1.0391,1.0391,809.8592,R-01-near-threshold,0.0,0.0,0.0,0.0,0.0
 lcdb1000461575,Low Producing Grassland,1.0134,1.0134,1.0134,R-01-near-threshold,0.0,0.0,0.0,0.0,0.0
-lcdb1000463953,High Producing Exotic Grassland,0.6668,0.6668,1010.2074,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000464026,High Producing Exotic Grassland,0.651,0.651,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000464029,High Producing Exotic Grassland,0.5426,0.5426,484.1619,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000464089,High Producing Exotic Grassland,0.6089,0.6089,1010.2074,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000464177,High Producing Exotic Grassland,0.3955,0.3955,4.3529,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000464192,High Producing Exotic Grassland,0.502,0.502,1010.2074,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000464250,Low Producing Grassland,0.3413,0.3413,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000464382,High Producing Exotic Grassland,0.1218,0.1218,1010.2074,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000502944,Low Producing Grassland,0.0097,0.0097,1836.7491,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000509992,Low Producing Grassland,0.0417,0.0417,1836.7491,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000611246,High Producing Exotic Grassland,0.9261,0.9261,45506.0974,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000611301,High Producing Exotic Grassland,2.9238,2.9238,7.2796,R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000611432,High Producing Exotic Grassland,0.7973,0.7973,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000611433,High Producing Exotic Grassland,0.7566,0.7566,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000611437,High Producing Exotic Grassland,0.5576,0.5576,2156.685,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000611441,High Producing Exotic Grassland,0.8015,0.8015,956.8198,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000611524-part-2,High Producing Exotic Grassland,0.0443,0.0443,1836.7491,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000611525,High Producing Exotic Grassland,0.5678,0.5678,1836.7491,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000611541,High Producing Exotic Grassland,0.5658,0.5658,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000611546,High Producing Exotic Grassland,0.6977,0.6977,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000611551,High Producing Exotic Grassland,1.0023,1.0023,178357.0452,R-01-near-threshold,0.0,0.0,0.0,0.0,0.0
-lcdb1000611637,High Producing Exotic Grassland,0.552,0.552,45506.0974,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000611640,High Producing Exotic Grassland,0.341,0.341,8638.2916,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000611645,Low Producing Grassland,0.0873,0.0873,406.4898,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000611662,Low Producing Grassland,0.7459,0.7459,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000611665,Low Producing Grassland,0.6098,0.6098,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000611666,Low Producing Grassland,0.5686,0.5686,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000464250,Low Producing Grassland,0.3413,0.3413,91893.8649,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000611246,High Producing Exotic Grassland,0.9261,0.9261,33.5087,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000611517,High Producing Exotic Grassland,6.0931,6.0931,91893.8649,R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
+lcdb1000611524-part-2,High Producing Exotic Grassland,0.0443,0.0443,24.0167,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000611525,High Producing Exotic Grassland,0.5678,0.5678,2.2629,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000611541,High Producing Exotic Grassland,0.5658,0.5658,91893.8649,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000611546,High Producing Exotic Grassland,0.6977,0.6977,91893.8649,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000611640,High Producing Exotic Grassland,0.341,0.341,25.7261,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000611645,Low Producing Grassland,0.0873,0.0873,394.2955,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000611662,Low Producing Grassland,0.7459,0.7459,5.5446,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000611666,Low Producing Grassland,0.5686,0.5686,91893.8649,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
 lcdb1000611669,Low Producing Grassland,0.9236,0.9236,2.6256,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000611670,Low Producing Grassland,0.4959,0.4959,1665.451,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000611701,Low Producing Grassland,0.0531,0.0531,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000611764,Low Producing Grassland,0.9621,0.9621,16.1218,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000611778,Low Producing Grassland,0.6423,0.6423,45506.0974,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000611817-part-2,Low Producing Grassland,0.0023,0.0023,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000611829,Low Producing Grassland,0.8631,0.8631,45506.0974,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000611837,Low Producing Grassland,0.8265,0.8265,45506.0974,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000611859,Low Producing Grassland,1.0148,1.0148,8638.2916,R-01-near-threshold,0.0,0.0,0.0,0.0,0.0
-lcdb1000611872,Low Producing Grassland,0.4232,0.4232,3716.0128,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000611898,Low Producing Grassland,0.9667,0.9667,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000611670,Low Producing Grassland,0.4959,0.4959,1615.86,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000611701,Low Producing Grassland,0.0531,0.0531,91893.8649,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000611817-part-2,Low Producing Grassland,0.0023,0.0023,83.3638,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000611837,Low Producing Grassland,0.8265,0.8265,2011.0088,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000611859,Low Producing Grassland,1.0148,1.0148,1.0148,R-01-near-threshold,0.0,0.0,0.0,0.0,0.0
+lcdb1000611898,Low Producing Grassland,0.9667,0.9667,5.5446,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
 lcdb1000611902,Low Producing Grassland,1.0118,1.0118,1.0118,R-01-near-threshold,0.0,0.0,0.0,0.0,0.0
 lcdb1000611956,Low Producing Grassland,1.0057,1.0057,21.9775,R-01-near-threshold,0.0,0.0,0.0,0.0,0.0
 lcdb1000611957,Low Producing Grassland,0.7388,0.7388,21.9775,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000612006,Gorse and/or Broom,0.8789,0.8789,11853.5785,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000612033,Gorse and/or Broom,0.7738,0.7738,502.0974,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb1000700732,High Producing Exotic Grassland,1.0085,1.0085,178357.0452,R-01-near-threshold,0.0,0.0,0.0,0.0,0.0
-lcdb1000700739,High Producing Exotic Grassland,0.6717,0.6717,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb2000502898,Low Producing Grassland,1.5083,1.5083,2.9931,R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb2000512599,Low Producing Grassland,1.8044,1.8044,105.3561,R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb2000513805,Low Producing Grassland,1.7345,1.7345,3758.752,R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb2000515051,High Producing Exotic Grassland,0.9815,0.9815,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb2000515228,Low Producing Grassland,1.0125,1.0125,931.6255,R-01-near-threshold,0.0,0.0,0.0,0.0,0.0
-lcdb2000515286,Low Producing Grassland,1.0089,1.0089,1.0089,R-01-near-threshold,0.0,0.0,0.0,0.0,0.0
-lcdb2000515425,Low Producing Grassland,1.0101,1.0101,1.0101,R-01-near-threshold,0.0,0.0,0.0,0.0,0.0
-lcdb2000515524,High Producing Exotic Grassland,0.8126,0.8126,45506.0974,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb2000515599,Gorse and/or Broom,1.0231,1.0231,45506.0974,R-01-near-threshold,0.0,0.0,0.0,0.0,0.0
-lcdb2000515989,Low Producing Grassland,0.7086,0.7086,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb2000516213,High Producing Exotic Grassland,0.8745,0.8745,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb2000516298,Low Producing Grassland,0.7634,0.7634,615.5859,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb2000516330,Low Producing Grassland,0.8698,0.8698,45506.0974,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb2000516501,High Producing Exotic Grassland,0.8102,0.8102,1010.2074,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb2000516524,Low Producing Grassland,0.794,0.794,42.4527,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb1000700732,High Producing Exotic Grassland,1.0085,1.0085,1.0085,R-01-near-threshold,0.0,0.0,0.0,0.0,0.0
+lcdb1000700739,High Producing Exotic Grassland,0.6717,0.6717,37.1891,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb2000504801,Low Producing Grassland,7.0549,7.0549,14.4386,R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
+lcdb2000505469,Low Producing Grassland,6.1246,6.1246,7.2594,R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
+lcdb2000508025,Low Producing Grassland,3.5686,3.5686,3.5686,R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
+lcdb2000508731,Low Producing Grassland,3.2752,3.2752,3.2752,R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
+lcdb2000513805,Low Producing Grassland,1.7345,1.7345,59.3422,R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb2000513824,High Producing Exotic Grassland,1.3531,1.3531,1.3531,R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
+lcdb2000515051,High Producing Exotic Grassland,0.9815,0.9815,91893.8649,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb2000515599,Gorse and/or Broom,1.0231,1.0231,33.5087,R-01-near-threshold,0.0,0.0,0.0,0.0,0.0
+lcdb2000515989,Low Producing Grassland,0.7086,0.7086,91893.8649,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb2000516330,Low Producing Grassland,0.8698,0.8698,5.3134,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
 lcdb2000516560,High Producing Exotic Grassland,0.8378,0.8378,9.0386,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb2000516915,High Producing Exotic Grassland,0.7912,0.7912,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb2000516955,Low Producing Grassland,0.6972,0.6972,2354.0062,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb2000517133,High Producing Exotic Grassland,0.811,0.811,1.9108,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb2000517213,High Producing Exotic Grassland,0.6654,0.6654,594.2185,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb2000517219,Low Producing Grassland,0.6754,0.6754,1665.451,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb2000517262,Low Producing Grassland,0.6674,0.6674,8638.2916,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb2000517527,High Producing Exotic Grassland,0.5594,0.5594,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb2000517573,Low Producing Grassland,0.6554,0.6554,178357.0452,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb2000517666,Low Producing Grassland,0.5063,0.5063,8.5737,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb2000517755,Low Producing Grassland,0.3687,0.3687,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb2000517835,High Producing Exotic Grassland,0.5323,0.5323,1.6941,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb2000517872,Low Producing Grassland,0.4536,0.4536,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb2000517925,High Producing Exotic Grassland,0.4089,0.4089,3758.752,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb2000517947,High Producing Exotic Grassland,0.4267,0.4267,12.0553,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb2000517960,High Producing Exotic Grassland,0.3669,0.3669,1665.451,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb2000517973,High Producing Exotic Grassland,0.5017,0.5017,1665.451,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb2000518100,Low Producing Grassland,0.4228,0.4228,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb2000518109,Low Producing Grassland,0.4613,0.4613,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb2000518375,High Producing Exotic Grassland,0.3078,0.3078,594.2185,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb2000517527,High Producing Exotic Grassland,0.5594,0.5594,108.9892,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
+lcdb2000517755,Low Producing Grassland,0.3687,0.3687,91893.8649,R-01-contiguous|R-02-contiguous|R-03-deforested-1990-2007,0.0,0.0,0.0,0.0,0.0
+lcdb2000518100,Low Producing Grassland,0.4228,0.4228,10.9522,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
 lcdb2000518432,Gorse and/or Broom,0.2682,0.2682,9.0386,R-01-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb2000518481,High Producing Exotic Grassland,0.2552,0.2552,1665.451,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb2000518530,Low Producing Grassland,0.2226,0.2226,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0
-lcdb2000518588,High Producing Exotic Grassland,0.2362,0.2362,178357.0452,R-01-contiguous|R-02-contiguous,0.0,0.0,0.0,0.0,0.0

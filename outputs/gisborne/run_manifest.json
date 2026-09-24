@@ -29,7 +29,7 @@
     "sliver_width_removed_m": 15.0,
     "status_when_not_material": "advisory (clip-required at or above the clip area)"
   },
-  "reject_rate": 0.46271008403361347,
+  "reject_rate": 0.7127100840336135,
   "reject_rate_threshold": 0.8,
   "unresolved_rules": [
     "R-03",
@@ -44,14 +44,14 @@
     "size": 30,
     "seed": 20260912,
     "pinned_ids_supplied": true,
-    "sampling_frame_count": 3069,
-    "sampling_frame_sha256": "efcf6cf22313a9a2b4e0859be79cdd392b8f0ba75c36130489416e03ba3cfc9a"
+    "sampling_frame_count": 1641,
+    "sampling_frame_sha256": "590c6ded864fea14c10d733e68b3b84682b471b035869469a193eb40ce2c68ef"
   },
   "inputs": {
     "files": {
-      "gisborne_candidates.gpkg": "d44c2bee7378a74f2b22ad8296a4fd3f5e447a0057c804550937aba4ee5815fc",
-      "gisborne_pre1990_evidence.gpkg": "b90d05d9aa175fd6446083928ef699082d34be01aafc8796243b41fbe4642321",
-      "gisborne_conservation.gpkg": "510aa4d3b25253a7123311c24a972ff6890dd8e02c23efaf956dddc3dad695f2"
+      "gisborne_candidates.gpkg": "daab9b9d8fbfa6a2cb0a9714fba6cad13858122a1042cb90e8a85019985dd668",
+      "gisborne_pre1990_evidence.gpkg": "9d675d5021438c38e0482f012054b21702679382dfcab385f7fe150958cb2572",
+      "gisborne_conservation.gpkg": "5ba3dc8b3ce3c891542e02251fda38fad694456e02aa42d90c8683588e10f736"
     },
     "sources": {
       "boundary": "https://services2.arcgis.com/vKb0s8tBIA3bdocZ/arcgis/rest/services/Territorial_Authority_2026/FeatureServer/0",
