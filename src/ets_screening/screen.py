@@ -24,7 +24,13 @@ from .io_utils import PublicationRecoveryError, normalise_gpkg, publish_outputs 
 from .load import InputValidationError, read_layer
 from .report import plot_layout_pdf, plot_screening_overview, plot_width_comparison
 from .review_labels import load_review_labels, load_review_sample_ids
-from .rules import RuleConfig, candidate_advisory_mask, evaluate_rules, manual_review_rule_ids
+from .rules import (
+    RuleConfig,
+    candidate_advisory_mask,
+    evaluate_rules,
+    manual_review_rule_ids,
+    unmatched_plantable_classes,
+)
 from .sample_review import DEFAULT_REVIEW_SEED, DEFAULT_REVIEW_SIZE, write_review_bundle
 
 SCOPE = "screening/triage only; not an eligibility determination"
@@ -279,6 +285,7 @@ def run_screening(
             ),
             "feature_count": len(results),
             "rule_config": config.as_record(),
+            "unmatched_plantable_lcdb_classes": unmatched_plantable_classes(candidates, config),
             "overlap_materiality": {
                 "minimum_area_m2_exclusive": config.minimum_overlap_area_m2,
                 "minimum_source_unit_pct_inclusive": config.minimum_overlap_pct,

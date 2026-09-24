@@ -18,6 +18,17 @@ ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "outputs" / "gisborne"
 MANIFEST = OUTPUT / "semantic_hashes.json"
 FILES = ("candidates.gpkg", "quarantine.gpkg", "review/review_queue.gpkg")
+#: The pinned inputs are also hashed by content. checksums.sha256 pins their
+#: bytes, which change with the GDAL version that wrote them; this manifest
+#: shows whether a refreshed download differs in content or only in bytes.
+INPUTS = ROOT / "data" / "processed"
+INPUT_MANIFEST = ROOT / "data" / "semantic_hashes.json"
+INPUT_FILES = (
+    "gisborne_boundary.gpkg",
+    "gisborne_candidates.gpkg",
+    "gisborne_conservation.gpkg",
+    "gisborne_pre1990_evidence.gpkg",
+)
 #: Floats are compared to 6 decimals and coordinates to 1 mm, so a last-digit
 #: difference between library builds is not reported as changed evidence
 #: while any change an assessor could see still is.
@@ -78,26 +89,25 @@ def semantic_hash(path: Path) -> str:
     return sha256("\n".join(lines).encode("utf-8")).hexdigest()
 
 
-def current() -> dict[str, str]:
-    return {relative: semantic_hash(OUTPUT / relative) for relative in FILES}
+def current(base: Path = OUTPUT, files: tuple[str, ...] = FILES) -> dict[str, str]:
+    return {relative: semantic_hash(base / relative) for relative in files}
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--write", action="store_true")
     args = parser.parse_args()
-    values = current()
-    if args.write:
-        MANIFEST.write_text(
-            json.dumps(values, indent=2) + "\n", encoding="utf-8", newline="\n"
-        )
-        print(MANIFEST)
-        return
-    expected = json.loads(MANIFEST.read_text(encoding="utf-8"))
-    if values != expected:
-        raise SystemExit(f"semantic output mismatch:\nexpected={expected}\nactual={values}")
-    for relative, digest in values.items():
-        print(f"ok  {relative}  {digest}")
+    for base, files, manifest in ((INPUTS, INPUT_FILES, INPUT_MANIFEST), (OUTPUT, FILES, MANIFEST)):
+        values = current(base, files)
+        if args.write:
+            manifest.write_text(json.dumps(values, indent=2) + "\n", encoding="utf-8", newline="\n")
+            print(manifest)
+            continue
+        expected = json.loads(manifest.read_text(encoding="utf-8"))
+        if values != expected:
+            raise SystemExit(f"semantic mismatch in {manifest.name}:\nexpected={expected}\nactual={values}")
+        for relative, digest in values.items():
+            print(f"ok  {relative}  {digest}")
 
 
 if __name__ == "__main__":

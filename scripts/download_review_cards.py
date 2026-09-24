@@ -7,6 +7,7 @@ import io
 import argparse
 import json
 import math
+import subprocess
 import urllib.parse
 import urllib.request
 from pathlib import Path
@@ -15,7 +16,7 @@ import geopandas as gpd
 from PIL import Image, ImageDraw, ImageFont
 from shapely.geometry import Point
 
-from ets_screening.review_labels import validate_review_sample_ids
+from ets_screening.review_labels import CARD_RENDERER, REVIEW_VERSION_FILE, validate_review_sample_ids
 
 ROOT = Path(__file__).resolve().parents[1]
 QUEUE = ROOT / "outputs" / "gisborne" / "review" / "review_queue.gpkg"
@@ -163,6 +164,20 @@ def _draw_card(row, attribution: str = GDC_ATTRIBUTION) -> Image.Image:
     return card
 
 
+def _record_card_version(review_dir: Path, rendered_at: str) -> None:
+    """Mark the cards as current so labels made on them are accepted."""
+
+    path = review_dir / REVIEW_VERSION_FILE
+    version = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
+    commit = subprocess.run(
+        ["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True, text=True, check=False
+    ).stdout.strip() or None
+    version.update(
+        {"card_renderer": CARD_RENDERER, "cards_rendered_at": rendered_at, "cards_renderer_commit": commit}
+    )
+    path.write_text(json.dumps(version, indent=2) + "\n", encoding="utf-8", newline="\n")
+
+
 def _card_path(destination: Path, index: int, unit_id: str) -> Path:
     # IDs come from an external queue, so slashes and Windows path characters
     # must remain filename text rather than control the destination directory.
@@ -190,6 +205,8 @@ def main() -> None:
         _draw_card(row, attribution).save(path, quality=88, optimize=True)
         cards.append(path)
         print(f"{index:02d}/30 {row.unit_id}")
+
+    _record_card_version(destination.parent, source["retrieved_at"])
 
     for sheet_index in range(3):
         sheet = Image.new("RGB", (1536 * 2, 768 * 5), "white")

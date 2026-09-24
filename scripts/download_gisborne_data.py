@@ -371,11 +371,10 @@ def main() -> None:
         LUCAS_URL,
         bbox,
         "OBJECTID,LUCID_1989,LUCID_2007,LUCID_2020,START_1989,START_2007",
-        # Known gap (audit H-04): land that was natural forest in 1989 (LUCAS
-        # class 71) also fails post-1989 para (a)(i), and 71 -> 72 land can be
-        # pre-1990 forest land. Widening this filter changes the committed
-        # inputs, so it waits for the next deliberate data refresh.
-        where="LUCID_1989 LIKE '72%' AND LUCID_2007 LIKE '72%'",
+        # Natural (71) as well as planted (72) forest in 1989: either fails
+        # post-1989 para (a)(i). The 2007 class is kept so the rules can tell
+        # land still forested in 2007 from land deforested by then.
+        where="(LUCID_1989 LIKE '71%' OR LUCID_1989 LIKE '72%')",
     )
     conservation, conservation_record = _cached_download(
         "doc_conservation_bbox",
@@ -395,10 +394,7 @@ def main() -> None:
     # This is mapped evidence only: the Act's complete pre-1990 definition also
     # requires land-history and liability facts that LUCAS cannot establish.
     pre1990 = _clip(lucas, boundary)
-    pre1990 = pre1990[
-        pre1990["LUCID_1989"].astype(str).str.startswith("72")
-        & pre1990["LUCID_2007"].astype(str).str.startswith("72")
-    ].copy()
+    pre1990 = pre1990[pre1990["LUCID_1989"].astype(str).str.startswith(("71", "72"))].copy()
     conservation = _clip(conservation, boundary)
 
     outputs = {

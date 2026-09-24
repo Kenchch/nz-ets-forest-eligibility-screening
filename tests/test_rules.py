@@ -447,3 +447,53 @@ def test_manual_review_ids_follow_the_register():
     candidates, pre1990, conservation = build_demo_layers()
     results, _ = evaluate_rules(candidates, pre1990, conservation)
     assert (results["manual_review_rule_ids"] == "R-03|R-06|R-07|R-08|R-09|R-10|R-11").all()
+
+
+def test_unknown_plantable_class_names_are_reported():
+    config = RuleConfig(plantable_lcdb_classes=frozenset({"Low Producing Grassland", "Low Producing Grasland"}))
+    with pytest.warns(UserWarning, match="Low Producing Grasland"):
+        evaluate_rules(_frame(box(0, 0, 120, 120)), _empty(), _empty(), config)
+
+
+def _lucas(*rows):
+    return gpd.GeoDataFrame(
+        {"LUCID_1989": [row[0] for row in rows], "LUCID_2007": [row[1] for row in rows]},
+        geometry=[row[2] for row in rows],
+        crs=2193,
+    )
+
+
+@pytest.mark.parametrize(
+    "lucid_1989, lucid_2007",
+    [
+        ("71 - Natural Forest", "71 - Natural Forest"),
+        ("72 - Planted Forest - Pre 1990", "72 - Planted Forest - Pre 1990"),
+        ("71 - Natural Forest", "72 - Planted Forest - Pre 1990"),
+    ],
+)
+def test_forest_in_1989_and_2007_is_material_for_r03(lucid_1989, lucid_2007):
+    evidence = _lucas((lucid_1989, lucid_2007, box(0, 0, 60, 60)))
+    results, _ = evaluate_rules(_frame(box(0, 0, 120, 120)), evidence, _empty())
+    row = by_id(results, "boundary")
+    assert row["failed_rule_ids"] == "R-03"
+
+
+def test_forest_deforested_by_2007_is_advisory_not_material():
+    # Para (a)(ii): forest land on 31 December 1989 deforested by 2007 may
+    # still be post-1989 forest land, so this needs a person, not a rule.
+    evidence = _lucas(("71 - Natural Forest", "75 - Grassland - High producing", box(0, 0, 60, 60)))
+    results, audit = evaluate_rules(_frame(box(0, 0, 120, 120)), evidence, _empty())
+    row = by_id(results, "boundary")
+    assert row["status"] == "candidate_review"
+    assert row["pre1990_overlap_m2"] == 0
+    assert row["pre1990_deforested_overlap_m2"] == 3600
+    assert row["advisory_rule_ids"] == "R-03-deforested-1990-2007"
+    assert audit.set_index("rule_id").loc["R-03", "outcome"] == "advisory"
+
+
+def test_evidence_that_was_not_forest_in_1989_is_ignored():
+    evidence = _lucas(("75 - Grassland - High producing", "72 - Planted Forest - Post 1989", box(0, 0, 60, 60)))
+    results, _ = evaluate_rules(_frame(box(0, 0, 120, 120)), evidence, _empty())
+    row = by_id(results, "boundary")
+    assert row["failed_rule_ids"] == ""
+    assert row["advisory_rule_ids"] == ""

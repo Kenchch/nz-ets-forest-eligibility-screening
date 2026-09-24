@@ -239,3 +239,58 @@ def test_accepts_real_names_containing_machine_substrings(tmp_path, reviewer):
     # would reject all of these, so those are matched as whole tokens only.
     labels = load_review_labels(_write(tmp_path, _labels(reviewer=reviewer)))
     assert set(labels["reviewer"]) == {reviewer}
+
+
+# --- Review version gate and stratified sampling -------------------------------
+
+
+def test_labels_on_a_stale_sample_or_cards_are_refused(tmp_path):
+    import json
+
+    from ets_screening.review_labels import (
+        CARD_RENDERER,
+        REVIEW_VERSION_FILE,
+        SAMPLE_ALGORITHM,
+        ReviewLabelError,
+        require_current_review_version,
+    )
+
+    with pytest.raises(ReviewLabelError, match="out of date"):
+        require_current_review_version(tmp_path)
+    version = tmp_path / REVIEW_VERSION_FILE
+    version.write_text(json.dumps({"sample_algorithm": SAMPLE_ALGORITHM, "card_renderer": None}), encoding="utf-8")
+    with pytest.raises(ReviewLabelError, match="card_renderer"):
+        require_current_review_version(tmp_path)
+    version.write_text(
+        json.dumps({"sample_algorithm": SAMPLE_ALGORITHM, "card_renderer": CARD_RENDERER}), encoding="utf-8"
+    )
+    require_current_review_version(tmp_path)
+
+
+def test_fresh_sample_records_its_version_and_needs_new_cards(tmp_path):
+    import json
+
+    from ets_screening.review_labels import REVIEW_VERSION_FILE, SAMPLE_ALGORITHM
+
+    candidates, _, _ = build_demo_layers()
+    write_review_bundle(candidates, tmp_path, sample_size=3)
+    version = json.loads((tmp_path / REVIEW_VERSION_FILE).read_text(encoding="utf-8"))
+    assert version["sample_algorithm"] == SAMPLE_ALGORITHM
+    assert version["card_renderer"] is None
+    assert version["sampling_frame_count"] == len(candidates)
+
+
+def test_sample_includes_flagged_candidates():
+    from ets_screening.sample_review import MIN_FLAGGED_IN_SAMPLE, select_review_sample
+
+    candidates, _, _ = build_demo_layers()
+    frame = pd.concat([candidates.assign(unit_id=candidates["unit_id"] + f"-{copy}") for copy in range(10)])
+    frame = frame.set_geometry("geometry").reset_index(drop=True)
+    frame["advisory_rule_ids"] = ""
+    frame.loc[frame.index[:6], "advisory_rule_ids"] = "R-03-low-overlap"
+    first = select_review_sample(frame, sample_size=30, seed=7)
+    flagged = first["advisory_rule_ids"].ne("").sum()
+    assert flagged == MIN_FLAGGED_IN_SAMPLE
+    assert len(first) == 30
+    again = select_review_sample(frame.sample(frac=1, random_state=3), sample_size=30, seed=7)
+    assert again["unit_id"].tolist() == first["unit_id"].tolist()

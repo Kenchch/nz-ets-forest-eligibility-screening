@@ -1,0 +1,6 @@
+{
+  "sample_algorithm": "legacy-dataframe-sample-v1",
+  "sample_note": "DataFrame.sample(n=30, random_state=20260912) over the 2,520 clean candidates of the earlier rule set; advisory candidates could not be selected",
+  "card_renderer": "tile-centre-crosshair-v1",
+  "card_note": "crosshair drawn at the panel centre, not the interior point; must be re-rendered"
+}

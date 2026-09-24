@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import csv
 from datetime import date
+import json
 from numbers import Integral
 from pathlib import Path
 import re
@@ -149,6 +150,46 @@ _FREE_TEXT_COLUMNS = ("reviewer", "evidence_note")
 
 class ReviewLabelError(ValueError):
     """Raised when a review label file is not usable as human evidence."""
+
+
+#: Written beside review_sample_ids.csv. The sampler records how the sample
+#: was drawn and the card renderer records how the cards were drawn.
+REVIEW_VERSION_FILE = "review_version.json"
+#: Labels are accepted as evidence only for a sample and cards produced by
+#: these versions. The legacy sample excluded advisory candidates, and the
+#: legacy cards drew their crosshair at the tile centre, off the unit.
+SAMPLE_ALGORITHM = "stratified-sha256-rank-v2"
+CARD_RENDERER = "interior-point-crosshair-v2"
+
+
+def load_review_version(review_dir: str | Path) -> dict[str, object]:
+    path = Path(review_dir) / REVIEW_VERSION_FILE
+    if not path.exists():
+        return {}
+    try:
+        value = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError) as error:
+        raise ReviewLabelError(f"cannot read {path}: {error}") from error
+    _require(isinstance(value, dict), f"{path} must hold a JSON object")
+    return value
+
+
+def require_current_review_version(review_dir: str | Path) -> None:
+    """Refuse labels made on a stale sample or stale imagery cards."""
+
+    version = load_review_version(review_dir)
+    stale = []
+    if version.get("sample_algorithm") != SAMPLE_ALGORITHM:
+        stale.append(f"sample_algorithm is {version.get('sample_algorithm')!r}, expected {SAMPLE_ALGORITHM!r}")
+    if version.get("card_renderer") != CARD_RENDERER:
+        stale.append(f"card_renderer is {version.get('card_renderer')!r}, expected {CARD_RENDERER!r}")
+    _require(
+        not stale,
+        "the review sample or imagery cards are out of date ("
+        + "; ".join(stale)
+        + "). Re-draw the sample with `python scripts/reproduce.py --resample-review` and "
+        "re-render the cards with `python scripts/download_review_cards.py` before labelling.",
+    )
 
 
 def _require(condition: bool, message: str) -> None:

@@ -19,6 +19,9 @@
       "Mixed Exotic Shrubland"
     ]
   },
+  "unmatched_plantable_lcdb_classes": [
+    "Bare or Lightly Vegetated Surfaces"
+  ],
   "overlap_materiality": {
     "minimum_area_m2_exclusive": 1.0,
     "minimum_source_unit_pct_inclusive": 1.0,

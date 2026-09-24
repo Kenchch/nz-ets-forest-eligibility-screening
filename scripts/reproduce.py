@@ -8,7 +8,11 @@ import sys
 
 import geopandas as gpd
 
-from ets_screening.review_labels import load_review_labels, load_review_sample_ids
+from ets_screening.review_labels import (
+    load_review_labels,
+    load_review_sample_ids,
+    require_current_review_version,
+)
 from ets_screening.screen import run_screening
 from build_findings import main as build_findings
 from ingest_review_labels import main as ingest_review_labels
@@ -35,8 +39,14 @@ def _sha256(path: Path) -> str:
 
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--resample-review",
+        action="store_true",
+        help="Draw a new stratified review sample instead of keeping the pinned one. "
+        "Refused while labels exist; delete old cards first and re-render them afterwards.",
+    )
     # Called from tests and other scripts with no argv: never read sys.argv here.
-    parser.parse_args([] if argv is None else argv)
+    args = parser.parse_args([] if argv is None else argv)
 
     verify_checksums()
     review_dir = ROOT / "outputs" / "gisborne" / "review"
@@ -45,7 +55,12 @@ def main(argv: list[str] | None = None) -> None:
     review_sample_ids = load_review_sample_ids(review_dir / "review_sample_ids.csv")
     labels_path = review_dir / "review_labels.csv"
     if labels_path.exists():
+        if args.resample_review:
+            raise SystemExit("refusing to re-draw the review sample: review_labels.csv exists")
+        require_current_review_version(review_dir)
         load_review_labels(labels_path, review_sample_ids)
+    if args.resample_review:
+        review_sample_ids = None
     data = ROOT / "data" / "processed"
     frames = {name: gpd.read_file(data / filename) for name, filename in INPUTS.items()}
     source_manifest = json.loads((data / "gisborne_manifest.json").read_text(encoding="utf-8"))

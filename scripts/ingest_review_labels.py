@@ -26,6 +26,7 @@ from ets_screening.review_labels import (
     ReviewLabelError,
     load_review_labels,
     load_review_sample_ids,
+    require_current_review_version,
     summarise_review_labels,
 )
 
@@ -72,6 +73,7 @@ def main(argv: list[str] | None = None) -> int:
         expected = sample_unit_ids(review_dir)
         labels_sha256 = None
         if labels_path.exists():
+            require_current_review_version(review_dir)
             labels = load_review_labels(labels_path, expected)
             labels_sha256 = sha256(labels_path.read_bytes()).hexdigest()
         else:

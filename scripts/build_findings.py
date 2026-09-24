@@ -14,7 +14,11 @@ import pandas as pd
 
 from ets_screening.geometry import EROSION_TOLERANCE_M
 from ets_screening.report import PNG_METADATA
-from ets_screening.review_labels import load_review_labels, load_review_sample_ids
+from ets_screening.review_labels import (
+    load_review_labels,
+    load_review_sample_ids,
+    require_current_review_version,
+)
 from ets_screening.rules import candidate_advisory_mask
 from ets_screening.screen import SCOPE
 
@@ -46,6 +50,7 @@ def _visual_review_findings(review_dir: Path) -> dict[str, object]:
             "visual_review_sample_size": int(len(expected)),
             "visual_review_labels_recorded": 0,
         }
+    require_current_review_version(review_dir)
     labels = load_review_labels(labels_path, expected)
     counts = labels["review_label"].value_counts()
     plausible = int(counts.get("plausible-plantable", 0))

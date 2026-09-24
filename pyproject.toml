@@ -41,6 +41,9 @@ where = ["src"]
 # and already cleaned between sessions.
 addopts = "-q"
 testpaths = ["tests"]
+# Single-class fixtures would otherwise warn in almost every rule test; the
+# warning itself is asserted in test_rules.py.
+filterwarnings = ["ignore:plantable_lcdb_classes not found in input:UserWarning"]
 
 [tool.setuptools.package-data]
 ets_screening = ["vendor/leaflet-1.9.4/*", "rule_register.csv"]

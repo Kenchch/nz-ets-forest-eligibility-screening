@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import math
+import warnings
 from dataclasses import asdict, dataclass, field
 from importlib import resources
 from numbers import Real
@@ -210,6 +211,47 @@ def _append_flag(flags: pd.Series, mask: pd.Series, flag: str) -> pd.Series:
     return flags
 
 
+def unmatched_plantable_classes(candidates: pd.DataFrame, config: RuleConfig) -> list[str]:
+    """Allow-list classes that no input unit uses.
+
+    A misspelt class name otherwise fails silently: every unit of that class
+    is quarantined under R-05 exactly as if it were not plantable.
+    """
+
+    present = set(candidates["lcdb_class"].astype(str).str.strip().str.casefold())
+    return sorted(name for name in config.plantable_lcdb_classes if name.strip().casefold() not in present)
+
+
+#: LUCAS land-use classes that count as forest land at a nominal date.
+_LUCAS_FOREST_PREFIXES = ("71", "72")
+
+
+def classify_pre1990_evidence(evidence: gpd.GeoDataFrame) -> pd.Series:
+    """Sort LUCAS evidence by the statutory route it bears on.
+
+    - ``forest_1989_and_2007``: forest (71 natural or 72 planted) on both
+      nominal dates. Such land was forest land on 31 December 1989, so it
+      cannot enter post-1989 status through para (a)(i); planted forest in
+      2007 is also the usual pre-1990 forest-land case. Material for R-03.
+    - ``forest_1989_deforested_by_2007``: forest in 1989 but not in 2007. It
+      may be post-1989 forest land through para (a)(ii), which turns on the
+      deforestation date, so it is an advisory for manual review.
+    - ``not_forest_1989``: not evidence against para (a)(i); ignored.
+
+    A layer without LUCAS class fields is treated as forest on both dates,
+    which keeps earlier planted-forest-only inputs working unchanged.
+    """
+
+    if not {"LUCID_1989", "LUCID_2007"} <= set(evidence.columns):
+        return pd.Series("forest_1989_and_2007", index=evidence.index, dtype=object)
+    forest_1989 = evidence["LUCID_1989"].astype(str).str.startswith(_LUCAS_FOREST_PREFIXES)
+    forest_2007 = evidence["LUCID_2007"].astype(str).str.startswith(_LUCAS_FOREST_PREFIXES)
+    route = pd.Series("not_forest_1989", index=evidence.index, dtype=object)
+    route[forest_1989 & forest_2007] = "forest_1989_and_2007"
+    route[forest_1989 & ~forest_2007] = "forest_1989_deforested_by_2007"
+    return route
+
+
 def candidate_advisory_mask(results: pd.DataFrame) -> pd.Series:
     """Candidates that passed screening while carrying an advisory flag."""
 
@@ -309,6 +351,14 @@ def evaluate_rules(
         if not frame.empty:
             validate_geometry(frame, name)
 
+    unmatched = unmatched_plantable_classes(candidates, config)
+    if unmatched:
+        warnings.warn(f"plantable_lcdb_classes not found in input: {unmatched}", UserWarning, stacklevel=2)
+
+    routes = classify_pre1990_evidence(pre1990)
+    deforested = pre1990[routes == "forest_1989_deforested_by_2007"]
+    pre1990 = pre1990[routes == "forest_1989_and_2007"]
+
     out = candidates.copy()
     raw_area_ha = out.geometry.area / 10_000.0
     out["area_ha"] = raw_area_ha.round(4)
@@ -353,6 +403,8 @@ def evaluate_rules(
     ]
     conflict_area = gpd.GeoSeries(conflicts, index=out.index, crs=out.crs).area
     out["conflict_free_area_ha"] = ((unit_area - conflict_area).clip(lower=0) / 10_000.0).round(4)
+    deforested_m2, _ = _overlap_metrics(out, deforested, 0.0)
+    out["pre1990_deforested_overlap_m2"] = deforested_m2.round(2)
     out["r03_no_pre1990_overlap"] = ~out["pre1990_material"]
     out["r04_no_conservation_overlap"] = ~out["conservation_material"]
 
@@ -384,6 +436,9 @@ def evaluate_rules(
     flags = _append_flag(flags, out["r02_contiguous_pass"], "R-02-contiguous")
     flags = _append_flag(flags, clip_required["pre1990"], "R-03-clip-required")
     flags = _append_flag(flags, low_overlap["pre1990"], "R-03-low-overlap")
+    flags = _append_flag(
+        flags, deforested_m2 > config.minimum_overlap_area_m2, "R-03-deforested-1990-2007"
+    )
     flags = _append_flag(flags, clip_required["conservation"], "R-04-clip-required")
     flags = _append_flag(flags, low_overlap["conservation"], "R-04-low-overlap")
     out["advisory_rule_ids"] = flags

@@ -20,6 +20,8 @@ from .io_utils import PublicationRecoveryError, normalise_gpkg, publish_outputs
 from .review_labels import (
     LABEL_VOCABULARY,
     REVIEW_COLUMNS,
+    REVIEW_VERSION_FILE,
+    SAMPLE_ALGORITHM,
     load_review_labels,
     load_review_sample_ids,
     validate_review_sample_ids,
@@ -33,6 +35,7 @@ MAP_FIELDS = ("unit_id", "lcdb_class", "area_ha", "status")
 #: About 1 cm at New Zealand latitudes; enough for review, and stable across
 #: PROJ versions that differ in the last digits.
 MAP_COORDINATE_DECIMALS = 7
+MIN_FLAGGED_IN_SAMPLE = 5
 MAP_SCOPE = "Screening / triage only - not an ETS eligibility determination."
 
 LINZ_ATTRIBUTION = (
@@ -76,13 +79,25 @@ def select_review_sample(
     ranked["_sample_rank"] = ranked["unit_id"].astype(str).map(
         lambda value: sha256(f"{seed}:{value}".encode("utf-8")).hexdigest()
     )
-    return (
-        ranked.sort_values("_sample_rank")
-        .head(count)
-        .drop(columns="_sample_rank")
-        .sort_values("unit_id")
-        .reset_index(drop=True)
-    )
+    ranked = ranked.sort_values(["_sample_rank", "unit_id"], kind="mergesort")
+    if "advisory_rule_ids" in ranked.columns:
+        # Stratify, so flagged candidates - the ones most likely to change an
+        # assessor's answer - cannot be left out by chance.
+        flagged = ranked["advisory_rule_ids"].fillna("").astype(str).ne("")
+        flagged_count = _flagged_allocation(count, int(flagged.sum()), int((~flagged).sum()))
+        chosen = pd.concat([ranked[flagged].head(flagged_count), ranked[~flagged].head(count - flagged_count)])
+    else:
+        chosen = ranked.head(count)
+    return chosen.drop(columns="_sample_rank").sort_values("unit_id").reset_index(drop=True)
+
+
+def _flagged_allocation(count: int, flagged: int, clean: int) -> int:
+    """Proportional share of flagged units, but at least MIN_FLAGGED_IN_SAMPLE."""
+
+    share = round(count * flagged / (flagged + clean)) if flagged + clean else 0
+    allocation = min(flagged, max(share, MIN_FLAGGED_IN_SAMPLE), count)
+    # If there are too few clean units, fill the rest from the flagged stratum.
+    return max(allocation, count - clean)
 
 
 def _round_coordinates(value: object, decimals: int) -> object:
@@ -238,6 +253,21 @@ imageryControl.addTo(map);
         template["unit_id"] = sample["unit_id"].to_numpy()
         template.to_csv(stage / "review_labels_template.csv", index=False, lineterminator="\n")
         (stage / "review_map.html").write_text(html, encoding="utf-8", newline="\n")
+        if sample_ids is None:
+            # A fresh draw invalidates any cards: they must be rendered again
+            # before labels are accepted (see require_current_review_version).
+            ids = sorted(candidates["unit_id"].astype(str))
+            version = {
+                "sample_algorithm": SAMPLE_ALGORITHM,
+                "sample_seed": seed,
+                "sample_size": int(len(sample)),
+                "sampling_frame_count": len(ids),
+                "sampling_frame_sha256": sha256("\n".join(ids).encode("utf-8")).hexdigest(),
+                "card_renderer": None,
+            }
+            (stage / REVIEW_VERSION_FILE).write_text(
+                json.dumps(version, indent=2) + "\n", encoding="utf-8", newline="\n"
+            )
         publish_outputs(stage, destination)
     except PublicationRecoveryError:
         retain_stage = True
