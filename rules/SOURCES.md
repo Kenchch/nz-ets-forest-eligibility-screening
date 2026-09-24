@@ -139,7 +139,14 @@ exclusion is for species grown or managed primarily for fruit or nut crops.
 
 R-03 screens for the most common route into post-1989 status, paragraph (a)(i):
 land that was not forest land on 31 December 1989. Mapped 1989/2007 planted
-forest overlap is evidence against that route. Routes (a)(ii)–(vii) depend on
+forest overlap is evidence against that route. **Land that was natural forest in
+1989 is equally excluded from that route**, but the committed evidence layer was
+filtered to LUCAS class 72 (planted forest) in both 1989 and 2007 and holds no
+class 71 (natural forest) polygons. Nor does it hold 71→72 land, which can be
+pre-1990 forest land. R-03 therefore under-detects conflicts; widening the
+filter to `LUCID_1989 LIKE '71%' OR LUCID_1989 LIKE '72%'` and separating the
+land-history paths is the next data refresh, not a change that can be made to
+the committed inputs in place. Routes (a)(ii)–(vii) depend on
 deforestation dates, surrender liabilities and statutory status that no open
 spatial layer records, and pre-1990 paragraph (a)(i)(C) depends on the species
 composition on 31 December 2007, so R-03 cannot establish either status.
@@ -171,6 +178,15 @@ width or area test on its own is not necessarily excluded.
 The page also separates the forest-land definition from the pre-1990 /
 post-1989 classification by establishment date, and notes LUC-class restrictions
 on registering exotic forest on LUC class 1–6 land.
+
+**That restriction is recorded as rule R-09 but not implemented.** The candidate
+set is almost entirely grassland and scrub — High Producing Exotic Grassland
+alone is most of the candidate area — which is exactly the farm-to-forest
+conversion such a restriction targets. This project has not verified the
+underlying amendment, its commencement, the farm-level limit or the exemptions
+against the Act, so no numbers are given here. Until an LUC layer (NZLRI) is
+added and the provisions are checked by someone qualified to do so, a candidate
+says nothing about whether exotic planting on it could be registered.
 
 ### Average-width guidance — checked 16 September 2026
 
@@ -252,14 +268,26 @@ class cannot establish plantability, species, future height or future crown
 cover. Their results therefore prioritise or remove cases from this specific
 opportunity-screening queue; they do not decide ETS eligibility.
 
-**R-01 and R-02 test each land-cover unit in isolation, but eligibility does
-not.** Paragraph (c)(ii) of the forest-land definition keeps a narrow area that
-is contiguous with qualifying forest land, and MPI's guidance lets an area under
+**Eligibility is judged on areas of land, not on land-cover mapping units.**
+Paragraph (c)(ii) of the forest-land definition keeps a narrow area that is
+contiguous with qualifying forest land, and MPI's guidance lets an area under
 30 m wide on average register when it lies within 15 m of an eligible area of at
 least 1 hectare; its forest-land page excludes small tree areas under 1 hectare
-only when they are more than 15 m from adjacent forest. Neither rule measures
-adjacency, so a unit
-quarantined for area or width may still be eligible through a neighbour.
-Quarantine sends it to an assessor rather than rejecting it, which is the
-correct direction for this gap, but the quarantine count should not be read as a
-count of ineligible land.
+only when they are more than 15 m from adjacent forest. The screening
+approximates this: plantable units with no material conflict are chained into
+blocks wherever they lie within 15 m of each other. A unit under 1 ha passes
+R-01 with advisory `R-01-contiguous` when its block reaches 1 ha, and a narrow
+unit passes R-02 with advisory `R-02-contiguous` when its block contains a unit
+that meets R-01 and R-02 on its own. This is an approximation in three ways:
+mapped land cover stands in for forest, chains of 15 m gaps are transitive, and
+the shelter-belt exclusion in (c)(i), which has no contiguity exception, cannot
+be told apart from other narrow areas.
+
+**Overlap is judged after removing slivers, and never waved through by share
+alone.** Parts of an intersection narrower than 15 m are removed by
+morphological opening, matching the 15 m generalisation of the LCDB mirror.
+What remains is material at 1% of the unit. Remaining overlap of 1 ha or more
+below 1% is flagged `clip-required` and taken out of the unit's
+`conflict_free_area_ha`; excluding a 16,000 ha unit for a few hundred hectares
+of conflict would be as wrong as ignoring them. The 1% and 1 ha values are
+documented sensitivity thresholds, not law.

@@ -1,0 +1,32 @@
+[
+  {
+    "verified_on": "2026-09-23",
+    "metadata_url": "https://www.arcgis.com/sharing/rest/content/items/b7f8726da7f6467a9cb42221b0013938?f=json",
+    "id": "b7f8726da7f6467a9cb42221b0013938",
+    "title": "Territorial Authority 2026",
+    "owner": "StatsNZGeospatial",
+    "service_url": "https://services2.arcgis.com/vKb0s8tBIA3bdocZ/arcgis/rest/services/Territorial_Authority_2026/FeatureServer",
+    "access_information": "Stats NZ – Tatauranga Aotearoa",
+    "license_info": "<div style='text-align:Left;'><div><div><p><a target='_blank' href='https://creativecommons.org/licenses/by/4.0/deed.en' rel='nofollow ugc noopener noreferrer'><span>Creative Commons Attribution 4.0 International (CC BY 4.0)</span></a></p></div></div></div>"
+  },
+  {
+    "verified_on": "2026-09-23",
+    "metadata_url": "https://www.arcgis.com/sharing/rest/content/items/c13b3563d0d246ac978a5da1be3c921d?f=json",
+    "id": "c13b3563d0d246ac978a5da1be3c921d",
+    "title": "MfE LUCAS LUM NZ Mainland 2020 v005 feature",
+    "owner": "MfEMaps",
+    "service_url": "https://arcgis.mfe.govt.nz/server1/rest/services/Unrestricted/MfE_LUCAS_LUM_NZ_Mainland_2020_v005_feature/FeatureServer",
+    "access_information": "Manaaki Whenua - Landcare Research",
+    "license_info": "<div style='text-align:Left;'><p style='box-sizing:border-box; border-width:0px; border-style:solid; border-color:currentcolor; margin-top:0px; margin-bottom:1.5rem; color:rgb(74, 74, 74); font-family:&quot;Avenir Next&quot;, Avenir, &quot;Helvetica Neue&quot;, sans-serif; font-size:16px;'><a href='https://creativecommons.org/licenses/by/4.0' style='box-sizing:border-box; border-width:0px; border-style:solid; border-color:currentcolor; color:rgb(0, 97, 155); text-decoration-line:none; font-family:inherit;' rel='nofollow ugc'><img alt='Creative Commons License' src='https://i.creativecommons.org/l/by/4.0/88x31.png' style='box-sizing:border-box; border-width:0px; border-style:solid; border-color:currentcolor; display:block; max-width:100%; height:auto;' /></a></p><p style='box-sizing:border-box; border-width:0px; border-style:solid; border-color:currentcolor; margin-top:0px; margin-bottom:1.5rem; color:rgb(74, 74, 74); font-family:&quot;Avenir Next&quot;, Avenir, &quot;Helvetica Neue&quot;, sans-serif; font-size:16px;'>This work is licensed under a <a href='https://creativecommons.org/licenses/by/4.0' style='box-sizing:border-box; border-width:0px; border-style:solid; border-color:currentcolor; color:rgb(0, 97, 155); text-decoration-line:none; font-family:inherit;' rel='nofollow ugc'>Creative Commons Attribution 4.0 International License</a></p><p style='box-sizing:border-box; border-width:0px; border-style:solid; border-color:currentcolor; margin-top:0px; margin-bottom:1.5rem; color:rgb(74, 74, 74); font-family:&quot;Avenir Next&quot;, Avenir, &quot;Helvetica Neue&quot;, sans-serif; font-size:16px;'>Creative Commons Attribution 4.0 International by Ministry for the Environment</p></div>"
+  },
+  {
+    "verified_on": "2026-09-23",
+    "metadata_url": "https://www.arcgis.com/sharing/rest/content/items/72354ba9bf7a4706af3fdfe60f86eea1?f=json",
+    "id": "72354ba9bf7a4706af3fdfe60f86eea1",
+    "title": "DOC Public Conservation Land",
+    "owner": "DOC_admin",
+    "service_url": "https://services1.arcgis.com/3JjYDyG3oajxU6HO/arcgis/rest/services/DOC_Public_Conservation_Land/FeatureServer",
+    "access_information": "DOC, © Crown",
+    "license_info": "<div>Copyright 2018 Crown copyright (c) Department of Conservation (DOC) and the New Zealand Government.</div><div><br /></div>\n\n<a href='https://creativecommons.org/licenses/by/4.0/'></a><br />This work is licensed under a <a href='https://creativecommons.org/licenses/by/4.0/'>Creative Commons Attribution 4.0 International License, </a>Department of Conservation."
+  }
+]

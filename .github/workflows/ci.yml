@@ -2,30 +2,110 @@ name: CI
 
 on:
   push:
+    branches: [main]
   pull_request:
+  workflow_dispatch:
+  schedule:
+    # Weekly, so dependency or service drift shows up without a code change.
+    - cron: "17 3 * * 1"
 
 permissions:
   contents: read
 
 jobs:
   test-and-reproduce:
-    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            python: "3.11"
+          - os: ubuntu-latest
+            python: "3.12"
+          - os: windows-latest
+            python: "3.12"
+    runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      # Actions are pinned to full commit SHAs; Dependabot proposes updates.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
-          python-version: "3.12"
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: ${{ matrix.python }}
           cache: pip
+          cache-dependency-path: |
+            pyproject.toml
+            constraints.txt
       - name: Install
-        run: python -m pip install -e ".[dev]"
+        # Test the built distribution, including its vendored map assets.
+        run: python -m pip install -c constraints.txt ".[dev,notebook]"
+      - name: Lint
+        run: python -m ruff check .
       - name: Test
-        run: pytest
+        run: python -m pytest
       - name: Verify pinned inputs
         run: python scripts/verify_checksums.py
       - name: Reproduce Gisborne outputs
         run: python scripts/reproduce.py
       - name: Verify deterministic evidence tables
+        shell: bash
         run: |
-          git diff --exit-code -- "outputs/gisborne/*.csv" "outputs/gisborne/findings.json" "outputs/gisborne/review/*.csv"
+          # Cover every regenerated text artefact, not a hand-listed subset.
+          #
+          # GeoPackages are verified by semantic_hashes.py instead, and the
+          # Matplotlib PNG/PDF pages embed renderer output, so neither is
+          # byte-comparable across this matrix.
+          git diff --exit-code -- outputs/gisborne \
+            ':(exclude)outputs/gisborne/**/*.gpkg' \
+            ':(exclude)outputs/gisborne/**/*.png' \
+            ':(exclude)outputs/gisborne/**/*.pdf' \
+            ':(exclude)outputs/gisborne/review/cards/**'
+      - name: Verify no output file appeared or vanished
+        shell: bash
+        run: |
+          # git diff never inspects untracked files, so an artefact that is
+          # renamed or newly emitted ships silently even when its path matches
+          # the pathspec above.
+          untracked="$(git ls-files --others --exclude-standard -- outputs/gisborne)"
+          deleted="$(git ls-files --deleted -- outputs/gisborne)"
+          if [ -n "$untracked" ] || [ -n "$deleted" ]; then
+            [ -n "$untracked" ] && { echo "untracked outputs:"; echo "$untracked"; }
+            [ -n "$deleted" ] && { echo "missing committed outputs:"; echo "$deleted"; }
+            exit 1
+          fi
+      - name: Verify no basemap key was published
+        shell: bash
+        run: |
+          if grep -RIlE "api=[A-Za-z0-9_-]{8,}" outputs/; then
+            echo "a LINZ basemap API key appears in a generated output"
+            exit 1
+          fi
       - name: Verify semantic GeoPackage content
         run: python scripts/semantic_hashes.py
+      - name: Execute the derivation notebook
+        shell: bash
+        run: |
+          python - <<'PY'
+          import nbformat
+          from nbclient import NotebookClient
+          path = "notebooks/01_width_rule_comparison.ipynb"
+          notebook = nbformat.read(path, as_version=4)
+          NotebookClient(notebook, timeout=600, resources={"metadata": {"path": "notebooks"}}).execute()
+          PY
+
+  latest-dependencies:
+    # Early warning only: the reproducible build uses constraints.txt.
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.12"
+      - name: Install latest releases
+        run: python -m pip install --upgrade ".[dev]"
+      - name: Test
+        run: python -m pytest
