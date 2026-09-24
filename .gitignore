@@ -8,7 +8,10 @@ data/raw/*
 !data/raw/.gitkeep
 outputs/tmp/
 outputs/ets-screen-*/
+# Machine-specific library versions and git state; varies by design.
+outputs/**/run_environment.json
 *.egg-info/
+build/
 .idea/
 .vscode/
 

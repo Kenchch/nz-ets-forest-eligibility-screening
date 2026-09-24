@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=75", "wheel"]
+requires = ["setuptools>=77,<81", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -8,20 +8,24 @@ version = "0.1.0"
 description = "Auditable spatial triage for selected NZ ETS post-1989 forest-land criteria"
 readme = "README.md"
 requires-python = ">=3.11"
-license = {text = "MIT"}
+license = "MIT"
+license-files = ["LICENSE", "src/ets_screening/vendor/leaflet-1.9.4/LICENSE"]
 authors = [{name = "Feng Jiang"}]
 dependencies = [
   "geopandas>=1.0",
   "matplotlib>=3.9",
+  "numpy>=1.26",
   "pandas>=2.2",
   "pillow>=11.0",
   "pyogrio>=0.10",
   "pyproj>=3.7",
-  "shapely>=2.0",
+  "shapely>=2.0.4",
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=8.3"]
+dev = ["pytest>=8.3", "ruff>=0.6"]
+# Executes notebooks/ in CI so the published derivation cannot go stale.
+notebook = ["nbclient>=0.10", "nbformat>=5.10", "ipykernel>=6.29"]
 
 [project.scripts]
 ets-screen = "ets_screening.screen:main"
@@ -31,8 +35,20 @@ ets-review-sample = "ets_screening.sample_review:main"
 where = ["src"]
 
 [tool.pytest.ini_options]
-addopts = "-q --basetemp=.pytest_tmp"
+# No --basetemp: it resolves against the invoking process's working directory,
+# not the project root, so two checkouts (or two agents) launched from a shared
+# parent collide on one temp tree. pytest's own rotating basetemp is per-user
+# and already cleaned between sessions.
+addopts = "-q"
 testpaths = ["tests"]
 
 [tool.setuptools.package-data]
-ets_screening = ["vendor/leaflet-1.9.4/*"]
+ets_screening = ["vendor/leaflet-1.9.4/*", "rule_register.csv"]
+
+[tool.ruff]
+line-length = 120
+extend-exclude = ["build", "notebooks"]
+
+[tool.ruff.lint]
+# Correctness checks only; formatting is left as written.
+select = ["F", "E9"]

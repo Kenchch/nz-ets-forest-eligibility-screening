@@ -12,6 +12,8 @@ import geopandas as gpd
 from shapely.geometry import box
 from shapely.ops import unary_union
 
+from .io_utils import normalise_gpkg
+
 CRS = "EPSG:2193"
 
 
@@ -20,7 +22,7 @@ def build_demo_layers() -> tuple[gpd.GeoDataFrame, gpd.GeoDataFrame, gpd.GeoData
     dumbbell = unary_union(
         [
             box(x0 + 700, y0, x0 + 780, y0 + 80),
-            box(x0 + 780, y0 + 30, x0 + 1_180, y0 + 50),
+            box(x0 + 780, y0 + 35, x0 + 1_180, y0 + 45),
             box(x0 + 1_180, y0, x0 + 1_260, y0 + 80),
         ]
     )
@@ -35,7 +37,7 @@ def build_demo_layers() -> tuple[gpd.GeoDataFrame, gpd.GeoDataFrame, gpd.GeoData
         ("G01", "High Producing Exotic Grassland", box(x0, y0, x0 + 120, y0 + 100), "compact candidate"),
         ("G02", "Low Producing Grassland", box(x0, y0 + 180, x0 + 500, y0 + 200), "20 m strip"),
         ("G03", "High Producing Exotic Grassland", box(x0 + 560, y0, x0 + 640, y0 + 80), "below 1 ha"),
-        ("G04", "Gorse and/or Broom", dumbbell, "dumbbell with 20 m neck"),
+        ("G04", "Gorse and/or Broom", dumbbell, "dumbbell with 10 m neck"),
         ("G05", "Low Producing Grassland", box(x0, y0 + 300, x0 + 130, y0 + 400), "conservation overlap"),
         ("G06", "Exotic Forest", box(x0 + 200, y0 + 300, x0 + 320, y0 + 400), "LCDB proxy fails"),
         ("G07", "High Producing Exotic Grassland", box(x0 + 400, y0 + 300, x0 + 550, y0 + 400), "pre-1990 overlap"),
@@ -76,7 +78,10 @@ def write_demo_layers(directory: str | Path) -> tuple[Path, Path, Path]:
         paths,
         ("candidates", "pre1990", "conservation"),
     ):
+        if path.exists():
+            path.unlink()
         frame.to_file(path, layer=layer, driver="GPKG")
+        normalise_gpkg(path)
     return paths
 
 

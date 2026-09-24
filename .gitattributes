@@ -1,0 +1,13 @@
+# Deterministic-output checks compare bytes, so line endings must not depend
+# on each developer's core.autocrlf setting.
+* text=auto eol=lf
+*.gpkg binary
+*.png binary
+*.jpg binary
+*.pdf binary
+
+# Keep GitHub's language statistics about the code, not the generated map or
+# the bundled library.
+outputs/gisborne/review/review_map.html linguist-generated
+src/ets_screening/vendor/** linguist-vendored
+notebooks/*.ipynb linguist-documentation

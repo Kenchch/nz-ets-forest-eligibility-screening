@@ -4,8 +4,8 @@ import pytest
 
 from ets_screening.demo_data import build_demo_layers
 from ets_screening.geometry import compare_width_methods
-from ets_screening.rules import evaluate_rules
-from ets_screening.screen import RejectRateExceeded, _summary, run_screening
+from ets_screening.rules import evaluate_rules, load_rule_register
+from ets_screening.screen import RejectRateExceeded, _summary, _width_comparison, run_screening
 from ets_screening.sample_review import select_review_sample, write_review_bundle
 
 
@@ -28,7 +28,7 @@ def test_demo_pipeline_writes_auditable_outputs(tmp_path):
     )
     assert output_count == len(candidates)
     assert manifest["crs"] == "EPSG:2193"
-    assert len(pd.read_csv(tmp_path / "rule_results.csv")) == len(candidates) * 8
+    assert len(pd.read_csv(tmp_path / "rule_results.csv")) == len(candidates) * len(load_rule_register())
 
 
 def test_reject_rate_gate_aborts_before_publication(tmp_path):
@@ -38,12 +38,13 @@ def test_reject_rate_gate_aborts_before_publication(tmp_path):
     assert not tmp_path.exists() or not any(tmp_path.iterdir())
 
 
-def test_main_pipeline_propagates_linz_api_key(tmp_path, monkeypatch):
+def test_main_pipeline_does_not_publish_linz_api_key(tmp_path, monkeypatch):
     candidates, pre1990, conservation = build_demo_layers()
     monkeypatch.setenv("LINZ_BASEMAP_API_KEY", "test-key-not-secret")
     run_screening(candidates, pre1990, conservation, tmp_path, 0.90)
     html = (tmp_path / "review" / "review_map.html").read_text(encoding="utf-8")
-    assert "api=test-key-not-secret" in html
+    assert "test-key-not-secret" not in html
+    assert "password" in html
     assert "YOUR_API_KEY" not in html
 
 
@@ -60,7 +61,7 @@ def test_summary_separates_candidate_advisories():
     candidates, pre1990, conservation = build_demo_layers()
     results, _ = evaluate_rules(candidates, pre1990, conservation)
     results.loc[results["status"] == "candidate_review", "advisory_rule_ids"] = "R-03-low-overlap"
-    comparison = compare_width_methods(results)
+    comparison = _width_comparison(results)
 
     summary = dict(_summary(results, comparison).itertuples(index=False, name=None))
 
@@ -125,3 +126,72 @@ def test_study_label_titles_the_overview_figure(tmp_path, monkeypatch):
         candidates, pre1990, conservation, tmp_path, 0.90, study_label="Test District run"
     )
     assert seen["title"] == "Test District run"
+
+
+@pytest.mark.parametrize("threshold", [float("nan"), float("inf"), -0.01, 1.01])
+def test_invalid_reject_threshold_cannot_bypass_gate(tmp_path, threshold):
+    candidates, pre1990, conservation = build_demo_layers()
+    with pytest.raises(ValueError, match="reject_rate_threshold"):
+        run_screening(candidates, pre1990, conservation, tmp_path, threshold)
+    assert not any(tmp_path.iterdir())
+
+
+def test_custom_width_threshold_reaches_tables_and_reports(tmp_path, monkeypatch):
+    import ets_screening.screen as screen
+    from ets_screening.rules import RuleConfig
+
+    seen = {}
+    def width_plot(comparison, destination, threshold_m, data_note):
+        seen["plot"] = threshold_m
+    def layout(*args, width_threshold_m, **kwargs):
+        seen["layout"] = width_threshold_m
+    monkeypatch.setattr(screen, "plot_width_comparison", width_plot)
+    monkeypatch.setattr(screen, "plot_layout_pdf", layout)
+    candidates, pre1990, conservation = build_demo_layers()
+    config = RuleConfig(width_threshold_m=60)
+    manifest = run_screening(candidates, pre1990, conservation, tmp_path, 1.0, config)
+    comparison = pd.read_csv(tmp_path / "width_method_comparison.csv")
+    expected = compare_width_methods(candidates, 60)
+    pd.testing.assert_frame_equal(comparison, expected.reset_index(drop=True))
+    assert seen == {"plot": 60, "layout": 60}
+    assert manifest["rule_config"]["width_threshold_m"] == 60
+
+
+def test_refresh_preserves_unmanaged_files(tmp_path):
+    from ets_screening.screen import _publish_outputs
+
+    stage = tmp_path / "stage"
+    output = tmp_path / "output"
+    (stage / "figures").mkdir(parents=True)
+    (output / "figures").mkdir(parents=True)
+    (stage / "figures" / "generated.png").write_bytes(b"new")
+    (output / "figures" / "generated.png").write_bytes(b"old")
+    custom = output / "figures" / "assessor-notes.png"
+    custom.write_bytes(b"keep")
+    _publish_outputs(stage, output)
+    assert custom.read_bytes() == b"keep"
+    assert (output / "figures" / "generated.png").read_bytes() == b"new"
+
+
+def test_failed_publication_restores_previous_files(tmp_path, monkeypatch):
+    import ets_screening.io_utils as io_utils
+    import ets_screening.screen as screen
+
+    stage = tmp_path / "stage"
+    output = tmp_path / "output"
+    stage.mkdir()
+    output.mkdir()
+    for name in ("candidates.gpkg", "summary.csv"):
+        (stage / name).write_bytes(b"new")
+        (output / name).write_bytes(b"old")
+    replace = io_utils.os.replace
+    def fail_one_move(source, target):
+        if source == stage / "summary.csv":
+            raise PermissionError("simulated locked output")
+        return replace(source, target)
+    monkeypatch.setattr(io_utils.os, "replace", fail_one_move)
+    with pytest.raises(PermissionError, match="locked"):
+        screen._publish_outputs(stage, output)
+    assert {path.name: path.read_bytes() for path in output.iterdir()} == {
+        "candidates.gpkg": b"old", "summary.csv": b"old",
+    }
