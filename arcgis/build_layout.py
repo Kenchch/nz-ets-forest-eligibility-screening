@@ -19,6 +19,8 @@ into the ArcGIS environment to produce the map.
 from __future__ import annotations
 
 import argparse
+import csv
+import json
 import os
 import shutil
 import tempfile
@@ -40,9 +42,28 @@ CONSERVATION = os.path.join(
     ROOT, r"data\processed\gisborne_conservation.gpkg\main.gisborne_conservation"
 )
 
-#: A branching unit whose 30 m erosion core survives in separate lobes while the
-#: compactness-sensitive 2A/P average width fails. See README finding 2.
-INSET_UNIT = "lcdb1000453434"
+SUMMARY = os.path.join(ROOT, r"outputs\gisborne\summary.csv")
+FINDINGS = os.path.join(ROOT, r"outputs\gisborne\findings.json")
+
+
+def _read_results():
+    """Read the counts shown on the map from the committed run outputs.
+
+    Hard-coding them let the layout keep stale numbers after a rule change.
+    """
+
+    with open(SUMMARY, encoding="utf-8", newline="") as handle:
+        summary = {row["metric"]: row["value"] for row in csv.DictReader(handle)}
+    with open(FINDINGS, encoding="utf-8") as handle:
+        findings = json.load(handle)
+    return summary, findings
+
+
+SUMMARY_VALUES, FINDINGS_VALUES = _read_results()
+INSET = FINDINGS_VALUES["layout_inset"]
+#: A branching unit whose 30 m erosion core survives in separate fragments while
+#: its average-width proxy fails. See README finding 2.
+INSET_UNIT = INSET["unit_id"]
 
 STATUS_COLOURS = {
     "candidate_review": [64, 145, 74, 100],
@@ -50,20 +71,22 @@ STATUS_COLOURS = {
     "excluded": [176, 60, 60, 100],
 }
 STATUS_LABELS = {
-    "candidate_review": "Candidate for assessor review (2,687)",
-    "quarantine": "Quarantined - rule failure (2,801)",
-    "excluded": "Excluded - project conservation policy (224)",
+    "candidate_review": f"Candidate for assessor review ({int(SUMMARY_VALUES['candidate_review']):,})",
+    "quarantine": f"Quarantined - rule failure ({int(SUMMARY_VALUES['quarantine']):,})",
+    "excluded": f"Excluded - project conservation policy ({int(SUMMARY_VALUES['excluded']):,})",
 }
 
 TITLE = "NZ ETS Post-1989 Forest-Land Screening - Gisborne District"
 SUBTITLE = (
-    "Automated spatial triage of 5,712 LCDB v6 land-cover mapping units against the "
-    "subset of forest-land criteria testable from open data"
+    f"Automated spatial triage of {int(SUMMARY_VALUES['total_features']):,} LCDB v6 "
+    "land-cover mapping units against the subset of forest-land criteria testable "
+    "from open data"
 )
 DISCLAIMER = "SCREENING / TRIAGE ONLY - NOT AN ELIGIBILITY DETERMINATION"
 SOURCES = (
-    "Sources: LCDB v6.0 (Manaaki Whenua); LUCAS NZ Land Use Map 2020 v005 (MfE); "
-    "Public Conservation Land (DOC); Territorial Authority 2026 (Stats NZ). "
+    "Sources (all CC BY 4.0, modified): LCDB v6.0 (Manaaki Whenua - Landcare Research); "
+    "LUCAS NZ Land Use Map 2020 v005 (MfE); Public Conservation Land (DOC, Crown); "
+    "Territorial Authority 2026 (Stats NZ). "
     "Independent portfolio project; not endorsed by MPI, EPA, LINZ, MfE, DOC or Stats NZ."
 )
 CRS_NOTE = (
@@ -71,9 +94,11 @@ CRS_NOTE = (
     "EPSG:2193. All area and width tests computed in metres."
 )
 INSET_NOTE = (
-    f"{INSET_UNIT}: a 30 m core survives in two separate lobes, yet the "
-    "compactness-sensitive 2A/P average width is 22.5 m. One of 694 units (12.15%) "
-    "where the two proxies disagree; all are quarantined for assessor review, not rejected."
+    f"{INSET_UNIT}: a 30 m erosion core survives in {INSET['erosion_core_parts']} separate "
+    f"fragments ({INSET['erosion_core_parts_over_500_m2']} larger than 500 m2), yet its "
+    f"equivalent-rectangle width is {INSET['equivalent_rectangle_m']:.1f} m. One of "
+    f"{int(SUMMARY_VALUES['width_method_disagreements']):,} units where the two R-02 proxies "
+    "disagree; all are quarantined for assessor review, not rejected."
 )
 
 
@@ -267,7 +292,7 @@ def build(aprx_path: str, pdf_path: str, png_path: str | None) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--pdf", default=os.path.join(ROOT, r"arcgis\layout_map.pdf"))
+    parser.add_argument("--pdf", default=os.path.join(ROOT, r"arcgis\layout_map_arcgispro.pdf"))
     parser.add_argument(
         "--aprx",
         default=os.path.join(tempfile.gettempdir(), "ets_screening_layout.aprx"),

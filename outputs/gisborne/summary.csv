@@ -1,11 +1,14 @@
 metric,value
 total_features,5712
-candidate_review,2687
-candidate_review_clean,2520
-candidate_review_with_advisory,167
-quarantine,2801
-excluded,224
-automated_reject_rate,0.5296
-width_method_disagreements,694
-manual_rules_out_of_scope,3
+candidate_review,3069
+candidate_review_clean,2509
+candidate_review_with_advisory,560
+candidate_review_area_ha,309480.7
+candidate_review_conflict_free_area_ha,307934.1
+quarantine,2443
+excluded,200
+automated_reject_rate,0.4627
+width_method_disagreements,381
+rules_requiring_manual_review,7
 crs_epsg,2193
+scope,screening/triage only; not an eligibility determination
