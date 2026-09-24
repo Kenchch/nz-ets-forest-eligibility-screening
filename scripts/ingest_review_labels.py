@@ -50,7 +50,7 @@ def _write_csv(frame: pd.DataFrame, path: Path) -> None:
     ) as handle:
         temporary = Path(handle.name)
         try:
-            frame.to_csv(handle, index=False)
+            frame.to_csv(handle, index=False, lineterminator="\n")
         except BaseException:
             handle.close()
             temporary.unlink(missing_ok=True)

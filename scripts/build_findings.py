@@ -230,7 +230,7 @@ def main() -> None:
             for key, value in findings.items()
         ],
         columns=["finding", "value"],
-    ).to_csv(OUTPUT / "findings.csv", index=False)
+    ).to_csv(OUTPUT / "findings.csv", index=False, lineterminator="\n")
 
     examples = comparison[core_only].head(3).merge(
         candidates[["unit_id", "geometry"]], on="unit_id", how="left"

@@ -233,10 +233,10 @@ imageryControl.addTo(map);
     try:
         sample.to_file(stage / "review_queue.gpkg", layer="review_queue", driver="GPKG", index=False)
         normalise_gpkg(stage / "review_queue.gpkg")
-        sample[["unit_id"]].to_csv(stage / "review_sample_ids.csv", index=False)
+        sample[["unit_id"]].to_csv(stage / "review_sample_ids.csv", index=False, lineterminator="\n")
         template = pd.DataFrame({column: "" for column in REVIEW_COLUMNS}, index=sample.index)
         template["unit_id"] = sample["unit_id"].to_numpy()
-        template.to_csv(stage / "review_labels_template.csv", index=False)
+        template.to_csv(stage / "review_labels_template.csv", index=False, lineterminator="\n")
         (stage / "review_map.html").write_text(html, encoding="utf-8", newline="\n")
         publish_outputs(stage, destination)
     except PublicationRecoveryError:

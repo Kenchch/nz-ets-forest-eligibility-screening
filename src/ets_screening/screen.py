@@ -232,12 +232,12 @@ def run_screening(
         review_out.to_file(stage / "quarantine.gpkg", layer="quarantine", driver="GPKG")
         normalise_gpkg(stage / "candidates.gpkg")
         normalise_gpkg(stage / "quarantine.gpkg")
-        audit.to_csv(stage / "rule_results.csv", index=False)
+        audit.to_csv(stage / "rule_results.csv", index=False, lineterminator="\n")
         summary = _summary(results, comparison)
-        summary.to_csv(stage / "summary.csv", index=False)
-        comparison.to_csv(stage / "width_method_comparison.csv", index=False)
+        summary.to_csv(stage / "summary.csv", index=False, lineterminator="\n")
+        comparison.to_csv(stage / "width_method_comparison.csv", index=False, lineterminator="\n")
         _advisory_candidates(results).to_csv(
-            stage / "advisory_candidates.csv", index=False
+            stage / "advisory_candidates.csv", index=False, lineterminator="\n"
         )
         overview_path = stage / "figures" / "screening_overview.png"
         plot_screening_overview(
