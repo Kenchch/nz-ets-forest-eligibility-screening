@@ -55,12 +55,14 @@ jobs:
           #
           # GeoPackages are verified by semantic_hashes.py instead, and the
           # Matplotlib PNG/PDF pages embed renderer output, so neither is
-          # byte-comparable across this matrix.
+          # byte-comparable across this matrix. `glob` magic is required:
+          # without it `**/` needs at least one directory, so the top-level
+          # GeoPackages and PDF were compared byte for byte.
           git diff --exit-code -- outputs/gisborne \
-            ':(exclude)outputs/gisborne/**/*.gpkg' \
-            ':(exclude)outputs/gisborne/**/*.png' \
-            ':(exclude)outputs/gisborne/**/*.pdf' \
-            ':(exclude)outputs/gisborne/review/cards/**'
+            ':(exclude,glob)outputs/gisborne/**/*.gpkg' \
+            ':(exclude,glob)outputs/gisborne/**/*.png' \
+            ':(exclude,glob)outputs/gisborne/**/*.pdf' \
+            ':(exclude,glob)outputs/gisborne/review/cards/**'
       - name: Verify no output file appeared or vanished
         shell: bash
         run: |
