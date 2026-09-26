@@ -1,0 +1,4 @@
+# The review map is rendered output with Leaflet bundled in, so it can open
+# offline. Marked generated so GitHub's language bar shows the Python that
+# builds it, and diffs collapse it.
+outputs/**/*.html linguist-generated
