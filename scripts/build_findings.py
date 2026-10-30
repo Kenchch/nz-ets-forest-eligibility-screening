@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import logging
 import warnings
 from pathlib import Path
 
@@ -12,12 +13,16 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import pandas as pd
 
+from ets_screening import logs
 from ets_screening.review_labels import load_review_labels
 
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data" / "processed" / "gisborne_candidates.gpkg"
 OUTPUT = ROOT / "outputs" / "gisborne"
+RUN_LOG = ROOT / "outputs" / logs.LOG_NAME
+
+log = logging.getLogger("ets_screening.build_findings")
 
 
 def _visual_review_findings(review_dir: Path) -> dict[str, object]:
@@ -65,6 +70,10 @@ def main() -> None:
         ),
         geometry="geometry",
         crs=2193,
+    )
+    log.info(
+        f"findings: {len(candidates):,} input units, {len(screened):,} screened units and "
+        f"{len(audit):,} rule results read from {logs.rel(OUTPUT)}"
     )
     status_counts = screened["status"].value_counts()
     advisory_candidates = (
@@ -138,6 +147,13 @@ def main() -> None:
         ),
     }
     findings.update(_visual_review_findings(OUTPUT / "review"))
+    log.info(
+        f"findings: {findings['width_method_disagreements']:,} width disagreements; "
+        f"{findings['false_rejections_if_square_degrees_treated_as_square_metres']:,} false "
+        "rejections if square degrees were read as square metres; visual review "
+        f"{findings['visual_review_status']} ({findings['visual_review_labels_recorded']} of "
+        f"{findings['visual_review_sample_size']} labels)"
+    )
     (OUTPUT / "findings.json").write_text(json.dumps(findings, indent=2), encoding="utf-8")
     pd.DataFrame(findings.items(), columns=["finding", "value"]).to_csv(
         OUTPUT / "findings.csv", index=False
@@ -170,8 +186,13 @@ def main() -> None:
     )
     fig.savefig(OUTPUT / "figures" / "width_disagreement_cases.png", dpi=180)
     plt.close(fig)
+    log.info(
+        f"findings: wrote findings.json, findings.csv and "
+        f"figures/width_disagreement_cases.png to {logs.rel(OUTPUT)}"
+    )
     print(json.dumps(findings, indent=2))
 
 
 if __name__ == "__main__":
-    main()
+    with logs.command("build_findings", RUN_LOG):
+        main()

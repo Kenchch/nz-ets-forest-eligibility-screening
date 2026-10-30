@@ -33,6 +33,9 @@ where = ["src"]
 [tool.pytest.ini_options]
 addopts = "-q --basetemp=.pytest_tmp"
 testpaths = ["tests"]
+# scripts/ is not a package; this lets tests import its modules the way
+# reproduce.py imports build_findings.
+pythonpath = ["scripts"]
 
 [tool.setuptools.package-data]
 ets_screening = ["vendor/leaflet-1.9.4/*"]

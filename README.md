@@ -198,6 +198,21 @@ than loaded from a CDN, so the map opens on a restricted network, and the static
 committed review cards use the official Gisborne imagery service and require no
 secret.
 
+Each pipeline step logs its start, end and duration, and the screening logs
+the units in, how many each rule moves to quarantine or exclusion, the
+candidate, advisory and quarantine counts, and the reject rate against its
+threshold. The log goes to the console on stderr, keeping stdout for the
+results (the manifest, the findings), and each run is appended, with any
+traceback, to `outputs/ets_screening.log`, which git ignores. `ets-screen` and
+`ets-review-sample` append to `ets_screening.log` in their `--output` folder.
+Times are UTC.
+
+`python scripts/trace_pipeline.py` runs the same steps one module at a
+time into `outputs/trace/<run_id>/` and logs how the data changes shape at each
+one: rows, columns, dtypes, nulls, ranges and sample rows. It ends by comparing
+every evidence table and GeoPackage it wrote with the committed ones, so its
+`trace.log` doubles as a reproducibility check. It takes about a minute.
+
 CI runs the test suite, verifies every pinned input, reproduces the real
 Gisborne run and compares deterministic CSV findings plus semantic GeoPackage
 content hashes. GeoPackage output is byte-stable within an environment:
@@ -206,10 +221,10 @@ rerunning the pipeline on unchanged inputs produces no diff to commit.
 
 ## Tests and peer-review controls
 
-- 54 tests cover CRS, area, both width methods, boundary-only contact, true
+- 70 tests cover CRS, area, both width methods, boundary-only contact, true
   overlap, each rule's own failure reason, API-key propagation, GeoPackage byte
-  stability, ArcGIS catalog-path translation, review-label validation and the
-  80% publication gate.
+  stability, ArcGIS catalog-path translation, review-label validation, the
+  80% publication gate, and what each step writes to the log.
 - The 0.99996 ha fixture displays as 1.0000 ha but correctly fails because the
   raw value controls R-01.
 - Corrupted copies independently trigger small area, narrow geometry, wrong

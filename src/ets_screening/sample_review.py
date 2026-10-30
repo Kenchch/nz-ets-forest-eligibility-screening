@@ -5,14 +5,18 @@ from __future__ import annotations
 import argparse
 from hashlib import sha256
 import json
+import logging
 import os
 from pathlib import Path
 
 import geopandas as gpd
 import pandas as pd
 
+from . import logs
 from .load import assert_nztm2000
 from .review_labels import LABEL_VOCABULARY, REVIEW_COLUMNS
+
+log = logging.getLogger(__name__)
 
 LINZ_ATTRIBUTION = (
     'LINZ CC BY 4.0 © Imagery Basemap contributors - '
@@ -67,6 +71,10 @@ def write_review_bundle(
     destination = Path(destination)
     destination.mkdir(parents=True, exist_ok=True)
     sample = select_review_sample(candidates, sample_size, seed, sample_ids)
+    log.info(
+        f"review sample: {len(sample):,} of {len(candidates):,} candidates, "
+        + ("pinned by review_sample_ids.csv" if sample_ids is not None else f"drawn with seed {seed}")
+    )
     sample.to_file(destination / "review_queue.gpkg", layer="review_queue", driver="GPKG")
 
     # The pinned ID list keeps the review sample stable across reruns without
@@ -114,14 +122,15 @@ def main() -> None:
     parser.add_argument("--sample-size", type=int, default=30)
     parser.add_argument("--seed", type=int, default=20260912)
     args = parser.parse_args()
-    frame = gpd.read_file(args.input)
-    write_review_bundle(
-        frame,
-        args.output,
-        args.sample_size,
-        args.seed,
-        os.getenv("LINZ_BASEMAP_API_KEY"),
-    )
+    with logs.command("ets-review-sample", Path(args.output) / logs.LOG_NAME):
+        frame = gpd.read_file(args.input)
+        write_review_bundle(
+            frame,
+            args.output,
+            args.sample_size,
+            args.seed,
+            os.getenv("LINZ_BASEMAP_API_KEY"),
+        )
 
 
 if __name__ == "__main__":
