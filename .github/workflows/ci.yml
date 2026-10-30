@@ -3,6 +3,11 @@ name: CI
 on:
   push:
   pull_request:
+  workflow_dispatch:
+  # Weekly, so drift in the runner image, uv or an action shows up on its own
+  # rather than on the next unrelated pull request.
+  schedule:
+    - cron: "17 4 * * 1"
 
 permissions:
   contents: read
@@ -10,22 +15,41 @@ permissions:
 jobs:
   test-and-reproduce:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      # uv installs Python too, so this replaces setup-python.
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
         with:
           python-version: "3.12"
-          cache: pip
+          enable-cache: true
+
+      # From uv.lock, exactly. The committed outputs are checked below against
+      # a fresh run, so the versions that produce them have to be the versions
+      # the lock names; `pip install -e ".[dev]"` resolved the open ranges in
+      # pyproject.toml to whatever was newest that day. --locked fails if the
+      # lock no longer matches pyproject.toml.
       - name: Install
-        run: python -m pip install -e ".[dev]"
+        run: uv sync --locked
       - name: Test
-        run: pytest
+        run: uv run pytest
       - name: Verify pinned inputs
-        run: python scripts/verify_checksums.py
+        run: uv run python scripts/verify_checksums.py
       - name: Reproduce Gisborne outputs
-        run: python scripts/reproduce.py
+        run: uv run python scripts/reproduce.py
       - name: Verify deterministic evidence tables
         run: |
           git diff --exit-code -- "outputs/gisborne/*.csv" "outputs/gisborne/findings.json" "outputs/gisborne/review/*.csv"
       - name: Verify semantic GeoPackage content
-        run: python scripts/semantic_hashes.py
+        run: uv run python scripts/semantic_hashes.py
+
+      # Nothing else runs the trace, so a change that breaks it would otherwise
+      # pass CI. It writes only under outputs/trace/ (ignored), so it goes after
+      # the checks above and cannot affect what they compare. It logs mismatches
+      # rather than failing on them; the checks above fail on those. About a
+      # minute.
+      - name: The pipeline trace runs end to end
+        run: uv run python scripts/trace_pipeline.py

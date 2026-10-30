@@ -20,7 +20,9 @@ dependencies = [
   "shapely>=2.0",
 ]
 
-[project.optional-dependencies]
+# A dependency group rather than an extra, so `uv sync` installs it by default
+# and it never ships as part of the package. pip 25.1+: `pip install --group dev`.
+[dependency-groups]
 dev = ["pytest>=8.3"]
 
 [project.scripts]
