@@ -1,0 +1,20 @@
+version: 2
+
+# Actions are pinned to commit SHAs and dependencies to uv.lock, so nothing
+# moves until one of these proposes it. Monthly keeps the noise low enough to
+# actually read. CI reproduces the committed outputs on each proposal, so a
+# bump that changes a result fails there rather than landing quietly.
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 5
+
+  # uv, not pip: CI installs from uv.lock, and the pip ecosystem would bump
+  # pyproject.toml without ever updating the lock.
+  - package-ecosystem: uv
+    directory: /
+    schedule:
+      interval: monthly
+    open-pull-requests-limit: 5

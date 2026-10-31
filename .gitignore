@@ -8,6 +8,9 @@ data/raw/*
 !data/raw/.gitkeep
 outputs/tmp/
 outputs/ets-screen-*/
+# Run logs (ets_screening.log, appended by every command) and trace runs.
+outputs/**/*.log
+outputs/trace/
 *.egg-info/
 .idea/
 .vscode/

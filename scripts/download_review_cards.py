@@ -4,16 +4,22 @@ from __future__ import annotations
 
 import io
 import argparse
+import logging
 import urllib.request
 from pathlib import Path
 
 import geopandas as gpd
 from PIL import Image, ImageDraw, ImageFont
 
+from ets_screening import logs
+
 
 ROOT = Path(__file__).resolve().parents[1]
 QUEUE = ROOT / "outputs" / "gisborne" / "review" / "review_queue.gpkg"
 DESTINATION = ROOT / "outputs" / "gisborne" / "review" / "cards"
+RUN_LOG = ROOT / "outputs" / logs.LOG_NAME
+
+log = logging.getLogger("ets_screening.download_review_cards")
 TILE_SIZE = 256
 GDC_IMAGERY = (
     "https://tiles.arcgis.com/tiles/8G10QCd84QpdcTJ9/arcgis/rest/services/"
@@ -124,7 +130,7 @@ def main() -> None:
         path = destination / f"{index:02d}_{row.unit_id}.jpg"
         _draw_card(row).save(path, quality=88, optimize=True)
         cards.append(path)
-        print(f"{index:02d}/30 {row.unit_id}")
+        log.info(f"review cards: {index:02d}/30 {row.unit_id}")
 
     for sheet_index in range(3):
         sheet = Image.new("RGB", (1536 * 2, 768 * 5), "white")
@@ -132,7 +138,9 @@ def main() -> None:
             image = Image.open(path)
             sheet.paste(image, ((slot % 2) * 1536, (slot // 2) * 768))
         sheet.save(destination / f"contact_sheet_{sheet_index + 1}.jpg", quality=82, optimize=True)
+    log.info(f"review cards: 30 cards and 3 contact sheets in {logs.rel(destination)}")
 
 
 if __name__ == "__main__":
-    main()
+    with logs.command("download_review_cards", RUN_LOG):
+        main()

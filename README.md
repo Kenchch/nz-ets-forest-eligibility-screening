@@ -160,22 +160,26 @@ official boundary + LCDB + LUCAS + DOC
 
 The committed processed inputs total about 12 MB and are pinned by SHA-256.
 `reproduce.py` reads those files directly; it no longer rebuilds unused in-memory
-demo shapes.
+demo shapes. Package versions are pinned by `uv.lock`, the set CI reproduces the
+committed outputs with:
 
 ```bash
-conda env create -f environment.yml
-conda activate nz-ets-screening
-pytest
-python scripts/verify_checksums.py
-python scripts/reproduce.py
+uv sync --locked
+uv run pytest
+uv run python scripts/verify_checksums.py
+uv run python scripts/reproduce.py
 ```
+
+`environment.yml` remains for conda users. It resolves the open version ranges
+in `pyproject.toml`, so it installs whatever is newest that day rather than the
+locked set.
 
 To refresh from the public services:
 
 ```bash
-python scripts/download_gisborne_data.py
-python scripts/reproduce.py
-python scripts/download_review_cards.py
+uv run python scripts/download_gisborne_data.py
+uv run python scripts/reproduce.py
+uv run python scripts/download_review_cards.py
 ```
 
 To record the outstanding imagery review, copy the blank template, label all 30
@@ -183,8 +187,8 @@ cards, then ingest the result:
 
 ```bash
 cp outputs/gisborne/review/review_labels_template.csv outputs/gisborne/review/review_labels.csv
-python scripts/ingest_review_labels.py
-python scripts/reproduce.py
+uv run python scripts/ingest_review_labels.py
+uv run python scripts/reproduce.py
 ```
 
 The ingest step validates the label vocabulary, the reviewer, the date format,
@@ -198,18 +202,36 @@ than loaded from a CDN, so the map opens on a restricted network, and the static
 committed review cards use the official Gisborne imagery service and require no
 secret.
 
-CI runs the test suite, verifies every pinned input, reproduces the real
-Gisborne run and compares deterministic CSV findings plus semantic GeoPackage
-content hashes. GeoPackage output is byte-stable within an environment:
+Each pipeline step logs its start, end and duration, and the screening logs
+the units in, how many each rule moves to quarantine or exclusion, the
+candidate, advisory and quarantine counts, and the reject rate against its
+threshold. The log goes to the console on stderr, keeping stdout for the
+results (the manifest, the findings), and each run is appended, with any
+traceback, to `outputs/ets_screening.log`, which git ignores. `ets-screen` and
+`ets-review-sample` append to `ets_screening.log` in their `--output` folder.
+Times are UTC.
+
+`uv run python scripts/trace_pipeline.py` runs the same steps one module at a
+time into `outputs/trace/<run_id>/` and logs how the data changes shape at each
+one: rows, columns, dtypes, nulls, ranges and sample rows. It ends by comparing
+every evidence table and GeoPackage it wrote with the committed ones, so its
+`trace.log` doubles as a reproducibility check. It takes about a minute.
+
+CI installs exactly what `uv.lock` pins, runs the test suite, verifies every
+pinned input, reproduces the real Gisborne run and compares deterministic CSV
+findings plus semantic GeoPackage content hashes, then runs the trace. It also
+runs weekly, so drift in the runner or an action shows up without a push. Its
+actions are pinned to commit SHAs, and Dependabot proposes action and lock
+updates monthly. GeoPackage output is byte-stable within an environment:
 volatile timestamps and the SQLite writer-version stamp are normalised, so
 rerunning the pipeline on unchanged inputs produces no diff to commit.
 
 ## Tests and peer-review controls
 
-- 54 tests cover CRS, area, both width methods, boundary-only contact, true
+- 70 tests cover CRS, area, both width methods, boundary-only contact, true
   overlap, each rule's own failure reason, API-key propagation, GeoPackage byte
-  stability, ArcGIS catalog-path translation, review-label validation and the
-  80% publication gate.
+  stability, ArcGIS catalog-path translation, review-label validation, the
+  80% publication gate, and what each step writes to the log.
 - The 0.99996 ha fixture displays as 1.0000 ha but correctly fails because the
   raw value controls R-01.
 - Corrupted copies independently trigger small area, narrow geometry, wrong

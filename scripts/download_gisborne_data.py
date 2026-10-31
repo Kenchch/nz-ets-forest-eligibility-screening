@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import logging
 import urllib.parse
 import urllib.request
 from pathlib import Path
@@ -16,12 +17,16 @@ from pathlib import Path
 import geopandas as gpd
 import pandas as pd
 
+from ets_screening import logs
 from ets_screening.io_utils import normalise_gpkg
 
 
 ROOT = Path(__file__).resolve().parents[1]
 RAW = ROOT / "data" / "raw"
 PROCESSED = ROOT / "data" / "processed"
+RUN_LOG = ROOT / "outputs" / logs.LOG_NAME
+
+log = logging.getLogger("ets_screening.download_gisborne_data")
 
 BOUNDARY_URL = (
     "https://services2.arcgis.com/vKb0s8tBIA3bdocZ/arcgis/rest/services/"
@@ -95,6 +100,7 @@ def _download_by_bbox(
     bbox: tuple[float, float, float, float],
     fields: str,
     *,
+    label: str,
     batch_size: int = 500,
     where: str = "1=1",
 ) -> gpd.GeoDataFrame:
@@ -112,6 +118,10 @@ def _download_by_bbox(
         post=True,
     )
     object_ids = sorted(id_payload.get("objectIds") or [])
+    log.info(
+        f"{label}: {len(object_ids):,} features in the bounding box, "
+        f"{-(-len(object_ids) // batch_size):,} batches of {batch_size:,}"
+    )
     frames: list[gpd.GeoDataFrame] = []
     for start in range(0, len(object_ids), batch_size):
         ids = object_ids[start : start + batch_size]
@@ -124,7 +134,7 @@ def _download_by_bbox(
                 },
             )
         )
-        print(f"{service.rsplit('/', 1)[0].rsplit('/', 1)[-1]}: {min(start + batch_size, len(object_ids))}/{len(object_ids)}")
+        log.info(f"{label}: {min(start + batch_size, len(object_ids)):,}/{len(object_ids):,}")
     if not frames:
         return gpd.GeoDataFrame(geometry=[], crs="EPSG:2193")
     return gpd.GeoDataFrame(pd.concat(frames, ignore_index=True), crs="EPSG:2193")
@@ -151,12 +161,15 @@ def _cached_download(
 ) -> gpd.GeoDataFrame:
     path = RAW / f"{name}.gpkg"
     if path.exists():
-        print(f"{name}: reading cached {path}")
-        return gpd.read_file(path)
-    frame = _download_by_bbox(
-        service, bbox, fields, batch_size=batch_size, where=where
-    )
-    frame.to_file(path, layer=name, driver="GPKG")
+        frame = gpd.read_file(path)
+        log.info(f"{name}: {len(frame):,} features read from the cache at {logs.rel(path)}")
+        return frame
+    with logs.step(f"download {name}"):
+        frame = _download_by_bbox(
+            service, bbox, fields, label=name, batch_size=batch_size, where=where
+        )
+        frame.to_file(path, layer=name, driver="GPKG")
+    log.info(f"{name}: {len(frame):,} features cached at {logs.rel(path)}")
     return frame
 
 
@@ -175,18 +188,25 @@ def main() -> None:
     boundary_path = RAW / "gisborne_boundary.geojson"
     if boundary_path.exists():
         boundary = gpd.read_file(boundary_path)
+        log.info(f"gisborne_boundary: read from the cache at {logs.rel(boundary_path)}")
     else:
-        boundary = _query_geojson(
-            BOUNDARY_URL,
-            {
-                "where": "TA2026_V1_00_NAME='Gisborne District'",
-                "outFields": "TA2026_V1_00,TA2026_V1_00_NAME,LAND_AREA_SQ_KM",
-            },
-        )
+        with logs.step("download gisborne_boundary"):
+            boundary = _query_geojson(
+                BOUNDARY_URL,
+                {
+                    "where": "TA2026_V1_00_NAME='Gisborne District'",
+                    "outFields": "TA2026_V1_00,TA2026_V1_00_NAME,LAND_AREA_SQ_KM",
+                },
+            )
     if len(boundary) != 1:
         raise RuntimeError(f"expected one Gisborne boundary, received {len(boundary)}")
     boundary.to_file(boundary_path, driver="GeoJSON")
     bbox = tuple(boundary.total_bounds)
+    log.info(
+        "gisborne_boundary: bounding box "
+        + ", ".join(f"{value:,.0f}" for value in bbox)
+        + " (EPSG:2193)"
+    )
 
     lcdb = _cached_download(
         "lcdb_v60_screening_bbox",
@@ -211,59 +231,74 @@ def main() -> None:
         "OBJECTID,NaPALIS_ID,Type,Name,Legislation,Section",
     )
 
-    candidates = _clip(lcdb, boundary)
-    candidates = candidates[candidates["Name_2023"].isin(CANDIDATE_SOURCE_CLASSES)].copy()
-    fragment_count = int((candidates.geometry.area < MINIMUM_FRAGMENT_AREA_M2).sum())
-    candidates = candidates[candidates.geometry.area >= MINIMUM_FRAGMENT_AREA_M2].copy()
-    candidates = candidates.sort_values("LCDB_UID").reset_index(drop=True)
-    part = candidates.groupby("LCDB_UID").cumcount() + 1
-    total_parts = candidates.groupby("LCDB_UID")["LCDB_UID"].transform("size")
-    candidates["unit_id"] = candidates["LCDB_UID"].astype(str)
-    candidates.loc[total_parts > 1, "unit_id"] += "-part-" + part.astype(str)
-    candidates["lcdb_class"] = candidates["Name_2023"]
-    candidates = candidates[["unit_id", "lcdb_class", "geometry"]].sort_values("unit_id")
+    with logs.step("clip to the district"):
+        candidates = _clip(lcdb, boundary)
+        candidates = candidates[candidates["Name_2023"].isin(CANDIDATE_SOURCE_CLASSES)].copy()
+        clipped_count = len(candidates)
+        fragment_count = int((candidates.geometry.area < MINIMUM_FRAGMENT_AREA_M2).sum())
+        candidates = candidates[candidates.geometry.area >= MINIMUM_FRAGMENT_AREA_M2].copy()
+        candidates = candidates.sort_values("LCDB_UID").reset_index(drop=True)
+        part = candidates.groupby("LCDB_UID").cumcount() + 1
+        total_parts = candidates.groupby("LCDB_UID")["LCDB_UID"].transform("size")
+        candidates["unit_id"] = candidates["LCDB_UID"].astype(str)
+        candidates.loc[total_parts > 1, "unit_id"] += "-part-" + part.astype(str)
+        candidates["lcdb_class"] = candidates["Name_2023"]
+        candidates = candidates[["unit_id", "lcdb_class", "geometry"]].sort_values("unit_id")
 
-    # This is mapped evidence only: the Act's complete pre-1990 definition also
-    # requires land-history and liability facts that LUCAS cannot establish.
-    pre1990 = _clip(lucas, boundary)
-    pre1990 = pre1990[
-        pre1990["LUCID_1989"].astype(str).str.startswith("72")
-        & pre1990["LUCID_2007"].astype(str).str.startswith("72")
-    ].copy()
-    conservation = _clip(conservation, boundary)
-
-    outputs = {
-        "gisborne_boundary.gpkg": boundary,
-        "gisborne_candidates.gpkg": candidates,
-        "gisborne_pre1990_evidence.gpkg": pre1990,
-        "gisborne_conservation.gpkg": conservation,
-    }
-    for filename, frame in outputs.items():
-        path = PROCESSED / filename
-        if path.exists():
-            path.unlink()
-        frame.to_file(path, layer=path.stem, driver="GPKG")
-        normalise_gpkg(path)
-
-    manifest = {
-        "study_area": "Gisborne District",
-        "crs": "EPSG:2193",
-        "feature_counts": {name: len(frame) for name, frame in outputs.items()},
-        "discarded_clip_fragments_below_1_m2": fragment_count,
-        "sha256": {name: _sha256(PROCESSED / name) for name in outputs},
-        "sources": {
-            "boundary": BOUNDARY_URL,
-            "lcdb": LCDB_URL,
-            "lucas": LUCAS_URL,
-            "conservation": DOC_URL,
-        },
-        "lcdb_geometry_note": "ArcGIS Living Atlas mirror is simplified at 15 m; source is LCDB v6.0.",
-    }
-    (PROCESSED / "gisborne_manifest.json").write_text(
-        json.dumps(manifest, indent=2), encoding="utf-8"
+        # This is mapped evidence only: the Act's complete pre-1990 definition also
+        # requires land-history and liability facts that LUCAS cannot establish.
+        pre1990 = _clip(lucas, boundary)
+        pre1990 = pre1990[
+            pre1990["LUCID_1989"].astype(str).str.startswith("72")
+            & pre1990["LUCID_2007"].astype(str).str.startswith("72")
+        ].copy()
+        conservation = _clip(conservation, boundary)
+    log.info(
+        f"candidates: {clipped_count:,} single-part polygons of the selected LCDB classes "
+        "in the district, "
+        f"{fragment_count:,} fragments below {MINIMUM_FRAGMENT_AREA_M2:g} m2 discarded, "
+        f"{len(candidates):,} units kept"
     )
+    log.info(
+        f"pre-1990 evidence: {len(pre1990):,} LUCAS polygons; "
+        f"conservation: {len(conservation):,} DOC polygons"
+    )
+
+    with logs.step("write processed inputs"):
+        outputs = {
+            "gisborne_boundary.gpkg": boundary,
+            "gisborne_candidates.gpkg": candidates,
+            "gisborne_pre1990_evidence.gpkg": pre1990,
+            "gisborne_conservation.gpkg": conservation,
+        }
+        for filename, frame in outputs.items():
+            path = PROCESSED / filename
+            if path.exists():
+                path.unlink()
+            frame.to_file(path, layer=path.stem, driver="GPKG")
+            normalise_gpkg(path)
+
+        manifest = {
+            "study_area": "Gisborne District",
+            "crs": "EPSG:2193",
+            "feature_counts": {name: len(frame) for name, frame in outputs.items()},
+            "discarded_clip_fragments_below_1_m2": fragment_count,
+            "sha256": {name: _sha256(PROCESSED / name) for name in outputs},
+            "sources": {
+                "boundary": BOUNDARY_URL,
+                "lcdb": LCDB_URL,
+                "lucas": LUCAS_URL,
+                "conservation": DOC_URL,
+            },
+            "lcdb_geometry_note": "ArcGIS Living Atlas mirror is simplified at 15 m; source is LCDB v6.0.",
+        }
+        (PROCESSED / "gisborne_manifest.json").write_text(
+            json.dumps(manifest, indent=2), encoding="utf-8"
+        )
+    log.info(f"processed inputs written to {logs.rel(PROCESSED)}")
     print(json.dumps(manifest, indent=2))
 
 
 if __name__ == "__main__":
-    main()
+    with logs.command("download_gisborne_data", RUN_LOG):
+        main()

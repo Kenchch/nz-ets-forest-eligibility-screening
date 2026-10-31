@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import logging
 import os
 import shutil
 import tempfile
@@ -12,6 +13,7 @@ from pathlib import Path
 import geopandas as gpd
 import pandas as pd
 
+from . import logs
 from .demo_data import build_demo_layers, write_demo_layers
 from .geometry import compare_width_methods
 from .io_utils import normalise_gpkg
@@ -19,6 +21,10 @@ from .load import read_layer
 from .report import plot_layout_pdf, plot_screening_overview, plot_width_comparison
 from .rules import RuleConfig, evaluate_rules
 from .sample_review import write_review_bundle
+
+log = logging.getLogger(__name__)
+
+AUTOMATED_RULE_IDS = ("R-01", "R-02", "R-03", "R-04", "R-05")
 
 
 class RejectRateExceeded(RuntimeError):
@@ -86,6 +92,38 @@ def _advisory_candidates(results: gpd.GeoDataFrame) -> pd.DataFrame:
     ).reset_index(drop=True)
 
 
+def _log_rule_moves(results: gpd.GeoDataFrame, audit: pd.DataFrame) -> None:
+    """Log what each automated rule moves out of candidate review, and the statuses left.
+
+    The rules are tested independently, so one unit can fail several of them;
+    "fail nothing else" counts the units that a rule alone keeps from review.
+    """
+
+    names = dict(audit[["rule_id", "rule_name"]].drop_duplicates().itertuples(index=False))
+    failed = results["failed_rule_ids"]
+    single = failed.ne("") & ~failed.str.contains("|", regex=False)
+    advisory = results["advisory_rule_ids"].fillna("")
+    for rule_id in AUTOMATED_RULE_IDS:
+        fails = failed.str.contains(rule_id, regex=False)
+        line = (
+            f"{rule_id} {names[rule_id]}: {int(fails.sum()):,} units fail "
+            f"({int((fails & single).sum()):,} fail nothing else) -> "
+            f"{'excluded' if rule_id == 'R-04' else 'quarantine'}"
+        )
+        if rule_id in ("R-03", "R-04"):
+            minor = advisory.str.contains(f"{rule_id}-low-overlap", regex=False)
+            line += f"; {int(minor.sum()):,} overlap below materiality -> advisory flag"
+        log.info(line)
+    counts = results["status"].value_counts()
+    candidates = int(counts.get("candidate_review", 0))
+    flagged = int(((results["status"] == "candidate_review") & advisory.ne("")).sum())
+    log.info(
+        f"status: {candidates:,} candidate_review ({candidates - flagged:,} clean, "
+        f"{flagged:,} with an advisory flag), {int(counts.get('quarantine', 0)):,} quarantine, "
+        f"{int(counts.get('excluded', 0)):,} excluded"
+    )
+
+
 def run_screening(
     candidates: gpd.GeoDataFrame,
     pre1990: gpd.GeoDataFrame,
@@ -97,113 +135,135 @@ def run_screening(
     data_note: str = "Provided inputs",
     review_sample_ids: list[str] | None = None,
 ) -> dict[str, object]:
-    results, audit = evaluate_rules(candidates, pre1990, conservation, config)
-    comparison = compare_width_methods(results)
+    log.info(
+        f"screen: {len(candidates):,} units in; overlaying {len(pre1990):,} pre-1990 evidence "
+        f"and {len(conservation):,} conservation polygons"
+    )
+    with logs.step("rules"):
+        results, audit = evaluate_rules(candidates, pre1990, conservation, config)
+    _log_rule_moves(results, audit)
+    with logs.step("width comparison"):
+        comparison = compare_width_methods(results)
+    log.info(f"width methods disagree on {int(comparison['methods_disagree'].sum()):,} units")
     reject_rate = float((results["status"] != "candidate_review").mean())
     if reject_rate > reject_rate_threshold:
+        log.error(
+            f"reject rate {reject_rate:.2%} is above the {reject_rate_threshold:.2%} "
+            "threshold; nothing is published"
+        )
         raise RejectRateExceeded(
             f"reject rate {reject_rate:.1%} exceeds {reject_rate_threshold:.1%}; "
             "publication aborted because the input may be wrong"
         )
+    log.info(
+        f"reject rate {reject_rate:.2%} (quarantine and excluded), within the "
+        f"{reject_rate_threshold:.2%} threshold"
+    )
 
     output_dir = Path(output_dir)
     output_dir.parent.mkdir(parents=True, exist_ok=True)
     stage = Path(tempfile.mkdtemp(prefix="ets-screen-", dir=output_dir.parent))
     try:
-        candidates_out = results[results["status"] == "candidate_review"].copy()
-        review_out = results[results["status"] != "candidate_review"].copy()
-        candidates_out.to_file(stage / "candidates.gpkg", layer="candidates", driver="GPKG")
-        review_out.to_file(stage / "quarantine.gpkg", layer="quarantine", driver="GPKG")
-        normalise_gpkg(stage / "candidates.gpkg")
-        normalise_gpkg(stage / "quarantine.gpkg")
-        audit.to_csv(stage / "rule_results.csv", index=False)
-        summary = _summary(results, comparison)
-        summary.to_csv(stage / "summary.csv", index=False)
-        comparison.to_csv(stage / "width_method_comparison.csv", index=False)
-        _advisory_candidates(results).to_csv(
-            stage / "advisory_candidates.csv", index=False
-        )
-        overview_path = stage / "figures" / "screening_overview.png"
-        plot_screening_overview(
-            results,
-            conservation,
-            pre1990,
-            overview_path,
-            title=study_label,
-        )
-        plot_width_comparison(comparison, stage / "figures" / "width_method_comparison.png")
-        plot_layout_pdf(
-            overview_path,
-            results,
-            comparison,
-            stage / "layout_map.pdf",
-            study_label,
-            data_note,
-        )
-        write_review_bundle(
-            candidates_out,
-            stage / "review",
-            sample_size=30,
-            api_key=os.getenv("LINZ_BASEMAP_API_KEY"),
-            sample_ids=review_sample_ids,
-        )
-        normalise_gpkg(stage / "review" / "review_queue.gpkg")
-        manifest = {
-            "scope": "screening/triage only; not an eligibility determination",
-            "crs": "EPSG:2193",
-            "input_feature_type": (
-                "LCDB land-cover mapping units; not cadastral parcels or ETS application areas"
-            ),
-            "feature_count": len(results),
-            "overlap_materiality": {
-                "minimum_area_m2_exclusive": (config or RuleConfig()).minimum_overlap_area_m2,
-                "minimum_source_unit_pct_inclusive": (config or RuleConfig()).minimum_overlap_pct,
-                "status_below_both_thresholds": "advisory",
-            },
-            "reject_rate": reject_rate,
-            "reject_rate_threshold": reject_rate_threshold,
-            "unresolved_rules": ["R-03", "R-06", "R-07", "R-08"],
-        }
-        (stage / "run_manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+        with logs.step("write outputs"):
+            candidates_out = results[results["status"] == "candidate_review"].copy()
+            review_out = results[results["status"] != "candidate_review"].copy()
+            candidates_out.to_file(stage / "candidates.gpkg", layer="candidates", driver="GPKG")
+            review_out.to_file(stage / "quarantine.gpkg", layer="quarantine", driver="GPKG")
+            normalise_gpkg(stage / "candidates.gpkg")
+            normalise_gpkg(stage / "quarantine.gpkg")
+            audit.to_csv(stage / "rule_results.csv", index=False)
+            summary = _summary(results, comparison)
+            summary.to_csv(stage / "summary.csv", index=False)
+            comparison.to_csv(stage / "width_method_comparison.csv", index=False)
+            _advisory_candidates(results).to_csv(
+                stage / "advisory_candidates.csv", index=False
+            )
+            overview_path = stage / "figures" / "screening_overview.png"
+            plot_screening_overview(
+                results,
+                conservation,
+                pre1990,
+                overview_path,
+                title=study_label,
+            )
+            plot_width_comparison(comparison, stage / "figures" / "width_method_comparison.png")
+            plot_layout_pdf(
+                overview_path,
+                results,
+                comparison,
+                stage / "layout_map.pdf",
+                study_label,
+                data_note,
+            )
+            write_review_bundle(
+                candidates_out,
+                stage / "review",
+                sample_size=30,
+                api_key=os.getenv("LINZ_BASEMAP_API_KEY"),
+                sample_ids=review_sample_ids,
+            )
+            normalise_gpkg(stage / "review" / "review_queue.gpkg")
+            manifest = {
+                "scope": "screening/triage only; not an eligibility determination",
+                "crs": "EPSG:2193",
+                "input_feature_type": (
+                    "LCDB land-cover mapping units; not cadastral parcels or ETS application areas"
+                ),
+                "feature_count": len(results),
+                "overlap_materiality": {
+                    "minimum_area_m2_exclusive": (config or RuleConfig()).minimum_overlap_area_m2,
+                    "minimum_source_unit_pct_inclusive": (config or RuleConfig()).minimum_overlap_pct,
+                    "status_below_both_thresholds": "advisory",
+                },
+                "reject_rate": reject_rate,
+                "reject_rate_threshold": reject_rate_threshold,
+                "unresolved_rules": ["R-03", "R-06", "R-07", "R-08"],
+            }
+            (stage / "run_manifest.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
 
-        output_dir.mkdir(parents=True, exist_ok=True)
-        managed_names = {
-            "candidates.gpkg",
-            "quarantine.gpkg",
-            "summary.csv",
-            "rule_results.csv",
-            "width_method_comparison.csv",
-            "advisory_candidates.csv",
-            "run_manifest.json",
-            "layout_map.pdf",
-            "figures",
-        }
-        for child in (output_dir / name for name in managed_names):
-            if not child.exists():
-                continue
-            if child.is_dir():
-                shutil.rmtree(child)
-            else:
-                child.unlink()
-        generated_review = stage / "review"
-        output_review = output_dir / "review"
-        output_review.mkdir(parents=True, exist_ok=True)
-        for name in (
-            "review_queue.gpkg",
-            "review_sample_ids.csv",
-            "review_labels_template.csv",
-            "review_map.html",
-        ):
-            target = output_review / name
-            if target.exists():
-                target.unlink()
-            shutil.copy2(generated_review / name, target)
-        for child in stage.iterdir():
-            if child.name == "review":
-                continue
-            os.replace(child, output_dir / child.name)
+        with logs.step("publish"):
+            output_dir.mkdir(parents=True, exist_ok=True)
+            managed_names = {
+                "candidates.gpkg",
+                "quarantine.gpkg",
+                "summary.csv",
+                "rule_results.csv",
+                "width_method_comparison.csv",
+                "advisory_candidates.csv",
+                "run_manifest.json",
+                "layout_map.pdf",
+                "figures",
+            }
+            for child in (output_dir / name for name in managed_names):
+                if not child.exists():
+                    continue
+                if child.is_dir():
+                    shutil.rmtree(child)
+                else:
+                    child.unlink()
+            generated_review = stage / "review"
+            output_review = output_dir / "review"
+            output_review.mkdir(parents=True, exist_ok=True)
+            for name in (
+                "review_queue.gpkg",
+                "review_sample_ids.csv",
+                "review_labels_template.csv",
+                "review_map.html",
+            ):
+                target = output_review / name
+                if target.exists():
+                    target.unlink()
+                shutil.copy2(generated_review / name, target)
+            for child in stage.iterdir():
+                if child.name == "review":
+                    continue
+                os.replace(child, output_dir / child.name)
     finally:
         shutil.rmtree(stage, ignore_errors=True)
+    log.info(
+        f"screen: {len(candidates_out):,} candidates and {len(review_out):,} quarantined or "
+        f"excluded units published to {logs.rel(output_dir)}"
+    )
     return manifest
 
 
@@ -219,25 +279,29 @@ def main() -> None:
     parser.add_argument("--data-note", default="Provided inputs")
     args = parser.parse_args()
 
-    if args.demo:
-        candidates, pre1990, conservation = build_demo_layers()
-    else:
+    if not args.demo:
         missing = [name for name in ("candidates", "pre1990", "conservation") if not getattr(args, name)]
         if missing:
             parser.error(f"missing required inputs: {', '.join(missing)}")
-        candidates = read_layer(args.candidates, ("unit_id", "lcdb_class"), "candidates")
-        pre1990 = read_layer(args.pre1990, name="pre1990")
-        conservation = read_layer(args.conservation, name="conservation")
 
-    manifest = run_screening(
-        candidates,
-        pre1990,
-        conservation,
-        args.output,
-        args.reject_rate_threshold,
-        study_label=args.study_label,
-        data_note=args.data_note,
-    )
+    with logs.command("ets-screen", Path(args.output) / logs.LOG_NAME):
+        if args.demo:
+            candidates, pre1990, conservation = build_demo_layers()
+        else:
+            with logs.step("read inputs"):
+                candidates = read_layer(args.candidates, ("unit_id", "lcdb_class"), "candidates")
+                pre1990 = read_layer(args.pre1990, name="pre1990")
+                conservation = read_layer(args.conservation, name="conservation")
+
+        manifest = run_screening(
+            candidates,
+            pre1990,
+            conservation,
+            args.output,
+            args.reject_rate_threshold,
+            study_label=args.study_label,
+            data_note=args.data_note,
+        )
     print(json.dumps(manifest, indent=2))
 
 

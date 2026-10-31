@@ -15,11 +15,12 @@ this project that must be done, and signed, by a named person.
 from __future__ import annotations
 
 import argparse
+import logging
 from pathlib import Path
-import sys
 
 import pandas as pd
 
+from ets_screening import logs
 from ets_screening.review_labels import (
     ReviewLabelError,
     load_review_labels,
@@ -30,6 +31,9 @@ from ets_screening.review_labels import (
 ROOT = Path(__file__).resolve().parents[1]
 REVIEW = ROOT / "outputs" / "gisborne" / "review"
 IMAGERY = "Gisborne District Council Imagery Satellite Gisborne 2024 (credited to LINZ)"
+RUN_LOG = ROOT / "outputs" / logs.LOG_NAME
+
+log = logging.getLogger("ets_screening.ingest_review_labels")
 
 
 def sample_unit_ids(review_dir: Path) -> list[str]:
@@ -39,10 +43,10 @@ def sample_unit_ids(review_dir: Path) -> list[str]:
     return pd.read_csv(pinned, dtype=str)["unit_id"].tolist()
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--review-dir", type=Path, default=REVIEW)
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     review_dir = args.review_dir
     expected = sample_unit_ids(review_dir)
@@ -52,21 +56,24 @@ def main() -> int:
         try:
             labels = load_review_labels(labels_path, expected)
         except ReviewLabelError as error:
-            print(f"review labels rejected: {error}", file=sys.stderr)
+            log.error(f"review labels rejected: {error}")
             return 1
+        log.info(
+            f"review labels: {len(labels)} of {len(expected)} accepted from "
+            f"{'; '.join(sorted(set(labels['reviewer'])))}"
+        )
         labels.to_csv(labels_path, index=False)
     else:
         labels = None
-        print(
-            f"{labels_path.name} not present; writing the pending-review summary.",
-            file=sys.stderr,
-        )
+        log.info(f"{labels_path.name} not present; writing the pending-review summary.")
 
     summary = summarise_review_labels(labels, len(expected), IMAGERY)
     summary.to_csv(review_dir / "review_summary.csv", index=False)
+    log.info(f"review labels: wrote {logs.rel(review_dir / 'review_summary.csv')}")
     print(summary.to_string(index=False))
     return 0
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    with logs.command("ingest_review_labels", RUN_LOG):
+        raise SystemExit(main())
