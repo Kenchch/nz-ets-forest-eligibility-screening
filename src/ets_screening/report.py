@@ -3,18 +3,30 @@
 from __future__ import annotations
 
 from pathlib import Path
-from datetime import datetime, timezone
 
 import geopandas as gpd
-import matplotlib
-
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt
 import pandas as pd
+from matplotlib.figure import Figure
+from matplotlib.image import imread
 from matplotlib.lines import Line2D
 from matplotlib.ticker import MaxNLocator
 from shapely.affinity import translate
 
+from .io_utils import build_datetime
+
+# Figures are built on matplotlib.figure.Figure rather than pyplot, so
+# importing this module never switches the caller's backend (for example a
+# notebook's inline backend).
+
+SCOPE_NOTE = "Screening / triage only - not an eligibility determination."
+
+
+#: Matplotlib stamps its own version into every PNG as a `Software` tEXt chunk,
+#: so a point release changes the committed figure bytes with no code or data
+#: change. `None` suppresses the key entirely, which keeps the figures
+#: comparable across environments the way the CSV and GeoPackage outputs
+#: already are.
+PNG_METADATA = {"Software": None}
 
 STATUS_COLOURS = {
     "candidate_review": "#2b8c4b",
@@ -29,6 +41,7 @@ def plot_screening_overview(
     pre1990: gpd.GeoDataFrame,
     destination: str | Path,
     title: str = "Spatial eligibility screening",
+    data_note: str = "Provided inputs",
 ) -> None:
     destination = Path(destination)
     destination.parent.mkdir(parents=True, exist_ok=True)
@@ -46,7 +59,8 @@ def plot_screening_overview(
     display_results = local(results)
     display_conservation = local(conservation) if not conservation.empty else conservation
     display_pre1990 = local(pre1990) if not pre1990.empty else pre1990
-    fig, ax = plt.subplots(figsize=(11.7, 8.3))
+    fig = Figure(figsize=(11.7, 8.3))
+    ax = fig.subplots()
     for status, colour in STATUS_COLOURS.items():
         subset = display_results[display_results["status"] == status]
         if not subset.empty:
@@ -100,38 +114,54 @@ def plot_screening_overview(
     ax.xaxis.set_major_locator(MaxNLocator(6))
     ax.yaxis.set_major_locator(MaxNLocator(5))
     ax.ticklabel_format(style="plain", useOffset=False)
+    fig.text(0.01, 0.005, f"Data: {data_note}", fontsize=7, color="#555555")
     fig.tight_layout()
-    fig.savefig(destination, dpi=180, bbox_inches="tight")
-    plt.close(fig)
+    fig.savefig(
+        destination, dpi=180, bbox_inches="tight", metadata=PNG_METADATA
+    )
 
 
-def plot_width_comparison(comparison: pd.DataFrame, destination: str | Path) -> None:
+def plot_width_comparison(
+    comparison: pd.DataFrame,
+    destination: str | Path,
+    threshold_m: float = 30.0,
+    data_note: str = "Provided inputs",
+) -> None:
     destination = Path(destination)
     destination.parent.mkdir(parents=True, exist_ok=True)
-    ordered = comparison.sort_values("width_area_perimeter_m").reset_index(drop=True)
+    # unit_id breaks ties: many units share a width, and an unstable sort let
+    # their order (and so the figure bytes) vary between library versions.
+    ordered = comparison.sort_values(
+        ["width_equivalent_rectangle_m", "unit_id"], kind="mergesort"
+    ).reset_index(drop=True)
     colours = ordered["methods_disagree"].map({True: "#d95f02", False: "#2b8c4b"})
-    fig, ax = plt.subplots(figsize=(10, 5.5))
+    fig = Figure(figsize=(10, 5.5))
+    ax = fig.subplots()
     ax.scatter(
         ordered.index,
-        ordered["width_area_perimeter_m"],
+        ordered["width_equivalent_rectangle_m"],
         c=colours,
         s=16 if len(ordered) <= 100 else 5,
         alpha=0.75,
         linewidths=0,
     )
-    ax.axhline(30.0, color="#333333", linestyle="--", linewidth=1.2, label="30 m threshold")
-    ax.set_ylabel("2A/P width proxy (m)")
-    ax.set_xlabel("Features ranked by 2A/P width")
+    threshold_label = f"{threshold_m:g} m threshold"
+    ax.axhline(threshold_m, color="#333333", linestyle="--", linewidth=1.2, label=threshold_label)
+    ax.set_ylabel("Equivalent-rectangle width (m, log scale)")
+    ax.set_xlabel("Features ranked by equivalent-rectangle width")
     ax.set_title("Width-proxy comparison", loc="left", weight="bold")
+    ax.set_yscale("log")
     handles = [
-        Line2D([0], [0], color="#333333", lw=1.2, ls="--", label="30 m threshold"),
-        Line2D([0], [0], marker="s", color="none", markerfacecolor="#d95f02", markersize=10, label="Methods disagree"),
+        Line2D([0], [0], color="#333333", lw=1.2, ls="--", label=threshold_label),
+        Line2D([0], [0], marker="s", color="none", markerfacecolor="#d95f02", markersize=10, label="Erosion core and rectangle width disagree"),
         Line2D([0], [0], marker="s", color="none", markerfacecolor="#2b8c4b", markersize=10, label="Methods agree"),
     ]
     ax.legend(handles=handles)
+    fig.text(0.01, 0.005, f"{SCOPE_NOTE} Data: {data_note}", fontsize=7, color="#555555")
     fig.tight_layout()
-    fig.savefig(destination, dpi=180, bbox_inches="tight")
-    plt.close(fig)
+    fig.savefig(
+        destination, dpi=180, bbox_inches="tight", metadata=PNG_METADATA
+    )
 
 
 def plot_layout_pdf(
@@ -141,6 +171,7 @@ def plot_layout_pdf(
     destination: str | Path,
     study_label: str = "User-supplied screening run",
     data_note: str = "Provided inputs",
+    width_threshold_m: float = 30.0,
 ) -> None:
     """Build an A4 landscape reference sheet from the reproducible run."""
 
@@ -151,12 +182,12 @@ def plot_layout_pdf(
     example_values = disagreements["unit_id"].astype(str).head(3).tolist()
     example_lines = "\n".join(f"  {value}" for value in example_values) or "  none"
 
-    fig = plt.figure(figsize=(11.69, 8.27), facecolor="white")
+    fig = Figure(figsize=(11.69, 8.27), facecolor="white")
     fig.text(0.05, 0.955, "NZ ETS forest-land spatial screening", fontsize=20, weight="bold", color="#1a1a1a")
     fig.text(0.05, 0.925, study_label, fontsize=11, color="#555555")
 
     image_ax = fig.add_axes([0.045, 0.39, 0.91, 0.50])
-    image_ax.imshow(plt.imread(overview_png))
+    image_ax.imshow(imread(overview_png))
     image_ax.axis("off")
 
     summary_text = (
@@ -172,7 +203,7 @@ def plot_layout_pdf(
         f"Proxy disagreements: {len(disagreements)}\n"
         "Examples:\n"
         f"{example_lines}\n"
-        "2A/P and -15 m erosion are triage only.\n"
+        f"Rectangle width and -{width_threshold_m / 2:g} m erosion are triage only.\n"
         "Formal MPI width uses centre-line samples\n"
         "at 20 m intervals."
     )
@@ -188,20 +219,20 @@ def plot_layout_pdf(
     fig.text(0.72, 0.29, boundary_text, fontsize=9.0, linespacing=1.4, va="top")
     fig.text(
         0.05,
-        0.045,
-        f"SCREENING / TRIAGE ONLY - NOT AN ELIGIBILITY DETERMINATION | EPSG:2193 | {data_note}",
+        0.055,
+        "SCREENING / TRIAGE ONLY - NOT AN ELIGIBILITY DETERMINATION | EPSG:2193",
         fontsize=9,
         weight="bold",
         color="#8c2f39",
     )
+    fig.text(0.05, 0.03, f"Data: {data_note}", fontsize=6.5, color="#555555", wrap=True)
     fig.savefig(
         destination,
         format="pdf",
         metadata={
             "Title": f"NZ ETS forest-land spatial screening - {study_label}",
-            "Author": "Feng Jiang",
-            "CreationDate": datetime(2026, 9, 12, tzinfo=timezone.utc),
-            "ModDate": datetime(2026, 9, 12, tzinfo=timezone.utc),
+            "Creator": "nz-ets-forest-eligibility-screening",
+            "CreationDate": build_datetime(),
+            "ModDate": build_datetime(),
         },
     )
-    plt.close(fig)

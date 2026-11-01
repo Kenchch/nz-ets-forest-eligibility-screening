@@ -11,7 +11,10 @@ outputs/ets-screen-*/
 # Run logs (ets_screening.log, appended by every command) and trace runs.
 outputs/**/*.log
 outputs/trace/
+# Machine-specific library versions and git state; varies by design.
+outputs/**/run_environment.json
 *.egg-info/
+build/
 .idea/
 .vscode/
 

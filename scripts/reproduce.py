@@ -4,43 +4,99 @@ Every step is logged with its time to the console and appended to
 outputs/ets_screening.log; the manifest printed at the end is the result.
 """
 
+import argparse
+from hashlib import sha256
+import json
 from pathlib import Path
+import sys
 
 import geopandas as gpd
-import pandas as pd
 
 from ets_screening import logs
+from ets_screening.review_labels import (
+    load_review_labels,
+    load_review_sample_ids,
+    require_current_review_version,
+)
 from ets_screening.screen import run_screening
 from build_findings import main as build_findings
 from ingest_review_labels import main as ingest_review_labels
+from verify_checksums import main as verify_checksums
 
 
 ROOT = Path(__file__).resolve().parents[1]
 RUN_LOG = ROOT / "outputs" / logs.LOG_NAME
+INPUTS = {
+    "candidates": "gisborne_candidates.gpkg",
+    "pre1990": "gisborne_pre1990_evidence.gpkg",
+    "conservation": "gisborne_conservation.gpkg",
+}
+STUDY_LABEL = "Gisborne District open-data screening"
+DATA_NOTE = (
+    "LCDB v6.0 (c) Manaaki Whenua - Landcare Research, CC BY 4.0; "
+    "LUCAS LUM 2020 v005 (c) Ministry for the Environment, CC BY 4.0; "
+    "Public Conservation Land (c) Crown / DOC, CC BY 4.0; "
+    "Territorial Authority 2026 (c) Stats NZ, CC BY 4.0. Modified."
+)
 
 
-def main() -> None:
+def _sha256(path: Path) -> str:
+    return sha256(path.read_bytes()).hexdigest()
+
+
+def input_provenance(data: Path) -> dict[str, object]:
+    """What run_manifest.json records about the inputs; the trace records the same."""
+
+    source_manifest = json.loads((data / "gisborne_manifest.json").read_text(encoding="utf-8"))
+    return {
+        "files": {filename: _sha256(data / filename) for filename in INPUTS.values()},
+        "sources": source_manifest.get("sources", {}),
+        "lcdb_geometry_note": source_manifest.get("lcdb_geometry_note"),
+    }
+
+
+def main(argv: list[str] | None = None) -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--resample-review",
+        action="store_true",
+        help="Draw a new stratified review sample instead of keeping the pinned one. "
+        "Refused while labels exist; delete old cards first and re-render them afterwards.",
+    )
+    # Called from tests and other scripts with no argv: never read sys.argv here.
+    args = parser.parse_args([] if argv is None else argv)
+
+    with logs.step("verify inputs"):
+        verify_checksums()
+    review_dir = ROOT / "outputs" / "gisborne" / "review"
+    # Validate the pinned sample and existing human labels before replacing any
+    # evidence. A missing pin must not silently select a different review set.
+    review_sample_ids = load_review_sample_ids(review_dir / "review_sample_ids.csv")
+    labels_path = review_dir / "review_labels.csv"
+    if labels_path.exists():
+        if args.resample_review:
+            raise SystemExit("refusing to re-draw the review sample: review_labels.csv exists")
+        require_current_review_version(review_dir)
+        load_review_labels(labels_path, review_sample_ids)
+    if args.resample_review:
+        review_sample_ids = None
     data = ROOT / "data" / "processed"
     with logs.step("read inputs"):
-        candidates = gpd.read_file(data / "gisborne_candidates.gpkg")
-        pre1990 = gpd.read_file(data / "gisborne_pre1990_evidence.gpkg")
-        conservation = gpd.read_file(data / "gisborne_conservation.gpkg")
+        frames = {name: gpd.read_file(data / filename) for name, filename in INPUTS.items()}
+        provenance = input_provenance(data)
     # The review sample is pinned by its own ID list, so reruns keep labelling
     # the same 30 polygons whether or not the human review has been completed.
-    pinned_path = ROOT / "outputs" / "gisborne" / "review" / "review_sample_ids.csv"
-    review_sample_ids = None
-    if pinned_path.exists():
-        review_sample_ids = pd.read_csv(pinned_path, dtype=str)["unit_id"].tolist()
     with logs.step("screening"):
         manifest = run_screening(
-            candidates,
-            pre1990,
-            conservation,
+            frames["candidates"],
+            frames["pre1990"],
+            frames["conservation"],
             ROOT / "outputs" / "gisborne",
             reject_rate_threshold=0.80,
-            study_label="Gisborne District open-data screening",
-            data_note="LCDB v6 / LUCAS v005 / DOC PCL",
+            study_label=STUDY_LABEL,
+            data_note=DATA_NOTE,
             review_sample_ids=review_sample_ids,
+            input_provenance=provenance,
         )
     with logs.step("findings"):
         build_findings()
@@ -48,12 +104,12 @@ def main() -> None:
         status = ingest_review_labels([])
     if status != 0:
         raise SystemExit("review labels rejected; see the message above")
-    # arcgis/layout_map.pdf is deliberately not refreshed here. It is exported
-    # from ArcGIS Pro by arcgis/build_layout.py; copying the Matplotlib PDF over
-    # it would silently replace the cartographic output on every run.
-    print(manifest)
+    # arcgis/layout_map_arcgispro.pdf is deliberately not refreshed here. It is
+    # exported from ArcGIS Pro by arcgis/build_layout.py; copying the Matplotlib
+    # PDF over it would silently replace the cartographic output on every run.
+    print(json.dumps(manifest, indent=2))
 
 
 if __name__ == "__main__":
     with logs.command("reproduce", RUN_LOG):
-        main()
+        main(sys.argv[1:])

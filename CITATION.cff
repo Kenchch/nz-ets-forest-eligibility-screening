@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below. The data it processes keep their own licences; see DATA_LICENSE.md."
+title: "NZ ETS Forest Land - Spatial Eligibility Screening"
+abstract: "An auditable Python/GeoPandas workflow for screening potential post-1989 forest-land opportunities in Gisborne District against the subset of NZ ETS forest-land criteria testable from open spatial data. Screening/triage only; not an eligibility determination."
+type: software
+authors:
+  - family-names: Jiang
+    given-names: Feng
+version: 0.1.0
+license: MIT
+repository-code: "https://github.com/Kenchch/nz-ets-forest-eligibility-screening"
+keywords:
+  - emissions trading scheme
+  - forestry
+  - New Zealand
+  - GIS
+  - screening

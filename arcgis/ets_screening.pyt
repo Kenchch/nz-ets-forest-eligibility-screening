@@ -1,7 +1,5 @@
 """ArcGIS Pro toolbox: thin wrapper around the tested ets_screening package."""
 
-import os
-
 import arcpy
 
 
@@ -78,10 +76,20 @@ class ScreenPost1989Candidates:
         candidate_path, pre1990_path, conservation_path, output_path = [
             parameter.valueAsText for parameter in parameters[:4]
         ]
-        threshold = float(parameters[4].value or 0.80)
+        value = parameters[4].value
+        threshold = 0.80 if value is None else float(value)
+        from ets_screening.load import InputValidationError
+        from ets_screening.screen import RejectRateExceeded
+
         arcpy.AddMessage("Loading inputs and asserting EPSG:2193...")
-        candidates = read_layer(candidate_path, ("unit_id", "lcdb_class"), "candidates")
-        pre1990 = read_layer(pre1990_path, name="pre1990")
-        conservation = read_layer(conservation_path, name="conservation")
-        manifest = run_screening(candidates, pre1990, conservation, output_path, threshold)
+        try:
+            candidates = read_layer(candidate_path, ("unit_id", "lcdb_class"), "candidates")
+            pre1990 = read_layer(pre1990_path, name="pre1990")
+            conservation = read_layer(conservation_path, name="conservation")
+            manifest = run_screening(candidates, pre1990, conservation, output_path, threshold)
+        except (InputValidationError, RejectRateExceeded, FileExistsError, FileNotFoundError, ValueError) as error:
+            # Report expected failures in the geoprocessing pane instead of as a
+            # Python traceback, and mark the tool run as failed.
+            arcpy.AddError(str(error))
+            raise arcpy.ExecuteError(str(error)) from error
         arcpy.AddMessage(f"Complete: {manifest}")
