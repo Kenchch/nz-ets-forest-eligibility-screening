@@ -14,13 +14,18 @@ from __future__ import annotations
 
 import csv
 from datetime import date
+from hashlib import sha256
 import json
 from numbers import Integral
 from pathlib import Path
 import re
 import unicodedata
 
+import geopandas as gpd
 import pandas as pd
+import shapely
+
+from .load import is_nztm2000
 
 
 REVIEW_COLUMNS = ("unit_id", "review_label", "reviewer", "review_date", "evidence_note")
@@ -160,6 +165,30 @@ REVIEW_VERSION_FILE = "review_version.json"
 #: legacy cards drew their crosshair at the tile centre, off the unit.
 SAMPLE_ALGORITHM = "stratified-sha256-rank-v2"
 CARD_RENDERER = "interior-point-crosshair-v2"
+#: Recorded by the card renderer: the review units' IDs and boundaries the
+#: cards were drawn for. Labels are made on the cards, so they are bound to it.
+CARD_GEOMETRY_KEY = "cards_geometry_sha256"
+REVIEW_QUEUE_FILE = "review_queue.gpkg"
+#: Coordinates are snapped to 1 mm before hashing so float noise from another
+#: platform cannot change the fingerprint; any real boundary edit still does.
+_GEOMETRY_HASH_GRID_M = 0.001
+
+
+def review_geometry_sha256(queue: gpd.GeoDataFrame) -> str:
+    """Fingerprint review units by ID and boundary, independent of row order.
+
+    A card or label describes a polygon, not just an ID. A rerun that keeps an
+    ID but moves its boundary must not inherit evidence drawn for the old one.
+    """
+
+    _require(is_nztm2000(queue.crs), "review queue must be in EPSG:2193 (NZTM2000)")
+    ids = validate_review_sample_ids(queue["unit_id"].tolist())
+    geometries = shapely.normalize(shapely.set_precision(queue.geometry.to_numpy(), _GEOMETRY_HASH_GRID_M))
+    wkb = shapely.to_wkb(geometries, hex=True, output_dimension=2)
+    digest = sha256()
+    for unit_id, shape in sorted(zip(ids, wkb)):
+        digest.update(f"{unit_id}\t{shape}\n".encode("utf-8"))
+    return digest.hexdigest()
 
 
 def load_review_version(review_dir: str | Path) -> dict[str, object]:
@@ -183,12 +212,21 @@ def require_current_review_version(review_dir: str | Path) -> None:
         stale.append(f"sample_algorithm is {version.get('sample_algorithm')!r}, expected {SAMPLE_ALGORITHM!r}")
     if version.get("card_renderer") != CARD_RENDERER:
         stale.append(f"card_renderer is {version.get('card_renderer')!r}, expected {CARD_RENDERER!r}")
+    queue = Path(review_dir) / REVIEW_QUEUE_FILE
+    recorded = version.get(CARD_GEOMETRY_KEY)
+    if recorded is None:
+        stale.append(f"{CARD_GEOMETRY_KEY} is missing, so the cards are not bound to unit boundaries")
+    elif not queue.exists():
+        stale.append(f"{REVIEW_QUEUE_FILE} is missing")
+    elif recorded != review_geometry_sha256(gpd.read_file(queue)):
+        stale.append(f"{REVIEW_QUEUE_FILE} IDs or boundaries differ from those the cards were drawn for")
     _require(
         not stale,
         "the review sample or imagery cards are out of date ("
         + "; ".join(stale)
-        + "). Re-draw the sample with `python scripts/reproduce.py --resample-review` and "
-        "re-render the cards with `python scripts/download_review_cards.py` before labelling.",
+        + "). Re-draw the sample with `python scripts/reproduce.py --resample-review` if the "
+        "sample is stale, and re-render the cards with `python scripts/download_review_cards.py` "
+        "before labelling. Labels made on old cards describe the old units: archive them.",
     )
 
 

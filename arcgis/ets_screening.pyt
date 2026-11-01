@@ -84,8 +84,8 @@ class ScreenPost1989Candidates:
         arcpy.AddMessage("Loading inputs and asserting EPSG:2193...")
         try:
             candidates = read_layer(candidate_path, ("unit_id", "lcdb_class"), "candidates")
-            pre1990 = read_layer(pre1990_path, name="pre1990")
-            conservation = read_layer(conservation_path, name="conservation")
+            pre1990 = read_layer(pre1990_path, name="pre1990", allow_empty=True)
+            conservation = read_layer(conservation_path, name="conservation", allow_empty=True)
             manifest = run_screening(candidates, pre1990, conservation, output_path, threshold)
         except (InputValidationError, RejectRateExceeded, FileExistsError, FileNotFoundError, ValueError) as error:
             # Report expected failures in the geoprocessing pane instead of as a

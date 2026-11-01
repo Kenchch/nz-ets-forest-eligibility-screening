@@ -195,3 +195,26 @@ def test_failed_publication_restores_previous_files(tmp_path, monkeypatch):
     assert {path.name: path.read_bytes() for path in output.iterdir()} == {
         "candidates.gpkg": b"old", "summary.csv": b"old",
     }
+
+
+def test_rerun_refuses_new_boundaries_under_preserved_cards(tmp_path):
+    from ets_screening.review_labels import REVIEW_QUEUE_FILE, load_review_sample_ids, review_geometry_sha256
+    import download_review_cards
+
+    candidates, pre1990, conservation = build_demo_layers()
+    run_screening(candidates, pre1990, conservation, tmp_path, 1.0)
+    review = tmp_path / "review"
+    queue = gpd.read_file(review / REVIEW_QUEUE_FILE)
+    download_review_cards._record_card_version(review, "2026-09-25T00:00:00Z", review_geometry_sha256(queue))
+    (review / "cards").mkdir()
+    (review / "cards" / "01_card.jpg").write_bytes(b"card")
+    pinned = load_review_sample_ids(review / "review_sample_ids.csv")
+    previous = (review / REVIEW_QUEUE_FILE).read_bytes()
+
+    moved = candidates.copy()
+    moved["geometry"] = moved.geometry.translate(xoff=0.5)
+    with pytest.raises(ValueError, match="boundaries changed"):
+        run_screening(moved, pre1990, conservation, tmp_path, 1.0, review_sample_ids=pinned)
+    assert (review / REVIEW_QUEUE_FILE).read_bytes() == previous
+    # The same units rerun cleanly with their cards.
+    run_screening(candidates, pre1990, conservation, tmp_path, 1.0, review_sample_ids=pinned)

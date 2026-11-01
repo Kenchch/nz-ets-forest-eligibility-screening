@@ -25,7 +25,7 @@ from .demo_data import build_demo_layers
 from .io_utils import PublicationRecoveryError, normalise_gpkg, publish_outputs as _publish_outputs
 from .load import InputValidationError, read_layer
 from .report import plot_layout_pdf, plot_screening_overview, plot_width_comparison
-from .review_labels import load_review_labels, load_review_sample_ids
+from .review_labels import REVIEW_QUEUE_FILE
 from .rules import (
     AUTOMATED_RULE_IDS,
     RuleConfig,
@@ -34,7 +34,12 @@ from .rules import (
     manual_review_rule_ids,
     unmatched_plantable_classes,
 )
-from .sample_review import DEFAULT_REVIEW_SEED, DEFAULT_REVIEW_SIZE, write_review_bundle
+from .sample_review import (
+    DEFAULT_REVIEW_SEED,
+    DEFAULT_REVIEW_SIZE,
+    check_preserved_review,
+    write_review_bundle,
+)
 
 log = logging.getLogger(__name__)
 
@@ -56,20 +61,8 @@ class RejectRateExceeded(RuntimeError):
 
 
 def _validate_preserved_review(output_dir: Path, generated_review: Path) -> None:
-    """Do not pair a new sample with preserved labels or imagery for other IDs."""
-    review = output_dir / "review"
-    labels = review / "review_labels.csv"
-    new_ids = load_review_sample_ids(generated_review / "review_sample_ids.csv")
-    if labels.exists():
-        load_review_labels(labels, new_ids)
-    cards = review / "cards"
-    if cards.exists() and any(cards.iterdir()):
-        old_ids = load_review_sample_ids(review / "review_sample_ids.csv")
-        if set(old_ids) != set(new_ids):
-            raise ValueError(
-                "review sample changed while imagery cards are present; "
-                "use the pinned review_sample_ids or a separate output directory"
-            )
+    """Do not pair a new queue with preserved labels or imagery for other units."""
+    check_preserved_review(output_dir / "review", gpd.read_file(generated_review / REVIEW_QUEUE_FILE))
 
 
 def _check_output_directory(output_dir: Path) -> None:
@@ -463,8 +456,8 @@ def main(argv: list[str] | None = None) -> None:
             else:
                 with logs.step("read inputs"):
                     candidates = read_layer(args.candidates, ("unit_id", "lcdb_class"), "candidates")
-                    pre1990 = read_layer(args.pre1990, name="pre1990")
-                    conservation = read_layer(args.conservation, name="conservation")
+                    pre1990 = read_layer(args.pre1990, name="pre1990", allow_empty=True)
+                    conservation = read_layer(args.conservation, name="conservation", allow_empty=True)
             manifest = run_screening(
                 candidates,
                 pre1990,

@@ -244,27 +244,90 @@ def test_accepts_real_names_containing_machine_substrings(tmp_path, reviewer):
 # --- Review version gate and stratified sampling -------------------------------
 
 
-def test_labels_on_a_stale_sample_or_cards_are_refused(tmp_path):
-    import json
+def _render_cards(review_dir):
+    """Record card rendering the way scripts/download_review_cards.py does, without the network."""
 
-    from ets_screening.review_labels import (
-        CARD_RENDERER,
-        REVIEW_VERSION_FILE,
-        SAMPLE_ALGORITHM,
-        ReviewLabelError,
-        require_current_review_version,
-    )
+    import geopandas as gpd
+
+    from ets_screening.review_labels import REVIEW_QUEUE_FILE, review_geometry_sha256
+    import download_review_cards
+
+    queue = gpd.read_file(review_dir / REVIEW_QUEUE_FILE)
+    download_review_cards._record_card_version(review_dir, "2026-09-25T00:00:00Z", review_geometry_sha256(queue))
+    cards = review_dir / "cards"
+    cards.mkdir(exist_ok=True)
+    (cards / "01_card.jpg").write_bytes(b"card")
+
+
+def test_labels_on_a_stale_sample_or_cards_are_refused(tmp_path):
+    from ets_screening.review_labels import ReviewLabelError, require_current_review_version
 
     with pytest.raises(ReviewLabelError, match="out of date"):
         require_current_review_version(tmp_path)
-    version = tmp_path / REVIEW_VERSION_FILE
-    version.write_text(json.dumps({"sample_algorithm": SAMPLE_ALGORITHM, "card_renderer": None}), encoding="utf-8")
+    candidates, _, _ = build_demo_layers()
+    write_review_bundle(candidates, tmp_path, sample_size=3)
     with pytest.raises(ReviewLabelError, match="card_renderer"):
         require_current_review_version(tmp_path)
-    version.write_text(
-        json.dumps({"sample_algorithm": SAMPLE_ALGORITHM, "card_renderer": CARD_RENDERER}), encoding="utf-8"
-    )
+    _render_cards(tmp_path)
     require_current_review_version(tmp_path)
+
+
+def test_labels_do_not_survive_a_boundary_change_under_the_same_ids(tmp_path):
+    import shutil
+
+    from ets_screening.review_labels import (
+        REVIEW_QUEUE_FILE,
+        ReviewLabelError,
+        load_review_sample_ids,
+        require_current_review_version,
+    )
+
+    candidates, _, _ = build_demo_layers()
+    write_review_bundle(candidates, tmp_path, sample_size=3)
+    _render_cards(tmp_path)
+    pinned = load_review_sample_ids(tmp_path / "review_sample_ids.csv")
+    moved = candidates.copy()
+    moved["geometry"] = moved.geometry.translate(xoff=0.5)
+
+    # With cards present the new boundaries are refused and nothing is replaced.
+    previous = (tmp_path / REVIEW_QUEUE_FILE).read_bytes()
+    with pytest.raises(ValueError, match="boundaries changed"):
+        write_review_bundle(moved, tmp_path, sample_ids=pinned)
+    assert (tmp_path / REVIEW_QUEUE_FILE).read_bytes() == previous
+
+    # Once the cards are moved aside the queue may change, but labels are then
+    # refused until cards are rendered for the new boundaries.
+    shutil.rmtree(tmp_path / "cards")
+    write_review_bundle(moved, tmp_path, sample_ids=pinned)
+    with pytest.raises(ReviewLabelError, match="boundaries differ"):
+        require_current_review_version(tmp_path)
+    _render_cards(tmp_path)
+    require_current_review_version(tmp_path)
+
+
+def test_same_units_keep_their_cards_bound(tmp_path):
+    from ets_screening.review_labels import load_review_sample_ids, require_current_review_version
+
+    candidates, _, _ = build_demo_layers()
+    write_review_bundle(candidates, tmp_path, sample_size=3)
+    _render_cards(tmp_path)
+    pinned = load_review_sample_ids(tmp_path / "review_sample_ids.csv")
+    write_review_bundle(candidates.sample(frac=1, random_state=2), tmp_path, sample_ids=pinned)
+    require_current_review_version(tmp_path)
+
+
+def test_cards_are_not_re_rendered_over_existing_labels(tmp_path, monkeypatch):
+    import sys
+
+    import download_review_cards
+
+    review = tmp_path / "review"
+    review.mkdir()
+    (review / "review_labels.csv").write_text("unit_id\n", encoding="utf-8")
+    monkeypatch.setattr(sys, "argv", ["download_review_cards", "--output", str(review / "cards")])
+    with pytest.raises(SystemExit, match="refusing to re-render cards"):
+        download_review_cards.main()
+    assert not (review / "cards").exists()
 
 
 def test_fresh_sample_records_its_version_and_needs_new_cards(tmp_path):

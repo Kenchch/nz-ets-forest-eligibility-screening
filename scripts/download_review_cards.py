@@ -18,7 +18,13 @@ from PIL import Image, ImageDraw, ImageFont
 from shapely.geometry import Point
 
 from ets_screening import logs
-from ets_screening.review_labels import CARD_RENDERER, REVIEW_VERSION_FILE, validate_review_sample_ids
+from ets_screening.review_labels import (
+    CARD_GEOMETRY_KEY,
+    CARD_RENDERER,
+    REVIEW_VERSION_FILE,
+    review_geometry_sha256,
+    validate_review_sample_ids,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 QUEUE = ROOT / "outputs" / "gisborne" / "review" / "review_queue.gpkg"
@@ -169,8 +175,8 @@ def _draw_card(row, attribution: str = GDC_ATTRIBUTION) -> Image.Image:
     return card
 
 
-def _record_card_version(review_dir: Path, rendered_at: str) -> None:
-    """Mark the cards as current so labels made on them are accepted."""
+def _record_card_version(review_dir: Path, rendered_at: str, geometry_sha256: str) -> None:
+    """Mark the cards as current for these unit boundaries so labels made on them are accepted."""
 
     path = review_dir / REVIEW_VERSION_FILE
     version = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
@@ -178,7 +184,12 @@ def _record_card_version(review_dir: Path, rendered_at: str) -> None:
         ["git", "rev-parse", "HEAD"], cwd=ROOT, capture_output=True, text=True, check=False
     ).stdout.strip() or None
     version.update(
-        {"card_renderer": CARD_RENDERER, "cards_rendered_at": rendered_at, "cards_renderer_commit": commit}
+        {
+            "card_renderer": CARD_RENDERER,
+            "cards_rendered_at": rendered_at,
+            "cards_renderer_commit": commit,
+            CARD_GEOMETRY_KEY: geometry_sha256,
+        }
     )
     path.write_text(json.dumps(version, indent=2) + "\n", encoding="utf-8", newline="\n")
 
@@ -196,6 +207,10 @@ def main() -> None:
     parser.add_argument("--queue", type=Path, default=QUEUE)
     args = parser.parse_args()
     destination = args.output
+    labels = destination.parent / "review_labels.csv"
+    if labels.exists():
+        # New cards may show other imagery or boundaries than the reviewer saw.
+        raise SystemExit(f"refusing to re-render cards: {labels} exists; archive it first")
     destination.mkdir(parents=True, exist_ok=True)
     queue = gpd.read_file(args.queue).to_crs(2193).sort_values("unit_id")
     if len(queue) != 30:
@@ -211,7 +226,7 @@ def main() -> None:
         cards.append(path)
         log.info(f"review cards: {index:02d}/30 {row.unit_id}")
 
-    _record_card_version(destination.parent, source["retrieved_at"])
+    _record_card_version(destination.parent, source["retrieved_at"], review_geometry_sha256(queue))
 
     for sheet_index in range(3):
         sheet = Image.new("RGB", (1536 * 2, 768 * 5), "white")

@@ -123,7 +123,7 @@ is an interpretation question, and it is the weakest link in everything above.
 |---|---|
 | [Stratified sample of 30 candidates](outputs/gisborne/review/review_sample_ids.csv) | Drawn 2026-09-24: 18 clean and 12 flagged candidates, pinned for reruns |
 | [Dual-panel imagery cards](outputs/gisborne/review/cards/) | Rendered 2026-09-24 from 2024 Gisborne imagery; crosshair on the unit's interior point |
-| [Review version](outputs/gisborne/review/review_version.json) | Records the sampler, sampling frame hash and card renderer |
+| [Review version](outputs/gisborne/review/review_version.json) | Records the sampler, sampling frame hash, card renderer and the unit boundaries the cards show |
 | [Interactive review map](outputs/gisborne/review/review_map.html) | Offline controls and polygons; live LINZ imagery requires internet and a session API key |
 | [Blank label template](outputs/gisborne/review/review_labels_template.csv) | Awaiting an independent human reviewer |
 
@@ -138,11 +138,15 @@ mark the unit's interior point and use an overview at least three zoom levels
 wider than the detail panel.
 
 `review_version.json` records the sampler, the sampling frame's size and
-SHA-256, and the card renderer and commit. **Labels are refused unless both
-the sample and the cards are current**, so labels made on an outdated set can
-never reach `findings.json`. To draw a new sample, remove the old cards, run
-`python scripts/reproduce.py --resample-review`, then render cards with
-`python scripts/download_review_cards.py`.
+SHA-256, the card renderer and commit, and a SHA-256 of the sampled units' IDs
+and boundaries when the cards were drawn. **Labels are refused unless the
+sample, the cards and the queue's boundaries are all current**, so labels made
+on an outdated set, or on a unit whose boundary has since moved under the same
+ID, can never reach `findings.json`. A rerun that would change those boundaries
+while cards or labels are present is refused rather than overwriting them, and
+cards are not re-rendered over existing labels. To draw a new sample, remove
+the old cards, run `uv run python scripts/reproduce.py --resample-review`, then
+render cards with `uv run python scripts/download_review_cards.py`.
 
 One limit remains: **the imagery is coarser than its tile grid.** Level 10
 tiles are 1.32 m per pixel, but the 2024 satellite mosaic appears to have a

@@ -130,13 +130,26 @@ def validate_candidates(frame: gpd.GeoDataFrame) -> None:
             )
 
 
-def read_layer(path: str | Path, required_columns: Iterable[str] = (), name: str = "layer") -> gpd.GeoDataFrame:
+def read_layer(
+    path: str | Path,
+    required_columns: Iterable[str] = (),
+    name: str = "layer",
+    allow_empty: bool = False,
+) -> gpd.GeoDataFrame:
+    """Read one NZTM2000 layer and validate it before any rule sees it.
+
+    ``allow_empty`` is for evidence layers only: an existing layer with no
+    features means "no such evidence in the study area", which the rules
+    accept. It is still checked for CRS and columns, and a missing file or
+    layer still fails, so absent data is never read as an empty layer.
+    """
     # An ArcGIS toolbox hands over a catalog path such as
     # "gisborne.gpkg\main.units", which GDAL cannot open directly.
     container, layer = split_dataset_path(path)
     frame = gpd.read_file(container) if layer is None else gpd.read_file(container, layer=layer)
     assert_nztm2000(frame, name)
-    validate_geometry(frame, name)
+    if not (allow_empty and frame.empty):
+        validate_geometry(frame, name)
     missing = set(required_columns) - set(frame.columns)
     if missing:
         raise InputValidationError(f"{name} is missing columns: {sorted(missing)}")

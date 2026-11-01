@@ -149,3 +149,27 @@ def test_true_overlap_is_still_detected_at_real_coordinates():
     overlapping.geometry = [first.intersection(box(*first.buffer(-1).bounds))]
     with pytest.raises(InputValidationError, match="overlap"):
         validate_candidates(pd.concat([candidates, overlapping], ignore_index=True))
+
+
+def test_empty_evidence_layer_runs_as_it_does_through_the_api(tmp_path):
+    # A layer with no features means "no such evidence in the study area".
+    # evaluate_rules accepts it, so the file entry point must agree with it.
+    paths = _write_demo(tmp_path)
+    candidates, pre1990, conservation = build_demo_layers()
+    empty = tmp_path / "empty_pre1990.gpkg"
+    pre1990.iloc[0:0].to_file(empty, driver="GPKG")
+    paths["pre1990"] = str(empty)
+    screen.main(_args(paths, tmp_path / "cli") + ["--reject-rate-threshold", "1"])
+    screen.run_screening(candidates, pre1990.iloc[0:0], conservation, tmp_path / "api", 1.0)
+    cli = pd.read_csv(tmp_path / "cli" / "rule_results.csv")
+    api = pd.read_csv(tmp_path / "api" / "rule_results.csv")
+    pd.testing.assert_frame_equal(cli, api)
+
+
+def test_empty_candidate_layer_is_still_refused(tmp_path):
+    paths = _write_demo(tmp_path)
+    candidates, _, _ = build_demo_layers()
+    empty = tmp_path / "empty_candidates.gpkg"
+    candidates.iloc[0:0].to_file(empty, driver="GPKG")
+    paths["candidates"] = str(empty)
+    assert _exit_code(screen.main, _args(paths, tmp_path / "out")) == screen.EXIT_INPUT_INVALID

@@ -20,12 +20,15 @@ from . import logs
 from .load import InputValidationError, assert_nztm2000, read_layer
 from .io_utils import PublicationRecoveryError, normalise_gpkg, publish_outputs
 from .review_labels import (
+    CARD_GEOMETRY_KEY,
     LABEL_VOCABULARY,
     REVIEW_COLUMNS,
     REVIEW_VERSION_FILE,
     SAMPLE_ALGORITHM,
     load_review_labels,
     load_review_sample_ids,
+    load_review_version,
+    review_geometry_sha256,
     validate_review_sample_ids,
 )
 
@@ -130,6 +133,34 @@ def _script_json(value: object) -> str:
     return json.dumps(value).replace("<", "\\u003c").replace(">", "\\u003e").replace("&", "\\u0026")
 
 
+def check_preserved_review(review_dir: Path, sample: gpd.GeoDataFrame) -> None:
+    """Refuse a new queue that the labels or cards already in review_dir do not describe.
+
+    Nothing is overwritten on refusal, so the human evidence stays with the
+    queue it was made for until someone archives it deliberately.
+    """
+
+    labels = review_dir / "review_labels.csv"
+    if labels.exists():
+        load_review_labels(labels, sample["unit_id"].tolist())
+    cards = review_dir / "cards"
+    has_cards = cards.exists() and any(cards.iterdir())
+    if has_cards:
+        old_ids = load_review_sample_ids(review_dir / "review_sample_ids.csv")
+        if set(old_ids) != set(sample["unit_id"]):
+            raise ValueError(
+                "review sample changed while imagery cards are present; "
+                "use the pinned review_sample_ids or a separate output directory"
+            )
+    recorded = load_review_version(review_dir).get(CARD_GEOMETRY_KEY)
+    if (has_cards or labels.exists()) and recorded is not None and recorded != review_geometry_sha256(sample):
+        raise ValueError(
+            "review unit boundaries changed while imagery cards or labels are present; "
+            "they describe the old boundaries. Move cards/ and review_labels.csv to an "
+            "archive, or use a separate output directory, then re-render the cards"
+        )
+
+
 def write_review_bundle(
     candidates: gpd.GeoDataFrame,
     destination: str | Path,
@@ -144,17 +175,7 @@ def write_review_bundle(
         f"review sample: {len(sample):,} of {len(candidates):,} candidates, "
         + ("pinned by review_sample_ids.csv" if sample_ids is not None else f"drawn with seed {seed}")
     )
-    existing_labels = destination / "review_labels.csv"
-    if existing_labels.exists():
-        load_review_labels(existing_labels, sample["unit_id"].tolist())
-    cards = destination / "cards"
-    if cards.exists() and any(cards.iterdir()):
-        old_ids = load_review_sample_ids(destination / "review_sample_ids.csv")
-        if set(old_ids) != set(sample["unit_id"]):
-            raise ValueError(
-                "review sample changed while imagery cards are present; "
-                "use the pinned review_sample_ids or a separate output directory"
-            )
+    check_preserved_review(destination, sample)
 
     # Only the fields an assessor needs reach the page. Extra candidate
     # columns, such as applicant notes, stay in the GeoPackage.

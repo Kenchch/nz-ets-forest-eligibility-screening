@@ -171,3 +171,19 @@ def test_read_layer_names_missing_columns(tmp_path, missing):
     frame.to_file(path, driver="GPKG")
     with pytest.raises(InputValidationError, match=missing):
         read_layer(path, ("unit_id", "lcdb_class"), "candidates")
+
+
+def test_empty_evidence_layer_is_read_only_when_allowed(tmp_path):
+    empty = gpd.GeoDataFrame({"name": []}, geometry=gpd.GeoSeries([], crs=2193), crs=2193)
+    path = tmp_path / "empty.gpkg"
+    empty.to_file(path, layer="pre1990", driver="GPKG")
+    with pytest.raises(InputValidationError, match="is empty"):
+        read_layer(path, name="pre1990")
+    assert read_layer(path, name="pre1990", allow_empty=True).empty
+    # An empty layer is still checked for CRS and columns.
+    with pytest.raises(InputValidationError, match=r"missing columns: \['id'\]"):
+        read_layer(path, ("name", "id"), name="pre1990", allow_empty=True)
+    wrong = tmp_path / "mercator.gpkg"
+    empty.set_crs(3857, allow_override=True).to_file(wrong, layer="pre1990", driver="GPKG")
+    with pytest.raises(InputValidationError, match="EPSG:2193"):
+        read_layer(wrong, name="pre1990", allow_empty=True)
