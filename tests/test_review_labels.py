@@ -5,6 +5,7 @@ from ets_screening.demo_data import build_demo_layers
 from ets_screening.review_labels import (
     ReviewLabelError,
     load_review_labels,
+    load_review_sample_ids,
     summarise_review_labels,
 )
 from ets_screening.sample_review import write_review_bundle
@@ -135,3 +136,224 @@ def test_review_bundle_pins_the_sample(tmp_path):
     template = pd.read_csv(tmp_path / "review_labels_template.csv", dtype=str)
     assert list(pinned["unit_id"]) == list(template["unit_id"])
     assert template.drop(columns="unit_id").isna().all().all()
+
+
+@pytest.mark.parametrize("column", ["unit_id", "reviewer", "evidence_note"])
+def test_rejects_whitespace_only_required_cells(tmp_path, column):
+    with pytest.raises(ReviewLabelError, match="blank cells"):
+        load_review_labels(_write(tmp_path, _labels(**{column: " \t "})))
+
+
+@pytest.mark.parametrize("value", ["20260914", "2026-W38-1", "2026-02-30"])
+def test_rejects_noncanonical_or_invalid_dates(tmp_path, value):
+    with pytest.raises(ReviewLabelError, match="ISO YYYY-MM-DD"):
+        load_review_labels(_write(tmp_path, _labels(review_date=value)))
+
+
+def test_rejects_duplicate_ids_after_trimming(tmp_path):
+    with pytest.raises(ReviewLabelError, match="duplicate unit_id"):
+        load_review_labels(_write(tmp_path, _labels(unit_id=["unit-a", " unit-a ", "unit-c"])))
+
+
+def test_rejects_repeated_ids_in_expected_sample(tmp_path):
+    with pytest.raises(ReviewLabelError, match="duplicate unit_id"):
+        load_review_labels(_write(tmp_path, _labels()), UNIT_IDS + ["unit-a"])
+
+
+def test_rejects_extra_csv_fields_instead_of_inferring_an_index(tmp_path):
+    path = tmp_path / "review_labels.csv"
+    path.write_text(
+        "unit_id,review_label,reviewer,review_date,evidence_note\n"
+        "extra,unit-a,plausible-plantable,Feng Jiang,2026-09-14,Open pasture visible throughout\n",
+        encoding="utf-8",
+    )
+    with pytest.raises(ReviewLabelError, match="expected 5 cells"):
+        load_review_labels(path)
+
+
+def test_csv_parse_errors_have_review_label_error_type(tmp_path):
+    path = tmp_path / "review_labels.csv"
+    path.write_text('unit_id,review_label,reviewer,review_date,evidence_note\n"unclosed', encoding="utf-8")
+    with pytest.raises(ReviewLabelError, match="cannot read review CSV"):
+        load_review_labels(path)
+
+
+def test_pinned_ids_preserve_literal_na(tmp_path):
+    path = tmp_path / "review_sample_ids.csv"
+    path.write_text("unit_id\nNA\n001\n", encoding="utf-8")
+    assert load_review_sample_ids(path) == ["NA", "001"]
+
+
+@pytest.mark.parametrize("body", ["unit_id\na\na\n", 'unit_id\n" "\n', "wrong\na\n"])
+def test_rejects_invalid_pinned_sample_csv(tmp_path, body):
+    path = tmp_path / "review_sample_ids.csv"
+    path.write_text(body, encoding="utf-8")
+    with pytest.raises(ReviewLabelError):
+        load_review_sample_ids(path)
+
+
+def test_summary_cannot_mark_partial_labels_complete():
+    with pytest.raises(ReviewLabelError, match="sample size"):
+        summarise_review_labels(_labels(), 30, "imagery")
+
+
+def test_summary_rejects_empty_completed_labels():
+    with pytest.raises(ReviewLabelError, match="no rows"):
+        summarise_review_labels(_labels().iloc[:0], 0, "imagery")
+
+
+def test_rejects_compatibility_unicode_machine_name(tmp_path):
+    with pytest.raises(ReviewLabelError, match="looks automated"):
+        load_review_labels(_write(tmp_path, _labels(reviewer="Ｃｏｄｅｘ")))
+
+
+@pytest.mark.parametrize(
+    "reviewer",
+    [
+        "ClaudeAgent",
+        "ReviewBot",
+        "GPTBot",
+        "Assistant9000",
+        "Grok",
+        "xAI",
+        "AutoGPT",
+        "claudeagent",
+        "C.h.a.t.G.P.T",
+        "SyntheticReviewer",
+    ],
+)
+def test_rejects_machine_names_that_defeat_word_boundaries(tmp_path, reviewer):
+    # A \b(...)\b regex misses every one of these: concatenating two trigger
+    # words, appending a digit, or splitting one with punctuation all remove the
+    # word boundary the pattern depends on.
+    with pytest.raises(ReviewLabelError, match="looks automated"):
+        load_review_labels(_write(tmp_path, _labels(reviewer=reviewer)))
+
+
+@pytest.mark.parametrize(
+    "reviewer",
+    ["Botha", "Abbott", "Llamas", "Marc Laudens", "Bartholomew Bardsley", "Wiremu Tane"],
+)
+def test_accepts_real_names_containing_machine_substrings(tmp_path, reviewer):
+    # Substring matching on the short, ambiguous words ("bot", "llama", "bard")
+    # would reject all of these, so those are matched as whole tokens only.
+    labels = load_review_labels(_write(tmp_path, _labels(reviewer=reviewer)))
+    assert set(labels["reviewer"]) == {reviewer}
+
+
+# --- Review version gate and stratified sampling -------------------------------
+
+
+def _render_cards(review_dir):
+    """Record card rendering the way scripts/download_review_cards.py does, without the network."""
+
+    import geopandas as gpd
+
+    from ets_screening.review_labels import REVIEW_QUEUE_FILE, review_geometry_sha256
+    import download_review_cards
+
+    queue = gpd.read_file(review_dir / REVIEW_QUEUE_FILE)
+    download_review_cards._record_card_version(review_dir, "2026-09-25T00:00:00Z", review_geometry_sha256(queue))
+    cards = review_dir / "cards"
+    cards.mkdir(exist_ok=True)
+    (cards / "01_card.jpg").write_bytes(b"card")
+
+
+def test_labels_on_a_stale_sample_or_cards_are_refused(tmp_path):
+    from ets_screening.review_labels import ReviewLabelError, require_current_review_version
+
+    with pytest.raises(ReviewLabelError, match="out of date"):
+        require_current_review_version(tmp_path)
+    candidates, _, _ = build_demo_layers()
+    write_review_bundle(candidates, tmp_path, sample_size=3)
+    with pytest.raises(ReviewLabelError, match="card_renderer"):
+        require_current_review_version(tmp_path)
+    _render_cards(tmp_path)
+    require_current_review_version(tmp_path)
+
+
+def test_labels_do_not_survive_a_boundary_change_under_the_same_ids(tmp_path):
+    import shutil
+
+    from ets_screening.review_labels import (
+        REVIEW_QUEUE_FILE,
+        ReviewLabelError,
+        load_review_sample_ids,
+        require_current_review_version,
+    )
+
+    candidates, _, _ = build_demo_layers()
+    write_review_bundle(candidates, tmp_path, sample_size=3)
+    _render_cards(tmp_path)
+    pinned = load_review_sample_ids(tmp_path / "review_sample_ids.csv")
+    moved = candidates.copy()
+    moved["geometry"] = moved.geometry.translate(xoff=0.5)
+
+    # With cards present the new boundaries are refused and nothing is replaced.
+    previous = (tmp_path / REVIEW_QUEUE_FILE).read_bytes()
+    with pytest.raises(ValueError, match="boundaries changed"):
+        write_review_bundle(moved, tmp_path, sample_ids=pinned)
+    assert (tmp_path / REVIEW_QUEUE_FILE).read_bytes() == previous
+
+    # Once the cards are moved aside the queue may change, but labels are then
+    # refused until cards are rendered for the new boundaries.
+    shutil.rmtree(tmp_path / "cards")
+    write_review_bundle(moved, tmp_path, sample_ids=pinned)
+    with pytest.raises(ReviewLabelError, match="boundaries differ"):
+        require_current_review_version(tmp_path)
+    _render_cards(tmp_path)
+    require_current_review_version(tmp_path)
+
+
+def test_same_units_keep_their_cards_bound(tmp_path):
+    from ets_screening.review_labels import load_review_sample_ids, require_current_review_version
+
+    candidates, _, _ = build_demo_layers()
+    write_review_bundle(candidates, tmp_path, sample_size=3)
+    _render_cards(tmp_path)
+    pinned = load_review_sample_ids(tmp_path / "review_sample_ids.csv")
+    write_review_bundle(candidates.sample(frac=1, random_state=2), tmp_path, sample_ids=pinned)
+    require_current_review_version(tmp_path)
+
+
+def test_cards_are_not_re_rendered_over_existing_labels(tmp_path, monkeypatch):
+    import sys
+
+    import download_review_cards
+
+    review = tmp_path / "review"
+    review.mkdir()
+    (review / "review_labels.csv").write_text("unit_id\n", encoding="utf-8")
+    monkeypatch.setattr(sys, "argv", ["download_review_cards", "--output", str(review / "cards")])
+    with pytest.raises(SystemExit, match="refusing to re-render cards"):
+        download_review_cards.main()
+    assert not (review / "cards").exists()
+
+
+def test_fresh_sample_records_its_version_and_needs_new_cards(tmp_path):
+    import json
+
+    from ets_screening.review_labels import REVIEW_VERSION_FILE, SAMPLE_ALGORITHM
+
+    candidates, _, _ = build_demo_layers()
+    write_review_bundle(candidates, tmp_path, sample_size=3)
+    version = json.loads((tmp_path / REVIEW_VERSION_FILE).read_text(encoding="utf-8"))
+    assert version["sample_algorithm"] == SAMPLE_ALGORITHM
+    assert version["card_renderer"] is None
+    assert version["sampling_frame_count"] == len(candidates)
+
+
+def test_sample_includes_flagged_candidates():
+    from ets_screening.sample_review import MIN_FLAGGED_IN_SAMPLE, select_review_sample
+
+    candidates, _, _ = build_demo_layers()
+    frame = pd.concat([candidates.assign(unit_id=candidates["unit_id"] + f"-{copy}") for copy in range(10)])
+    frame = frame.set_geometry("geometry").reset_index(drop=True)
+    frame["advisory_rule_ids"] = ""
+    frame.loc[frame.index[:6], "advisory_rule_ids"] = "R-03-low-overlap"
+    first = select_review_sample(frame, sample_size=30, seed=7)
+    flagged = first["advisory_rule_ids"].ne("").sum()
+    assert flagged == MIN_FLAGGED_IN_SAMPLE
+    assert len(first) == 30
+    again = select_review_sample(frame.sample(frac=1, random_state=3), sample_size=30, seed=7)
+    assert again["unit_id"].tolist() == first["unit_id"].tolist()

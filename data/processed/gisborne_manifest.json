@@ -4,15 +4,15 @@
   "feature_counts": {
     "gisborne_boundary.gpkg": 1,
     "gisborne_candidates.gpkg": 5712,
-    "gisborne_pre1990_evidence.gpkg": 1933,
+    "gisborne_pre1990_evidence.gpkg": 11109,
     "gisborne_conservation.gpkg": 410
   },
   "discarded_clip_fragments_below_1_m2": 36,
   "sha256": {
-    "gisborne_boundary.gpkg": "26f70188dde8f5b621862bb40ffe1e5c4d99a1a6a24016b72e55f2f55555af5f",
-    "gisborne_candidates.gpkg": "d44c2bee7378a74f2b22ad8296a4fd3f5e447a0057c804550937aba4ee5815fc",
-    "gisborne_pre1990_evidence.gpkg": "b90d05d9aa175fd6446083928ef699082d34be01aafc8796243b41fbe4642321",
-    "gisborne_conservation.gpkg": "510aa4d3b25253a7123311c24a972ff6890dd8e02c23efaf956dddc3dad695f2"
+    "gisborne_boundary.gpkg": "7bbafcf41e9229d3054e4ec09162a5ba2af954201be36674eb7b157621a85c41",
+    "gisborne_candidates.gpkg": "daab9b9d8fbfa6a2cb0a9714fba6cad13858122a1042cb90e8a85019985dd668",
+    "gisborne_pre1990_evidence.gpkg": "9d675d5021438c38e0482f012054b21702679382dfcab385f7fe150958cb2572",
+    "gisborne_conservation.gpkg": "5ba3dc8b3ce3c891542e02251fda38fad694456e02aa42d90c8683588e10f736"
   },
   "sources": {
     "boundary": "https://services2.arcgis.com/vKb0s8tBIA3bdocZ/arcgis/rest/services/Territorial_Authority_2026/FeatureServer/0",
@@ -20,5 +20,76 @@
     "lucas": "https://arcgis.mfe.govt.nz/server1/rest/services/Unrestricted/MfE_LUCAS_LUM_NZ_Mainland_2020_v005_feature/FeatureServer/0",
     "conservation": "https://services1.arcgis.com/3JjYDyG3oajxU6HO/arcgis/rest/services/DOC_Public_Conservation_Land/FeatureServer/0"
   },
-  "lcdb_geometry_note": "ArcGIS Living Atlas mirror is simplified at 15 m; source is LCDB v6.0."
+  "lcdb_geometry_note": "ArcGIS Living Atlas mirror is simplified at 15 m; source is LCDB v6.0.",
+  "source_queries": {
+    "lcdb": {
+      "query": {
+        "service": "https://services.arcgis.com/XTtANUDT8Va4DLwI/arcgis/rest/services/New_Zealand_Land_Cover/FeatureServer/0",
+        "where": "Name_2023 IN ('Bare or Lightly Vegetated Surfaces','Built-up Area (settlement)','Estuarine Open Water','Gorse and/or Broom','Gravel and Rock','High Producing Exotic Grassland','Lake or Pond','Low Producing Grassland','Mixed Exotic Shrubland','Not land','Permanent Snow and Ice','River','Sand and Gravel','Surface Mine or Dump','Transport Infrastructure','Urban Parkland/Open Space')",
+        "fields": "OBJECTID,LCDB_UID,Name_2023,Class_2023",
+        "bbox": [
+          1959096.466,
+          5674821.538,
+          2091919.636,
+          5833268.454
+        ]
+      },
+      "service": {
+        "url": "https://services.arcgis.com/XTtANUDT8Va4DLwI/arcgis/rest/services/New_Zealand_Land_Cover/FeatureServer/0",
+        "current_version": 12,
+        "service_item_id": "9f488a22f7894933b37fb0d8566c18e1",
+        "last_edit_date": 1773010357017,
+        "max_record_count": 2000
+      },
+      "retrieved_at": "2026-09-24T09:54:46Z",
+      "feature_count": 7268,
+      "raw_sha256": "7b09fafd8c3e43a476fe239910310d416c11b9435ef2487555c1e375e9798f3c"
+    },
+    "lucas": {
+      "query": {
+        "service": "https://arcgis.mfe.govt.nz/server1/rest/services/Unrestricted/MfE_LUCAS_LUM_NZ_Mainland_2020_v005_feature/FeatureServer/0",
+        "where": "(LUCID_1989 LIKE '71%' OR LUCID_1989 LIKE '72%')",
+        "fields": "OBJECTID,LUCID_1989,LUCID_2007,LUCID_2020,START_1989,START_2007",
+        "bbox": [
+          1959096.466,
+          5674821.538,
+          2091919.636,
+          5833268.454
+        ]
+      },
+      "service": {
+        "url": "https://arcgis.mfe.govt.nz/server1/rest/services/Unrestricted/MfE_LUCAS_LUM_NZ_Mainland_2020_v005_feature/FeatureServer/0",
+        "current_version": 11.5,
+        "service_item_id": "c13b3563d0d246ac978a5da1be3c921d",
+        "last_edit_date": null,
+        "max_record_count": 2000
+      },
+      "retrieved_at": "2026-09-24T09:55:22Z",
+      "feature_count": 13116,
+      "raw_sha256": "e6a549b33f531c658dad2ecd5d379c520541435cd66108bdfb4ed9ee9bb86b51"
+    },
+    "conservation": {
+      "query": {
+        "service": "https://services1.arcgis.com/3JjYDyG3oajxU6HO/arcgis/rest/services/DOC_Public_Conservation_Land/FeatureServer/0",
+        "where": "1=1",
+        "fields": "OBJECTID,NaPALIS_ID,Type,Name,Legislation,Section",
+        "bbox": [
+          1959096.466,
+          5674821.538,
+          2091919.636,
+          5833268.454
+        ]
+      },
+      "service": {
+        "url": "https://services1.arcgis.com/3JjYDyG3oajxU6HO/arcgis/rest/services/DOC_Public_Conservation_Land/FeatureServer/0",
+        "current_version": 12,
+        "service_item_id": "72354ba9bf7a4706af3fdfe60f86eea1",
+        "last_edit_date": 1790188165973,
+        "max_record_count": 1000
+      },
+      "retrieved_at": "2026-09-24T09:55:25Z",
+      "feature_count": 238,
+      "raw_sha256": "758960cd254ec433e1772978d966c3cc7bd3c2362b99606c930b73ccdd2aa1d8"
+    }
+  }
 }

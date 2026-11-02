@@ -2,6 +2,7 @@
 
 import json
 import logging
+from pathlib import Path
 import re
 import subprocess
 import sys
@@ -19,6 +20,9 @@ import ingest_review_labels as ingest
 from ets_screening import logs, screen
 from ets_screening.demo_data import build_demo_layers
 from ets_screening.screen import RejectRateExceeded, run_screening
+
+# Not logs.ROOT: CI tests the installed package, whose files are not in the repository.
+ROOT = Path(__file__).resolve().parents[1]
 
 
 def messages(caplog, level=logging.INFO):
@@ -59,7 +63,7 @@ def test_console_is_added_once():
 def test_importing_the_package_and_scripts_configures_nothing():
     code = (
         "import logging, sys, warnings\n"
-        f"sys.path.insert(0, {str(logs.ROOT / 'scripts')!r})\n"
+        f"sys.path.insert(0, {str(ROOT / 'scripts')!r})\n"
         "import ets_screening.screen, ets_screening.sample_review\n"
         "import reproduce, download_gisborne_data, download_review_cards\n"
         "package = logging.getLogger('ets_screening')\n"
@@ -170,7 +174,7 @@ def test_ets_screen_appends_its_run_log_beside_the_outputs(tmp_path, monkeypatch
     text = read(out / logs.LOG_NAME)
     assert text.count(f"INFO     ets-screen: start: {' '.join(argv)}") == 2
     assert text.count("INFO     ets-screen: done in") == 2
-    assert "INFO     R-05 Plantable LCDB proxy class: " in text
+    assert "INFO     R-05 Current land-cover proxy is potentially plantable: " in text
     assert "INFO     reject rate " in text
     assert "WARNING  " in text and "UserWarning: Tight layout not applied" in text
     # The manifest is the result and stays on stdout; the log goes to stderr.
@@ -228,7 +232,10 @@ def test_ingest_logs_rejected_labels_as_an_error(review_dir, info):
 
     assert ingest.main(["--review-dir", str(review_dir)]) == 1
     (error,) = messages(info, logging.ERROR)
-    assert error.startswith("review labels rejected: reviewer ['Claude'] looks automated")
+    # This review_dir has no current review_version.json, so the labels are
+    # refused before their content is read (test_review_labels.py covers each
+    # reason). Whatever the reason, the refusal is logged as an error.
+    assert error.startswith("review labels rejected: the review sample or imagery cards are out of date")
     assert not (review_dir / "review_summary.csv").exists()
 
 
@@ -243,17 +250,27 @@ def squares(count, **columns):
     )
 
 
+def requested(params):
+    return [int(value) for value in params["objectIds"].split(",")]
+
+
 def test_download_logs_batch_progress_then_reads_the_cache(tmp_path, monkeypatch, info):
     monkeypatch.setattr(download, "RAW", tmp_path)
+    monkeypatch.setattr(download, "_service_info", lambda service: {"max_record_count": 2000})
     monkeypatch.setattr(
-        download, "_request_json", lambda url, params, post: {"objectIds": list(range(1, 1201))}
+        download, "_request_json",
+        lambda url, params, post=False: {
+            "objectIds": list(range(1, 1201)), "objectIdFieldName": "OBJECTID"
+        },
     )
+    # The downloader checks that each batch returns exactly the IDs it asked for.
+    every = squares(1200)
     monkeypatch.setattr(
         download, "_query_geojson",
-        lambda service, params: squares(len(params["objectIds"].split(","))),
+        lambda service, params: every[every["OBJECTID"].isin(requested(params))],
     )
     service = "https://example.invalid/arcgis/rest/services/Land_Cover/FeatureServer/0"
-    frame = download._cached_download("lcdb_test", service, (0, 0, 1, 1), "OBJECTID")
+    frame, _ = download._cached_download("lcdb_test", service, (0, 0, 1, 1), "OBJECTID")
     assert len(frame) == 1200
     got = messages(info)
     assert "lcdb_test: 1,200 features in the bounding box, 3 batches of 500" in got
@@ -263,7 +280,9 @@ def test_download_logs_batch_progress_then_reads_the_cache(tmp_path, monkeypatch
     assert f"lcdb_test: 1,200 features cached at {logs.rel(tmp_path / 'lcdb_test.gpkg')}" in got
 
     info.clear()
-    monkeypatch.setattr(download, "_request_json", None)  # the cache must not touch the network
+    # The cache must not touch the network.
+    monkeypatch.setattr(download, "_request_json", None)
+    monkeypatch.setattr(download, "_service_info", None)
     download._cached_download("lcdb_test", service, (0, 0, 1, 1), "OBJECTID")
     assert messages(info) == [
         f"lcdb_test: 1,200 features read from the cache at {logs.rel(tmp_path / 'lcdb_test.gpkg')}"
@@ -297,12 +316,16 @@ def test_download_main_logs_each_step(tmp_path, monkeypatch, info, capsys):
                 geometry=[box(0, 0, 1000, 1000)],
                 crs=2193,
             )
-        return layers[service]
+        layer = layers[service]
+        return layer[layer["OBJECTID"].isin(requested(params))]
+
+    def object_ids(url, params, post=False):
+        layer = layers[url.removesuffix("/query")]
+        return {"objectIds": layer["OBJECTID"].tolist(), "objectIdFieldName": "OBJECTID"}
 
     monkeypatch.setattr(download, "_query_geojson", query)
-    monkeypatch.setattr(
-        download, "_request_json", lambda url, params, post: {"objectIds": [1, 2, 3]}
-    )
+    monkeypatch.setattr(download, "_request_json", object_ids)
+    monkeypatch.setattr(download, "_service_info", lambda service: {"url": service})
     download.main()
 
     got = messages(info)
@@ -327,7 +350,11 @@ def test_review_cards_log_their_progress(tmp_path, monkeypatch, info):
         crs=2193,
     )
     queue.to_file(tmp_path / "queue.gpkg", layer="review_queue", driver="GPKG")
-    monkeypatch.setattr(cards, "_draw_card", lambda row: Image.new("RGB", (8, 8)))
+    monkeypatch.setattr(cards, "_draw_card", lambda row, attribution: Image.new("RGB", (8, 8)))
+    monkeypatch.setattr(
+        cards, "_imagery_source",
+        lambda: {"copyright_text": "test imagery", "retrieved_at": "2026-10-30T00:00:00Z"},
+    )
     monkeypatch.setattr(
         sys, "argv",
         ["download_review_cards.py", "--queue", str(tmp_path / "queue.gpkg"),

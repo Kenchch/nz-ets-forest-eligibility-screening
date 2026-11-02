@@ -6,9 +6,9 @@ The trace runs what scripts/reproduce.py runs, on the same pinned processed
 inputs, but one module at a time and into outputs/trace/<run_id>/, so data/
 and outputs/gisborne/ are only read. Each step logs what it takes in and hands
 on: rows, columns, dtypes, nulls, ranges, a few rows, and what changed. At the
-end every evidence table the trace wrote is compared with the committed one,
-and its GeoPackages with semantic_hashes.json, so the log doubles as a
-reproducibility check: the same comparisons CI makes. About a minute.
+end every text output the trace wrote is compared with the committed one, and
+its GeoPackages with semantic_hashes.json, so the log doubles as a
+reproducibility check: the same comparisons CI makes. About two minutes.
 
     trace.log          full log: per step, input and output shape, columns,
                        dtypes, nulls, ranges, sample rows, what changed; the
@@ -37,27 +37,33 @@ import pandas as pd
 
 import build_findings
 import ingest_review_labels
+import reproduce
 import semantic_hashes
 from ets_screening import logs
 from ets_screening.geometry import compare_width_methods
 from ets_screening.load import assert_nztm2000, validate_candidates, validate_geometry
-from ets_screening.rules import RuleConfig, _overlap_metrics, evaluate_rules
+from ets_screening.review_labels import load_review_sample_ids
+from ets_screening.rules import RuleConfig, _overlap_metrics, classify_pre1990_evidence, evaluate_rules
 from ets_screening.screen import run_screening
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data"
 COMMITTED = ROOT / "outputs" / "gisborne"
 STEPS = 7  # inputs is step 0
-# Everything whose bytes CI holds to the committed copy (see .github/workflows/ci.yml).
+# Every text output whose bytes CI holds to the committed copy (see
+# .github/workflows/ci.yml) that the trace writes too.
 EVIDENCE = (
     "summary.csv",
     "rule_results.csv",
     "width_method_comparison.csv",
     "advisory_candidates.csv",
+    "run_manifest.json",
+    ".ets_screening_output",
     "findings.csv",
     "findings.json",
     "review/review_sample_ids.csv",
     "review/review_labels_template.csv",
+    "review/review_map.html",
     "review/review_summary.csv",
 )
 CODE_PATHS = ["src", "scripts", "pyproject.toml", "uv.lock"]
@@ -207,60 +213,80 @@ def step_validate(candidates, pre1990, conservation) -> None:
     timed(validate_candidates, candidates)
     for name, layer in (("pre1990", pre1990), ("conservation", conservation)):
         assert_nztm2000(layer, name)
-        validate_geometry(layer, name)
-    overlap = float(candidates.geometry.area.sum() - candidates.geometry.union_all().area)
+        if not layer.empty:
+            validate_geometry(layer, name)
     log.info(
         f"  passed: EPSG:2193 everywhere, {len(candidates):,} unique unit_id values, every "
-        "candidate a valid single-part Polygon, no overlap between candidates (summed area "
-        f"minus union area {overlap:.2g} m2, within the 1e-06 m2 tolerance)"
+        "candidate a valid single-part Polygon, no overlap between candidates (each polygon "
+        "intersected with the earlier ones it touches, within the 1e-06 m2 tolerance)"
     )
     change("none: validation only raises or passes")
     record("validate", "load.py", f"{len(candidates):,} units", "-", "-", "CRS, schema and geometry checked")
 
 
 def step_widths(candidates) -> None:
-    header(2, "width proxies", "geometry.py", "R-02's two 30 m width diagnostics, side by side")
+    header(2, "width proxies", "geometry.py", "R-02's 30 m width measures, side by side")
     comparison = timed(compare_width_methods, candidates)
     frame("compare_width_methods()", comparison)
     disagree = comparison[comparison["methods_disagree"]]
-    direction = disagree.groupby(["area_perimeter_pass", "erosion_core_pass"]).size()
-    log.info(f"  disagreements by (2A/P pass, erosion pass): {direction.to_dict()}")
+    direction = disagree.groupby(["equivalent_rectangle_pass", "erosion_core_pass"]).size()
+    log.info(f"  disagreements by (rectangle pass, erosion pass): {direction.to_dict()}")
+    ap = int((comparison["area_perimeter_pass"] != comparison["erosion_core_pass"]).sum())
+    log.info(f"  2A/P, a diagnostic only, disagrees with the erosion core on {ap:,} units")
     change(
         f"one row per unit, geometry dropped: {len(candidates):,} polygons -> {len(comparison):,} "
-        f"rows of two proxies and their agreement; {len(disagree):,} disagree"
+        "rows of three width measures; R-02 needs both the equivalent rectangle and the erosion "
+        f"core, and {len(disagree):,} units pass only one of them"
     )
     record(
         "width proxies", "geometry.py", f"{len(candidates):,} polygons",
         f"{len(comparison):,} x {comparison.shape[1]}", "1 row per unit",
-        f"2A/P and -15 m erosion; {len(disagree):,} disagreements",
+        f"rectangle and -15 m erosion (2A/P diagnostic); {len(disagree):,} disagreements",
     )
 
 
 def step_overlaps(candidates, pre1990, conservation) -> None:
-    header(3, "overlaps", "rules.py", "true intersection area and share of each unit, per overlay")
+    header(3, "overlaps", "rules.py", "sliver-filtered intersection area and share of each unit, per overlay")
     config = RuleConfig()
-    for name, layer in (("pre1990", pre1990), ("conservation", conservation)):
-        area, share = timed(_overlap_metrics, candidates, layer)
-        touched = area > 0
-        above_area = area > config.minimum_overlap_area_m2
-        material = above_area & (share * 100 >= config.minimum_overlap_pct)
+    routes = classify_pre1990_evidence(pre1990)
+    log.info(f"  pre-1990 evidence by statutory route: {routes.value_counts().to_dict()}")
+    unit_area = candidates.geometry.area
+    material_evidence = pre1990[routes == "forest_1989_and_2007"]
+    for name, layer in (("pre1990", material_evidence), ("conservation", conservation)):
+        raw, kept = timed(_overlap_metrics, candidates, layer, config.sliver_width_m)
+        core = kept.area
+        share = (core / unit_area * 100).fillna(0.0)
+        above_area = raw > config.minimum_overlap_area_m2
+        material = (core > config.minimum_overlap_area_m2) & (share >= config.minimum_overlap_pct)
+        clip = ~material & (core >= config.clip_required_overlap_m2)
         log.info(
-            f"  {name}: {int(touched.sum()):,} units intersect it; {int(above_area.sum()):,} by "
-            f"more than {config.minimum_overlap_area_m2:g} m2, of which {int(material.sum()):,} "
-            f"reach {config.minimum_overlap_pct:g}% of the unit (material) and "
-            f"{int((above_area & ~material).sum()):,} do not (advisory)"
+            f"  {name}: {int((raw > 0).sum()):,} units intersect it, {int(above_area.sum()):,} by "
+            f"more than {config.minimum_overlap_area_m2:g} m2. With parts narrower than "
+            f"{config.sliver_width_m:g} m removed, {int(material.sum()):,} reach "
+            f"{config.minimum_overlap_pct:g}% of the unit (material), {int(clip.sum()):,} more keep "
+            f"at least {config.clip_required_overlap_m2:,.0f} m2 (clip-required) and "
+            f"{int((above_area & ~material & ~clip).sum()):,} are advisory"
         )
         log.info(
-            f"      overlap m2 range [{area.min():,.4g}, {area.max():,.4g}], share of unit "
-            f"[{share.min():.4%}, {share.max():.4%}]"
+            f"      overlap m2 range [{raw.min():,.4g}, {raw.max():,.4g}], sliver-filtered share "
+            f"of unit [{share.min():.4f}%, {share.max():.4f}%]"
         )
+    deforested, _ = timed(
+        _overlap_metrics, candidates, pre1990[routes == "forest_1989_deforested_by_2007"], 0.0
+    )
+    log.info(
+        f"  pre1990 deforested by 2007: {int((deforested > config.minimum_overlap_area_m2).sum()):,} "
+        f"units overlap it by more than {config.minimum_overlap_area_m2:g} m2 (advisory, para (a)(ii))"
+    )
     change(
-        "two numbers per unit and overlay (m2 and share of the unit); overlay polygons are "
-        "unioned locally first, so overlapping source records are not counted twice"
+        "per unit and overlay: the raw overlap, what is left of it once slivers are removed, and "
+        "that remainder's share of the unit; overlay polygons are unioned locally first, so "
+        "overlapping source records are not counted twice"
     )
     record(
-        "overlaps", "rules.py", f"{len(candidates):,} units x 2 overlays", "4 columns per unit",
-        "1 row per unit", "intersection area and share; materiality at >1 m2 and >=1%",
+        "overlaps", "rules.py", f"{len(candidates):,} units x 2 overlays", "3 measures per unit and overlay",
+        "1 row per unit",
+        "sliver-filtered area and share; material at >1 m2 and >=1%, clip-required from 1 ha",
     )
 
 
@@ -271,10 +297,14 @@ def step_rules(candidates, pre1990, conservation):
     frame(f"evaluate_rules() wide results: {len(added)} columns added", results[["unit_id", *added]])
     frame("evaluate_rules() audit, one row per unit and rule", audit, sample=8)
     log.info(f"  status: {results['status'].value_counts().to_dict()}")
+    flags = results["advisory_rule_ids"].fillna("").str.split("|").explode()
+    log.info(f"  advisory flags: {flags[flags.ne('')].value_counts().sort_index().to_dict()}")
+    manual = sorted(audit.loc[audit["outcome"] == "manual", "rule_id"].unique())
     change(
         f"{candidates.shape[1]} -> {results.shape[1]} columns (rule results, overlaps, widths, "
-        f"status); the audit unpivots them to {len(audit):,} rows = {len(results):,} units x "
-        f"{audit['rule_id'].nunique()} rules, R-06..R-08 marked manual"
+        f"advisory flags, status); the audit unpivots them to {len(audit):,} rows = "
+        f"{len(results):,} units x {audit['rule_id'].nunique()} rules, {manual[0]}..{manual[-1]} "
+        "marked manual"
     )
     record(
         "rules", "rules.py", f"{len(candidates):,} x {candidates.shape[1]}",
@@ -285,8 +315,7 @@ def step_rules(candidates, pre1990, conservation):
 
 def step_screening(candidates, pre1990, conservation, out: Path) -> None:
     header(5, "screening", "screen.py", "what reproduce.py publishes: GeoPackages, tables, figures, review")
-    pinned = COMMITTED / "review" / "review_sample_ids.csv"
-    sample = pd.read_csv(pinned, dtype=str)["unit_id"].tolist() if pinned.exists() else None
+    sample = load_review_sample_ids(COMMITTED / "review" / "review_sample_ids.csv")
     manifest = timed(
         run_screening,
         candidates,
@@ -294,9 +323,10 @@ def step_screening(candidates, pre1990, conservation, out: Path) -> None:
         conservation,
         out,
         reject_rate_threshold=0.80,
-        study_label="Gisborne District open-data screening",
-        data_note="LCDB v6 / LUCAS v005 / DOC PCL",
+        study_label=reproduce.STUDY_LABEL,
+        data_note=reproduce.DATA_NOTE,
         review_sample_ids=sample,
+        input_provenance=reproduce.input_provenance(DATA / "processed"),
     )
     for name in ("candidates.gpkg", "quarantine.gpkg", "review/review_queue.gpkg"):
         frame(name, gpd.read_file(out / name), sample=2)
@@ -309,12 +339,12 @@ def step_screening(candidates, pre1990, conservation, out: Path) -> None:
     log.info(f"  run_manifest.json: reject_rate {manifest['reject_rate']:.4f}")
     change(
         f"results split by status into two GeoPackages, the audit and width tables written as "
-        f"CSV, and the pinned {len(sample or [])} review units copied out with a blank label template"
+        f"CSV, and the pinned {len(sample)} review units copied out with a blank label template"
     )
     record(
         "screening", "screen.py + sample_review.py + report.py", "results + audit",
         "2 GeoPackages, 4 CSVs, manifest, figures, review bundle", "split by status",
-        "published by staging then swap; 30-unit review queue",
+        "staged, then each generated file replaced, rolled back on failure; 30-unit review queue",
     )
 
 
@@ -341,7 +371,9 @@ def step_review(out: Path) -> None:
     review = out / "review"
     labels = COMMITTED / "review" / "review_labels.csv"
     if labels.exists():  # a completed review lives beside the committed queue
-        shutil.copy2(labels, review / labels.name)
+        # Labels are accepted only with the record of the sample and cards they were made on.
+        for name in (labels.name, "review_version.json"):
+            shutil.copy2(COMMITTED / "review" / name, review / name)
     status = timed(quietly, ingest_review_labels.main, ["--review-dir", str(review)])
     log.info(f"  ingest_review_labels: exit status {status}")
     table(pd.read_csv(review / "review_summary.csv", dtype=str))

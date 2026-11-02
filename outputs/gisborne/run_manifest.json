@@ -3,17 +3,62 @@
   "crs": "EPSG:2193",
   "input_feature_type": "LCDB land-cover mapping units; not cadastral parcels or ETS application areas",
   "feature_count": 5712,
+  "rule_config": {
+    "minimum_area_ha": 1.0,
+    "width_threshold_m": 30.0,
+    "minimum_overlap_area_m2": 1.0,
+    "minimum_overlap_pct": 1.0,
+    "clip_required_overlap_m2": 10000.0,
+    "sliver_width_m": 15.0,
+    "adjacency_distance_m": 15.0,
+    "plantable_lcdb_classes": [
+      "Bare or Lightly Vegetated Surfaces",
+      "Gorse and/or Broom",
+      "High Producing Exotic Grassland",
+      "Low Producing Grassland",
+      "Mixed Exotic Shrubland"
+    ]
+  },
+  "unmatched_plantable_lcdb_classes": [
+    "Bare or Lightly Vegetated Surfaces"
+  ],
   "overlap_materiality": {
     "minimum_area_m2_exclusive": 1.0,
     "minimum_source_unit_pct_inclusive": 1.0,
-    "status_below_both_thresholds": "advisory"
+    "clip_required_area_m2_inclusive": 10000.0,
+    "sliver_width_removed_m": 15.0,
+    "status_when_not_material": "advisory (clip-required at or above the clip area)"
   },
-  "reject_rate": 0.5295868347338936,
+  "reject_rate": 0.7127100840336135,
   "reject_rate_threshold": 0.8,
   "unresolved_rules": [
     "R-03",
     "R-06",
     "R-07",
-    "R-08"
-  ]
+    "R-08",
+    "R-09",
+    "R-10",
+    "R-11"
+  ],
+  "review_sample": {
+    "size": 30,
+    "seed": 20260912,
+    "pinned_ids_supplied": true,
+    "sampling_frame_count": 1641,
+    "sampling_frame_sha256": "590c6ded864fea14c10d733e68b3b84682b471b035869469a193eb40ce2c68ef"
+  },
+  "inputs": {
+    "files": {
+      "gisborne_candidates.gpkg": "daab9b9d8fbfa6a2cb0a9714fba6cad13858122a1042cb90e8a85019985dd668",
+      "gisborne_pre1990_evidence.gpkg": "9d675d5021438c38e0482f012054b21702679382dfcab385f7fe150958cb2572",
+      "gisborne_conservation.gpkg": "5ba3dc8b3ce3c891542e02251fda38fad694456e02aa42d90c8683588e10f736"
+    },
+    "sources": {
+      "boundary": "https://services2.arcgis.com/vKb0s8tBIA3bdocZ/arcgis/rest/services/Territorial_Authority_2026/FeatureServer/0",
+      "lcdb": "https://services.arcgis.com/XTtANUDT8Va4DLwI/arcgis/rest/services/New_Zealand_Land_Cover/FeatureServer/0",
+      "lucas": "https://arcgis.mfe.govt.nz/server1/rest/services/Unrestricted/MfE_LUCAS_LUM_NZ_Mainland_2020_v005_feature/FeatureServer/0",
+      "conservation": "https://services1.arcgis.com/3JjYDyG3oajxU6HO/arcgis/rest/services/DOC_Public_Conservation_Land/FeatureServer/0"
+    },
+    "lcdb_geometry_note": "ArcGIS Living Atlas mirror is simplified at 15 m; source is LCDB v6.0."
+  }
 }
